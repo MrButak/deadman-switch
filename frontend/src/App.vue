@@ -1,6 +1,6 @@
 <template>
 
-<h1>Deadman Switch</h1>
+<h1>Deadman Switch / I'm Ok Check-in</h1>
 
 </template>
 
