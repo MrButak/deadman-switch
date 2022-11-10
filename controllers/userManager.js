@@ -135,3 +135,10 @@ exports.verifyUserEmail = async (req, res) => {
     // Email verification success
 	return res.send('Verification success! You can safely close this window now.');
 };
+
+// Function will attempt to get the http only cookie from the browser
+exports.getHttpCookie = async (req, res) => {
+
+    console.log(req.cookies)
+    console.log(req.cookies.dms_access_token)
+};
