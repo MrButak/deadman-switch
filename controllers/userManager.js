@@ -1,8 +1,9 @@
 const { validateName, validateEmail, validatePassword } = require('./javascripts/validationManager');
-const { insertNewUser, verifyUsersEmail } = require('./javascripts/databaseManager');
+const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail } = require('./javascripts/databaseManager');
 const { hashString, compareString } = require('./javascripts/utils/hashing');
 const { randomString } = require('./javascripts/utils/utils');
 const { sendVerificationEmail } = require('./javascripts/emailManager');
+const { createJwtTokenWithDbId, verifyToken, refreshToken } = require('./javascripts/jwtManager');
 
 exports.signupEmail = async (req, res) => {
 
@@ -44,14 +45,65 @@ exports.signupEmail = async (req, res) => {
     };
 
     // Send verification email
-    let didSendVerificationEmail = sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.verification_string);
-    if(!didSendVerificationEmail) {
-        // trigger backup email sender like the nodemailer package?
-        console.log('I need to handle this event, not sure how to yet');
-        return res.status(500);
-    };
+    sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.verification_string);
+    
 
     return res.status(200).json({status: '200'});
+};
+
+
+exports.loginEmail = async (req, res) => {
+    
+    let email = password = '';
+
+    try {
+        let userLoginData = Object.keys(req.body)
+        userLoginData = JSON.parse(userLoginData);
+        email = userLoginData.email;
+        password = userLoginData.password;
+    }
+    catch(error) {
+        console.log(error);
+        return res.status(400).json({status: '400', message: 'Invalid credentials'});
+    };
+
+    // User input validation
+    if( !validateEmail(email) || !validatePassword(password) ) {  
+        return res.status(400).json({status: '400', message: 'Invalid credentials'});
+    };
+
+    // Get user login credentials from DB
+    let userLoginDbData = await getUserLoginCredsWithEmail(email);
+    if(!userLoginDbData) {
+        return res.status(400).json({status: '400', message: 'Invalid credentials'});
+    };
+
+    // Check to see if passwords match
+    let passwordsMatch = compareString(password, userLoginDbData.password);
+    if(!passwordsMatch) {
+        return res.status(400).json({status: '400', message: 'Invalid credentials'});
+    };
+
+    // Make sure they have a verified email
+    if(!userLoginDbData.email_verified) {
+        // The HyperText Transfer Protocol (HTTP) 401 Unauthorized response status code indicates that the client request has not been completed because it lacks valid authentication credentials for the requested resource
+        return res.status(401).json({status: '401', message: 'Email not verified'});
+    };
+
+    // Issue a JWT as a cookie
+    let accessToken = createJwtTokenWithDbId(userLoginDbData.id);
+    
+	res.cookie('dms_access_token', accessToken, {
+        secure: true,
+		signed: true, // signed with 'cookie-parser' middleware
+		// sameSite: process.env.APP_ENVIRONMENT == 'production',
+        sameSite: true,
+		httpOnly: false,
+		expires: new Date(Date.now() + 3600 * 24 * 14 * 1000) // 14 days. Set to same age as JWT
+	});
+
+    // Login success
+    return res.status(200).json({status: '200', message: 'Login Success!'});
 };
 
 

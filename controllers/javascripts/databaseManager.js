@@ -37,14 +37,32 @@ exports.insertNewUser = async(firstName, lastName, email, password, provider, ve
     };
 };
 
+exports.getUserLoginCredsWithEmail = async (email) => {
+
+    let dbStmt = 'SELECT * FROM app_users WHERE email ilike ($1);';
+    let dbValues = [email];
+
+    try {
+        let loginCredentials = await pool.query(dbStmt, dbValues);
+        if(!loginCredentials.rows.length) {
+            return false;
+        };
+        return loginCredentials.rows[0];
+    }
+    catch(error) {
+        console.log(error);
+        return false;
+    };
+};
+
 // Function is called when a user verifies their email. ('clicked' from the link I sent in the email '/signup/email')
 exports.verifyUsersEmail = async (uniqueString) => {
 
-    let text = 'UPDATE app_users SET email_verified = true, verification_string = null WHERE verification_string = ($1) RETURNING *';
-    let values = [uniqueString];
+    let dbStmt = 'UPDATE app_users SET email_verified = true, verification_string = null WHERE verification_string = ($1) RETURNING *;';
+    let dbValues = [uniqueString];
 
     try {
-        let wasUpdated = await pool.query(text, values);
+        let wasUpdated = await pool.query(dbStmt, dbValues);
         return wasUpdated.rows.length > 0;
     }
     catch(err) {
