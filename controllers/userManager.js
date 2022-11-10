@@ -1,3 +1,6 @@
+const { validateName, validateEmail, validatePassword } = require('./javascripts/validationManager');
+const { insertNewUser } = require('./javascripts/databaseManager');
+
 exports.signupEmail = async (req, res) => {
 
     let firstName = lastName = email = password = '';
@@ -15,17 +18,21 @@ exports.signupEmail = async (req, res) => {
         return res.status(400);
     };
 
-    // // Must have
-    // if(!firstName || !lastName || !email || !password) {
-    //     return res.status(400);
-    // }
+    // User input validation
+    if( !validateName(firstName) || !validateName(lastName) ||
+        !validateEmail(email) || !validatePassword(password) ) {
+            
+        return res.status(400);
+    };
 
-    console.log(firstName)
-    console.log(lastName)
-    console.log(email)
-    console.log(password)
+    // Insert user into DB
+    let userData = await insertNewUser(firstName, lastName, email, password, 'email', false);
+    if(!userData) {
+        return res.status(400);
+    };
+
+    console.log(userData);
     
-    
-    
+    // Send verification email
     return res.status(200)
 };

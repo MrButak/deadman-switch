@@ -1,10 +1,12 @@
 CREATE TABLE app_users (
     id SERIAL PRIMARY KEY,
-    email TEXT,
-    password TEXT,
-    creation_date TIMESTAMP,
-    provider VARCHAR(255),
-    email_verified BOOLEAN
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    creation_date TIMESTAMP NOT NULL,
+    provider VARCHAR(255) NOT NULL,
+    email_verified BOOLEAN NOT NULL
 );
 
 CREATE TABLE user_preferences (
