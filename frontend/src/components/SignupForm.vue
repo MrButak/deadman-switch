@@ -100,7 +100,7 @@ async function handleFormSubmission() {
     if(!areFormFieldsValid()) { return };
 
     // Backend request
-    await fetch('http://localhost:3000/api/register', {
+    await fetch(`${import.meta.env.VITE_BASE_URL}api/register`, {
         mode: 'cors',
         method: 'POST',
         headers: {
