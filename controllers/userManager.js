@@ -139,8 +139,56 @@ exports.verifyUserEmail = async (req, res) => {
 // Function will attempt to get the http only cookie from the browser
 exports.getHttpCookie = async (req, res) => {
 
-    console.log(Object.keys(req.cookies))
-    console.log(Object.keys(req.signedCookies))
-    console.log(req)
+    let accessToken = '';
+
+    try {
+        accessToken = req.signedCookies.dms_access_token
+    }
+    catch(error) {
+        return res.status(401).json({status: '401', message: 'No cookie'});
+    };
+    console.log({accessToken})
+    console.log(req.signedCookies.dms_access_token)
+    console.log(req.secret)
+
+
+    let decodedCookie;
+    try {
+        // decode uri string
+        accessToken = utilities.decodeUri(accessToken);
+        // Decode signed cookie
+        decodedCookie = cookieParser.signedCookie(accessToken, process.env.COOKIE_PARSER_SECRET);
+    }
+    catch(err) {
+        console.log(err);
+        return res.status(401).json({status: '401', message: 'Invalid cookie'});
+    };
+
+    // If cookie did not have signature
+    if(!decodedCookie) {
+        return res.status(401).json({status: '401', message: 'Cookie does not have signature'});
+    };
+
+	// Decode JWT that was set as the cookie
+	let decodedJwt = jwtManager.verifyToken(decodedCookie);
+
+    // If JWT could not be verified, or if it has expired, send status code back to the frontend
+	if(decodedJwt.status === '400' || decodedJwt.status === '401') {
+
+		console.log('An error was thrown verifying JWT', decodedJwt.status);
+		return res.status(parseInt(decodedJwt.status)).json({status: decodedJwt.status});
+	};
+
+    // Function will create a new cookie and set it - only if it expires within 2 days
+	jwtManager.refreshToken(res, decodedJwt);
+
+    // Get all user data from DB using their DB id from the JWT
+	let appUserData = await dbManager.getUserFromDbId(decodedJwt.userDbId);
+
+    // cookies where present and legit, but user was not in DB
+    if(!appUserData) {
+        return res.status(401).json({status: '401'});
+    };
+    
     
 };
