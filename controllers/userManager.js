@@ -189,6 +189,5 @@ exports.getHttpCookie = async (req, res) => {
     // if(!appUserData) {
     //     return res.status(401).json({status: '401'});
     // };
-    
-    console.log('made it ***************** valid cookie')
+    res.status(200).json({status: '200', loggedIn: true})
 };

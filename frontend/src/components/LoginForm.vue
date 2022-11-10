@@ -1,8 +1,6 @@
 <template>
 
     <va-form class="signup-form">
-        <h2 class="va-h3">Login</h2>
-        
         <va-input
             v-model="userLoginData.emailAddress"
             type="email"
@@ -33,7 +31,7 @@
         > Login </va-button>
         <p>
             Not regestered yet? 
-            <span class="va-link">
+            <span @click="handleSignupView()" class="va-link">
                 Register
             </span>
         </p>
@@ -43,75 +41,76 @@
     
     
     
-    <script setup>
+<script setup>
+
+import { ref, reactive, computed } from 'vue';
+import { handleSignupView } from '../../javascripts/ViewManager'
+
+let isPasswordVisible = ref(false);
+let userLoginData = reactive({
+    emailAddress: '',
+    password: ''
+});
+
+let regexPassword = /^([A-Za-z0-9\-\_\!\@\#\$\%\^\&\*\+\=]){6,18}$/;
+let regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
+function areFormFieldsValid() {
     
-    import { ref, reactive, computed } from 'vue';
-    
-    let isPasswordVisible = ref(false);
-    let userLoginData = reactive({
-        emailAddress: '',
-        password: ''
+    if( regexEmail.test(userLoginData.emailAddress) &&
+        regexPassword.test(userLoginData.password)) 
+            { return true }
+
+    return false;
+};
+
+async function handleLogin() {
+
+    // Form validation
+    if(!areFormFieldsValid()) { return };
+
+    // Backend request
+    await fetch(`${import.meta.env.VITE_BASE_URL}api/login`, {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: JSON.stringify({
+            email: userLoginData.emailAddress,
+            password: userLoginData.password
+        })
     });
-    
-    let regexPassword = /^([A-Za-z0-9\-\_\!\@\#\$\%\^\&\*\+\=]){6,18}$/;
-    let regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-    
-    function areFormFieldsValid() {
+
+    // let response = await request.json();
+
+    // switch(response.status) {
+    //     case '400':
+    //         break;
+    //     case '500':
+    //         break;
         
-        if( regexEmail.test(userLoginData.emailAddress) &&
-            regexPassword.test(userLoginData.password)) 
-                { return true }
+    // }
+
+};
+
+</script>
+
+
+
+<style lang="scss" scoped>
+
+@import '../../styles/variables.scss';
+
+.signup-form {
     
-        return false;
-    };
-    
-    async function handleLogin() {
-    
-        // Form validation
-        if(!areFormFieldsValid()) { return };
-    
-        // Backend request
-        await fetch(`${import.meta.env.VITE_BASE_URL}api/login`, {
-            mode: 'cors',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: JSON.stringify({
-                email: userLoginData.emailAddress,
-                password: userLoginData.password
-            })
-        });
-    
-        // let response = await request.json();
-    
-        // switch(response.status) {
-        //     case '400':
-        //         break;
-        //     case '500':
-        //         break;
-            
-        // }
-    
-    };
-    
-    </script>
-    
-    
-    
-    <style lang="scss" scoped>
-    
-    @import '../../styles/variables.scss';
-    
-    .signup-form {
-        
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        p {
-            padding: .6rem 0 0 0;
-        }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    p {
+        padding: .6rem 0 0 0;
     }
-    
-    </style>
+}
+
+</style>
     

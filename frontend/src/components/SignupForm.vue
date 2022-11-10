@@ -1,7 +1,6 @@
 <template>
 
 <va-form class="signup-form">
-    <h2 class="va-h3">Register</h2>
     <va-input
         v-model="userSignupData.firstName"
         type="text"
@@ -54,7 +53,7 @@
     > Register </va-button>
     <p>
         Already have an account? 
-        <span class="va-link">
+        <span @click="handleLoginView()" class="va-link">
             Login
         </span>
     </p>
@@ -67,7 +66,7 @@
 <script setup>
 
 import { ref, reactive, computed } from 'vue';
-
+import { handleLoginView } from '../../javascripts/ViewManager'
 let isPasswordVisible = ref(false);
 let userSignupData = reactive({
     firstName: '',
