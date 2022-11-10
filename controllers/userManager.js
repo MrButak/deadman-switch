@@ -54,14 +54,15 @@ exports.signupEmail = async (req, res) => {
 
 // Function is called when a user 'clicks' on the email verification link (only when signed up with email)
 exports.verifyUserEmail = async (req, res) => {
-    console.log('made it')
+    
 	let uniqueString = '';
 	// console.log(req._startTime) _startTime: 2022-08-21T00:29:30.774Z . I could put a verification_string_created timestampz in db and compare to req._startTime
 	
 	try {
-		uniqueString = Object.keys(req.query)[0];
+		uniqueString = req.params.uniqueString;
 	}
 	catch(err) {
+        // res.send('error')
 		console.log(err)
 	};
 	
@@ -70,7 +71,7 @@ exports.verifyUserEmail = async (req, res) => {
 		return res.redirect('https://mrbutak.com');
 		// return res.send('Link invalid');
 	};
-
+    console.log(uniqueString)
     // TODO: check if user is already verified. If so, send another message ('Account already verified')
 
 	// Update user in DB. If success, their account is now verified.
