@@ -17,7 +17,7 @@ app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));
 app.use(function (req, res, next) {
 
     if(process.env.APP_ENVIRONMENT == 'development') {
-        res.header("Access-Control-Allow-Origin", "*");    
+        res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173/");    
     }
     else if(process.env.APP_ENVIRONMENT == 'production') {
         res.header("Access-Control-Allow-Origin", "https://deadmanswitchapp.herokuapp.com/");  ;

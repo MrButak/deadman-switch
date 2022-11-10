@@ -139,6 +139,8 @@ exports.verifyUserEmail = async (req, res) => {
 // Function will attempt to get the http only cookie from the browser
 exports.getHttpCookie = async (req, res) => {
 
-    console.log(req.cookies)
-    console.log(req.cookies.dms_access_token)
+    console.log(Object.keys(req.cookies))
+    console.log(Object.keys(req.signedCookies))
+    console.log(req)
+    
 };
