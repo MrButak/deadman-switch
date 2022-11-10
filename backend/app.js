@@ -20,9 +20,9 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/', express.static(path.join(__dirname, 'public', 'dist')));
-app.use('/css', express.static(path.join(__dirname, 'public', 'dist', 'css')));
-app.use('/js', express.static(path.join(__dirname, 'public', 'dist', 'js')));
+app.use('/', express.static(path.join(__dirname, 'frontend', 'public', 'dist')));
+app.use('/css', express.static(path.join(__dirname, 'frontend', 'public', 'dist', 'css')));
+app.use('/js', express.static(path.join(__dirname, 'frontend', 'public', 'dist', 'js')));
 
 app.use('/', indexRouter);
 
