@@ -1,16 +1,14 @@
 <template>
 
 <h1>Deadman Switch / I'm Ok Check-in</h1>
+<SignupForm />
 
 </template>
 
 
 <script setup>
 
-import { ref } from 'vue';
-
-let inputValue1 = ref('');
-let inputValue2 = ref('');
+import SignupForm from './components/SignupForm.vue';
 
 </script>
 
