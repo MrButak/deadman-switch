@@ -9,3 +9,13 @@ exports.randomString = () => {
 	};
 	return randomString;
 };
+
+// Function decodes a url/cookie e.g.: 'a%20ee%2F%2F%20sa%2F%20fgI33%20%2F' => 'a ee// sa/ fgI33 /'
+exports.decodeUri = (encoded) => {
+	return decodeURIComponent(encoded.replace(/\+/g,  " "));
+};
+
+// Function encodes a url/cookie e.g.: 'a ee// sa/ fgI33 /' => 'a%20ee%2F%2F%20sa%2F%20fgI33%20%2F'
+exports.encodeUri = (decoded) => {
+	return encodeURIComponent(decoded).replace(/'/g,"%27").replace(/"/g,"%22");	
+};

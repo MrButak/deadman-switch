@@ -9,4 +9,6 @@ async function checkForValidCookie() {
     appUserData = await request.json();
 };
 
+// 400 401
+
 export { checkForValidCookie }

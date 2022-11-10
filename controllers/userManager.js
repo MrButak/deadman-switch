@@ -1,7 +1,7 @@
 const { validateName, validateEmail, validatePassword } = require('./javascripts/validationManager');
 const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail } = require('./javascripts/databaseManager');
 const { hashString, compareString } = require('./javascripts/utils/hashing');
-const { randomString } = require('./javascripts/utils/utils');
+const { randomString, decodeUri, encodeUri } = require('./javascripts/utils/utils');
 const { sendVerificationEmail } = require('./javascripts/emailManager');
 const { createJwtTokenWithDbId, verifyToken, refreshToken } = require('./javascripts/jwtManager');
 
@@ -136,7 +136,9 @@ exports.verifyUserEmail = async (req, res) => {
 	return res.send('Verification success! You can safely close this window now.');
 };
 
+// ***********************************************************************************
 // Function will attempt to get the http only cookie from the browser
+// ***********************************************************************************
 exports.getHttpCookie = async (req, res) => {
 
     let accessToken = '';
@@ -147,15 +149,11 @@ exports.getHttpCookie = async (req, res) => {
     catch(error) {
         return res.status(401).json({status: '401', message: 'No cookie'});
     };
-    console.log({accessToken})
-    console.log(req.signedCookies.dms_access_token)
-    console.log(req.secret)
-
 
     let decodedCookie;
     try {
-        // decode uri string
-        accessToken = utilities.decodeUri(accessToken);
+        // Decode uri string
+        accessToken = decodeUri(accessToken);
         // Decode signed cookie
         decodedCookie = cookieParser.signedCookie(accessToken, process.env.COOKIE_PARSER_SECRET);
     }
@@ -182,13 +180,14 @@ exports.getHttpCookie = async (req, res) => {
     // Function will create a new cookie and set it - only if it expires within 2 days
 	jwtManager.refreshToken(res, decodedJwt);
 
-    // Get all user data from DB using their DB id from the JWT
-	let appUserData = await dbManager.getUserFromDbId(decodedJwt.userDbId);
+    console.log(decodedJwt)
+    // // Get all user data from DB using their DB id from the JWT
+	// let appUserData = await dbManager.getUserFromDbId(decodedJwt.userDbId);
 
-    // cookies where present and legit, but user was not in DB
-    if(!appUserData) {
-        return res.status(401).json({status: '401'});
-    };
+    // // cookies where present and legit, but user was not in DB
+    // if(!appUserData) {
+    //     return res.status(401).json({status: '401'});
+    // };
     
-    
+    console.log('made it ***************** valid cookie')
 };
