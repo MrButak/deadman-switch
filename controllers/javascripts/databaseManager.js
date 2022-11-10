@@ -19,10 +19,10 @@ else if(process.env.APP_ENVIRONMENT === 'production') {
     });
 };
 
-exports.insertNewUser = async(firstName, lastName, email, password, provider, verified) => {
+exports.insertNewUser = async(firstName, lastName, email, password, provider, verified, verificationString) => {
 
-    let dbStmt = 'INSERT INTO app_users (first_name, last_name, email, password, creation_date, provider, email_verified) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;'
-    let dbValues = [firstName, lastName, email, password, new Date(Date.now()), provider, verified];
+    let dbStmt = 'INSERT INTO app_users (first_name, last_name, email, password, creation_date, provider, verification_string, email_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;'
+    let dbValues = [firstName, lastName, email, password, new Date(Date.now()), provider, verificationString, verified];
 
     try {
         let userData = await pool.query(dbStmt, dbValues);

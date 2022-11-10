@@ -6,6 +6,7 @@ CREATE TABLE app_users (
     password TEXT NOT NULL,
     creation_date TIMESTAMP NOT NULL,
     provider VARCHAR(255) NOT NULL,
+    verification_string TEXT,
     email_verified BOOLEAN NOT NULL
 );
 
