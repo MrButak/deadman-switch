@@ -101,7 +101,7 @@ exports.loginEmail = async (req, res) => {
 		httpOnly: false,
 		expires: new Date(Date.now() + 3600 * 24 * 14 * 1000) // 14 days. Set to same age as JWT
 	});
-
+    console.log('cookie sent &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
     // Login success
     return res.status(200).json({status: '200', message: 'Login Success!'});
 };

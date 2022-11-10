@@ -22,12 +22,11 @@ app.use(function (req, res, next) {
     else if(process.env.APP_ENVIRONMENT == 'production') {
         res.header("Access-Control-Allow-Origin", "https://deadmanswitchapp.herokuapp.com/");  ;
     };
-
-    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
 });
+
 
 app.use('/', express.static(path.join(__dirname, 'public', 'dist')));
 app.use('/css', express.static(path.join(__dirname, 'public', 'dist', 'css')));
