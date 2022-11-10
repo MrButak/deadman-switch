@@ -36,3 +36,19 @@ exports.insertNewUser = async(firstName, lastName, email, password, provider, ve
         return false
     };
 };
+
+// Function is called when a user verifies their email. ('clicked' from the link I sent in the email '/signup/email')
+exports.verifyUsersEmail = async (uniqueString) => {
+
+    let text = 'UPDATE app_users SET email_verified = true, verification_string = null WHERE verification_string = ($1) RETURNING *';
+    let values = [uniqueString];
+
+    try {
+        let wasUpdated = await pool.query(text, values);
+        return wasUpdated.rows.length > 0;
+    }
+    catch(err) {
+        console.log(err);
+        return false;
+    };
+};

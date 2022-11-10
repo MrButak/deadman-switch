@@ -1,6 +1,5 @@
 <template>
 
-<h1>Deadman Switch / I'm Ok Check-in</h1>
 <SignupForm />
 
 </template>

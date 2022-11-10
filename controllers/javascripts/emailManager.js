@@ -20,7 +20,7 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString)
         params: {
             
             'customerName': `${firstName} ${lastName}`,
-            'verificationLink': `${process.env.VITE_BASE_URL}api/email/verify${verificationString}`
+            'verificationLink': `${process.env.VITE_BASE_URL}api/email/verify/${verificationString}`
         },
     
         headers: {
