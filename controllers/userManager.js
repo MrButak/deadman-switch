@@ -169,7 +169,7 @@ exports.getHttpCookie = async (req, res) => {
     };
 
 	// Decode JWT that was set as the cookie
-	let decodedJwt = jwtManager.verifyToken(decodedCookie);
+	let decodedJwt = verifyToken(decodedCookie);
 
     // If JWT could not be verified, or if it has expired, send status code back to the frontend
 	if(decodedJwt.status === '400' || decodedJwt.status === '401') {
@@ -179,7 +179,7 @@ exports.getHttpCookie = async (req, res) => {
 	};
 
     // Function will create a new cookie and set it - only if it expires within 2 days
-	jwtManager.refreshToken(res, decodedJwt);
+	refreshToken(res, decodedJwt);
 
     console.log(decodedJwt)
     // // Get all user data from DB using their DB id from the JWT
