@@ -18,14 +18,14 @@ exports.signupEmail = async (req, res) => {
     }
     catch(error) {
         console.log(error);
-        return res.status(400);
+        return res.status(400).json({status: '400', message: 'Invalid credentials'});
     };
 
     // User input validation
     if( !validateName(firstName) || !validateName(lastName) ||
         !validateEmail(email) || !validatePassword(password) ) {
             
-        return res.status(400);
+        return res.status(400).json({status: '400', message: 'Invalid credentials'});;
     };
 
     // Insert user into DB
@@ -40,19 +40,20 @@ exports.signupEmail = async (req, res) => {
     );
 
     if(!userData) {
-        return res.status(400);
+        return res.status(400).json({status: '400', message: 'Invalid credentials'});
     };
 
     // Send verification email
     let didSendVerificationEmail = sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.verification_string);
     if(!didSendVerificationEmail) {
-        
+        // trigger backup email sender like the nodemailer package?
         console.log('I need to handle this event, not sure how to yet');
         return res.status(500);
     };
 
-    return res.status(200)
+    return res.status(200).json({status: '200'});
 };
+
 
 // Function is called when a user 'clicks' on the email verification link (only when signed up with email)
 exports.verifyUserEmail = async (req, res) => {
