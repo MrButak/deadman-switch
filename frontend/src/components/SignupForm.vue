@@ -3,57 +3,60 @@
 <va-form class="signup-form">
     <h2 class="va-h3">Register</h2>
     <va-input
-      v-model="userSignupData.firstName"
-      type="text"
-      label="First name"
-      class="form-input mr-4 mb-4"
-      :rules="[value => (value && regexName.test(value)) || 'Field is required']"
+        v-model="userSignupData.firstName"
+        type="text"
+        label="First name"
+        class="form-input mr-4 mb-4"
+        :rules="[value => (value && regexName.test(value)) || 'Field is required']"
     />
     <va-input
-      v-model="userSignupData.lastName"
-      type="text"
-      label="Last name"
-      class="form-input mr-4 mb-4"
-      :rules="[value => (value && regexName.test(value)) || 'Field is required']"
+        v-model="userSignupData.lastName"
+        type="text"
+        label="Last name"
+        class="form-input mr-4 mb-4"
+        :rules="[value => (value && regexName.test(value)) || 'Field is required']"
     />
     <va-input
-      v-model="userSignupData.emailAddress"
-      type="email"
-      label="Email"
-      class="form-input mr-4 mb-4"
-      :rules="[value => (value && regexEmail.test(value)) || 'Field is required']"
+        v-model="userSignupData.emailAddress"
+        type="email"
+        label="Email"
+        class="form-input mr-4 mb-4"
+        :rules="[value => (value && regexEmail.test(value)) || 'Field is required']"
     />
     <va-input
-      v-model="userSignupData.password"
-      minlength="6"
-      maxlength="18"
-      :type="isPasswordVisible ? 'text' : 'password'"
-      label="Password"
-      class="form-input mr-4 mb-4"
-      :rules="[value => (value && regexPassword.test(value)) || 'Field is required']"
+        v-model="userSignupData.password"
+        minlength="6"
+        maxlength="18"
+        :type="isPasswordVisible ? 'text' : 'password'"
+        label="Password"
+        class="form-input mr-4 mb-4"
+        :rules="[value => (value && regexPassword.test(value)) || 'Field is required']"
     >
-      <template #appendInner>
+    <template #appendInner>
         <va-icon
-          :name="isPasswordVisible ? 'visibility_off' : 'visibility'"
-          size="small"
-          color="--va-primary"
-          @click="isPasswordVisible = !isPasswordVisible"
+        :name="isPasswordVisible ? 'visibility_off' : 'visibility'"
+        size="small"
+        color="--va-primary"
+        @click="isPasswordVisible = !isPasswordVisible"
         />
-      </template>
+    </template>
     </va-input>
     <va-input
-      v-model="userSignupData.retypePassword"
-      :type="isPasswordVisible ? 'text' : 'password'"
-      label="Retype password"
-      class="form-input mr-4 mb-4"
-      :rules="[value => (value && regexPassword.test(value)) || 'Field is required']"
+        v-model="userSignupData.retypePassword"
+        :type="isPasswordVisible ? 'text' : 'password'"
+        label="Retype password"
+        class="form-input mr-4 mb-4"
+        :rules="[value => (value && regexPassword.test(value)) || 'Field is required']"
     />
     <va-button
         @click.prevent="handleFormSubmission"
         :disabled="!areFormFieldsValid()"
     > Register </va-button>
     <p>
-        Already have an account? <span class="va-link">Login</span>
+        Already have an account? 
+        <span class="va-link">
+            Login
+        </span>
     </p>
 </va-form>
 
