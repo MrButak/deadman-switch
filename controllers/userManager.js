@@ -1,5 +1,5 @@
 const { validateName, validateEmail, validatePassword } = require('./javascripts/validationManager');
-const { insertNewUser } = require('./javascripts/databaseManager');
+const { insertNewUser, verifyUsersEmail } = require('./javascripts/databaseManager');
 const { hashString, compareString } = require('./javascripts/utils/hashing');
 const { randomString } = require('./javascripts/utils/utils');
 const { sendVerificationEmail } = require('./javascripts/emailManager');
@@ -46,7 +46,9 @@ exports.signupEmail = async (req, res) => {
     // Send verification email
     let didSendVerificationEmail = sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.verification_string);
     if(!didSendVerificationEmail) {
+        
         console.log('I need to handle this event, not sure how to yet');
+        return res.status(500);
     };
 
     return res.status(200)
@@ -71,7 +73,8 @@ exports.verifyUserEmail = async (req, res) => {
 		return res.redirect('https://mrbutak.com');
 		// return res.send('Link invalid');
 	};
-    console.log(uniqueString)
+    let userVerified = await verifyUsersEmail(uniqueString);
+    console.log(userVerified)
     // TODO: check if user is already verified. If so, send another message ('Account already verified')
 
 	// Update user in DB. If success, their account is now verified.
