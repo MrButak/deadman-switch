@@ -96,11 +96,11 @@ exports.loginEmail = async (req, res) => {
 	res.cookie('dms_access_token', accessToken, {
         secure: true,
 		signed: true, // signed with 'cookie-parser' middleware
-		// sameSite: process.env.APP_ENVIRONMENT == 'production',
         sameSite: true,
-		httpOnly: false,
+		httpOnly: true,
 		expires: new Date(Date.now() + 3600 * 24 * 14 * 1000) // 14 days. Set to same age as JWT
 	});
+
     console.log('cookie sent &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
     // Login success
     return res.status(200).json({status: '200', message: 'Login Success!'});
