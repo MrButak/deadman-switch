@@ -1,14 +1,16 @@
 var express = require('express');
 var router = express.Router();
+const app = express();
 
+const {signupEmail} = require('../controllers/userManager')
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/api/register', function(req, res, next) {
-    console.log('hitting');
-    return res.status(200)
+router.post('/api/register', async function(req, res, next) {
+    await signupEmail(req, res)
+    
 });
 
 module.exports = router;
