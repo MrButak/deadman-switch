@@ -4,6 +4,7 @@ const { hashString, compareString } = require('./javascripts/utils/hashing');
 const { randomString, decodeUri, encodeUri } = require('./javascripts/utils/utils');
 const { sendVerificationEmail } = require('./javascripts/emailManager');
 const { createJwtTokenWithDbId, verifyToken, refreshToken } = require('./javascripts/jwtManager');
+const cookieParser = require('cookie-parser');
 
 exports.signupEmail = async (req, res) => {
 
