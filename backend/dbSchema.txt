@@ -1,0 +1,17 @@
+CREATE TABLE app_users (
+    id SERIAL PRIMARY KEY,
+    email TEXT,
+    password TEXT,
+    creation_date TIMESTAMP,
+    provider VARCHAR(255),
+    email_verified BOOLEAN
+);
+
+CREATE TABLE user_preferences (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES app_users(id) NOT NULL,
+    recipient TEXT [],
+    check_in_interval_in_hours INTEGER CHECK (check_in_interval_in_hours > 0)
+);
+
+postgres://user:secret@localhost:5432/mydatabasename
