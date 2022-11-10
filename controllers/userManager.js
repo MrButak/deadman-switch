@@ -51,7 +51,7 @@ exports.signupEmail = async (req, res) => {
     return res.status(200).json({status: '200'});
 };
 
-
+// Function will handle user login and issue a cookie upon success
 exports.loginEmail = async (req, res) => {
     
     let email = password = '';
@@ -101,7 +101,6 @@ exports.loginEmail = async (req, res) => {
 		expires: new Date(Date.now() + 3600 * 24 * 14 * 1000) // 14 days. Set to same age as JWT
 	});
 
-    console.log('cookie sent &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
     // Login success
     return res.status(200).json({status: '200', message: 'Login Success!'});
 };
@@ -117,27 +116,22 @@ exports.verifyUserEmail = async (req, res) => {
 		uniqueString = req.params.uniqueString;
 	}
 	catch(err) {
-        // res.send('error')
-		console.log(err)
+		console.log(err);
+        return res.send('Link invalid');
 	};
 	
 	// If no query string was in request
 	if(!uniqueString) {
-		return res.redirect('https://mrbutak.com');
-		// return res.send('Link invalid');
+		return res.send('Link invalid');
 	};
+
+    // Update user in DB. If success, their account is now verified.
     let userVerified = await verifyUsersEmail(uniqueString);
-    console.log(userVerified)
-    // TODO: check if user is already verified. If so, send another message ('Account already verified')
-
-	// Update user in DB. If success, their account is now verified.
-	// let wasVerified = await dbManager.verifyUserInDbEmail(uniqueString);
     
-	// if(!wasVerified) {
-	// 	// return res.redirect(process.env.APP_REDIRECT_URL);
-	// 	return res.send('Link invalid');
-	// };
+	if(!userVerified) {
+		return res.send('Link invalid');
+	};
 
-	// console.log('success, db updated/user verified');
+    // Email verification success
 	return res.send('Verification success! You can safely close this window now.');
 };
