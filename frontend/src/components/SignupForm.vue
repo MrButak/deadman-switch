@@ -1,7 +1,6 @@
 <template>
 
 <va-form class="signup-form">
-    <h2 class="va-h3">Register</h2>
     <va-input
         v-model="userSignupData.firstName"
         type="text"
@@ -48,13 +47,16 @@
         class="form-input mr-4 mb-4"
         :rules="[value => (value && regexPassword.test(value)) || 'Field is required']"
     />
+
+    <div v-if="errorMessage" class="va-title" style="color: var(--va-danger); width: 300px; text-align: center;">{{ errorMessage }}</div>
+
     <va-button
         @click.prevent="handleFormSubmission"
         :disabled="!areFormFieldsValid()"
     > Register </va-button>
     <p>
         Already have an account? 
-        <span class="va-link">
+        <span @click="handleLoginView()" class="va-link">
             Login
         </span>
     </p>
@@ -67,7 +69,10 @@
 <script setup>
 
 import { ref, reactive, computed } from 'vue';
+import { hasRegistered, showLogin, showSignup } from '../../javascripts/stateManager';
+import { handleLoginView } from '../../javascripts/ViewManager';
 
+let errorMessage = ref('');
 let isPasswordVisible = ref(false);
 let userSignupData = reactive({
     firstName: '',
@@ -102,6 +107,9 @@ async function handleFormSubmission() {
     // Form validation
     if(!areFormFieldsValid()) { return };
 
+    // Remove error message (if any)
+    errorMessage.value = '';
+
     // Backend request
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/register`, {
         mode: 'cors',
@@ -117,16 +125,22 @@ async function handleFormSubmission() {
         })
     });
 
+    // Parse response
     let response = await request.json();
 
     switch(response.status) {
         case '400':
+            errorMessage.value = response.message;
             break;
         case '500':
+            errorMessage.value = response.message;
             break;
-        
-    }
-
+        // 200 success
+        default:
+            showSignup.value = false;
+            showLogin.value = true;
+            hasRegistered.value = true;
+    };
 };
 
 </script>

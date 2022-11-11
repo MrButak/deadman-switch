@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 const config = process.env;
 
-// Create token
+// ***********************************************************************************
+// Function will create a new JWT using the users id from the DB
+// ***********************************************************************************
 exports.createJwtTokenWithDbId = (userDbId) => {
 
 	// Create a new token with the user_id (from db) in the payload
@@ -13,6 +15,9 @@ exports.createJwtTokenWithDbId = (userDbId) => {
 	return token;
 };
 
+// ***********************************************************************************
+// Function will verify the token was signed with my key
+// ***********************************************************************************
 exports.verifyToken = (tc_access_token) => {
 
 	const token = tc_access_token;
@@ -25,21 +30,21 @@ exports.verifyToken = (tc_access_token) => {
 	} 
 	catch (err) {
 		if (err instanceof jwt.JsonWebTokenError) {
-			// if the error thrown is because the JWT is unauthorized, return a 401 error
-			// TODO: log user out and set existing browser cookie maxAge : 0 (this will destroy cookie)
+			// If the error thrown is because the JWT is unauthorized, return a 401 error
 			return {status : '401'};
 		};
-		// otherwise, return a bad request error
+		// Otherwise, return a bad request error
 		return {status : '400'};
-		// TODO: log user out and set existing browser cookie maxAge : 0 (this will destroy cookie)
 	};
 
 	return payload;
 };
 
+// ***********************************************************************************
+// Function will check if a JWT is within 2 days of expiring. If so create a new token
+// ***********************************************************************************
 exports.refreshToken = (res, payload) => {
 
-   
 	// Ensure that a new token is not issued until enough time has elapsed
 	// In this case, a new token will only be issued if the old token is within
 	// 2 days of expiry. Otherwise, return a bad request status
@@ -68,4 +73,4 @@ exports.refreshToken = (res, payload) => {
 		sameSite: true,
 		expires: new Date(Date.now() + 3600 * 24 * 14 * 1000) // 14 days. Set to same age as JWT (in milliseconds)
 	});
-}
+};

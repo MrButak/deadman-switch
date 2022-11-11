@@ -1,10 +1,14 @@
-const { validateName, validateEmail, validatePassword } = require('./javascripts/validationManager');
-const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail } = require('./javascripts/databaseManager');
-const { hashString, compareString } = require('./javascripts/utils/hashing');
-const { randomString } = require('./javascripts/utils/utils');
-const { sendVerificationEmail } = require('./javascripts/emailManager');
-const { createJwtTokenWithDbId, verifyToken, refreshToken } = require('./javascripts/jwtManager');
+const { validateName, validateEmail, validatePassword } = require('../javascripts/validationManager');
+const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail } = require('../javascripts/databaseManager');
+const { hashString, compareString } = require('../javascripts/utils/hashing');
+const { randomString, decodeUri } = require('../javascripts/utils/utils');
+const { sendVerificationEmail } = require('../javascripts/emailManager');
+const { createJwtTokenWithDbId, verifyToken, refreshToken } = require('../javascripts/jwtManager');
+const cookieParser = require('cookie-parser');
 
+// ***********************************************************************************
+// Function is called when a user signs up for a new account
+// ***********************************************************************************
 exports.signupEmail = async (req, res) => {
 
     let firstName = lastName = email = password = '';
@@ -51,7 +55,9 @@ exports.signupEmail = async (req, res) => {
     return res.status(200).json({status: '200'});
 };
 
+// ***********************************************************************************
 // Function will handle user login and issue a cookie upon success
+// ***********************************************************************************
 exports.loginEmail = async (req, res) => {
     
     let email = password = '';
@@ -87,7 +93,7 @@ exports.loginEmail = async (req, res) => {
     // Make sure they have a verified email
     if(!userLoginDbData.email_verified) {
         // The HyperText Transfer Protocol (HTTP) 401 Unauthorized response status code indicates that the client request has not been completed because it lacks valid authentication credentials for the requested resource
-        return res.status(401).json({status: '401', message: 'Email not verified'});
+        return res.status(401).json({status: '401', message: 'Email not verified. Check your email and click on the link to verify your email address'});
     };
 
     // Issue a JWT as a cookie
@@ -105,8 +111,9 @@ exports.loginEmail = async (req, res) => {
     return res.status(200).json({status: '200', message: 'Login Success!'});
 };
 
-
+// ***********************************************************************************
 // Function is called when a user 'clicks' on the email verification link (only when signed up with email)
+// ***********************************************************************************
 exports.verifyUserEmail = async (req, res) => {
     
 	let uniqueString = '';
@@ -136,9 +143,57 @@ exports.verifyUserEmail = async (req, res) => {
 	return res.send('Verification success! You can safely close this window now.');
 };
 
+// ***********************************************************************************
 // Function will attempt to get the http only cookie from the browser
+// ***********************************************************************************
 exports.getHttpCookie = async (req, res) => {
 
-    console.log(req.cookies)
-    console.log(req.cookies.dms_access_token)
+    let accessToken = '';
+
+    try {
+        accessToken = req.signedCookies.dms_access_token
+    }
+    catch(error) {
+        return res.status(401).json({status: '401', message: 'No cookie'});
+    };
+
+    let decodedCookie;
+    try {
+        // Decode uri string
+        accessToken = decodeUri(accessToken);
+        // Decode signed cookie
+        decodedCookie = cookieParser.signedCookie(accessToken, process.env.COOKIE_PARSER_SECRET);
+    }
+    catch(err) {
+        console.log(err);
+        return res.status(401).json({status: '401', message: 'Invalid cookie'});
+    };
+
+    // If cookie did not have signature
+    if(!decodedCookie) {
+        return res.status(401).json({status: '401', message: 'Cookie does not have signature'});
+    };
+
+	// Decode JWT that was set as the cookie
+	let decodedJwt = verifyToken(decodedCookie);
+
+    // If JWT could not be verified, or if it has expired, send status code back to the frontend
+	if(decodedJwt.status === '400' || decodedJwt.status === '401') {
+
+		console.log('An error was thrown verifying JWT', decodedJwt.status);
+		return res.status(parseInt(decodedJwt.status)).json({status: decodedJwt.status});
+	};
+
+    // Function will create a new cookie and set it - only if it expires within 2 days
+	refreshToken(res, decodedJwt);
+
+    console.log(decodedJwt)
+    // // Get all user data from DB using their DB id from the JWT
+	// let appUserData = await dbManager.getUserFromDbId(decodedJwt.userDbId);
+
+    // // cookies where present and legit, but user was not in DB
+    // if(!appUserData) {
+    //     return res.status(401).json({status: '401'});
+    // };
+    res.status(200).json({status: '200', loggedIn: true})
 };
