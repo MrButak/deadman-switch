@@ -16,7 +16,7 @@
 
 import { hasRegistered } from '../../javascripts/stateManager';
 import LoginForm from '../components/LoginForm.vue';
-import RegisterSuccessMessages from '../components/registerSuccessMessages.vue';
+import RegisterSuccessMessages from '../components/RegisterSuccessMessages.vue';
 
 </script>
 
