@@ -35,17 +35,22 @@
                 Register
             </span>
         </p>
+        <!-- Error message -->
+        <va-alert v-if="errorMessage" color="danger" class="mb-4">
+            {{ errorMessage }}
+        </va-alert>
     </va-form>
-    
-    </template>
+
+</template>
     
     
     
 <script setup>
 
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive } from 'vue';
 import { handleSignupView } from '../../javascripts/ViewManager'
 
+let errorMessage = ref('');
 let isPasswordVisible = ref(false);
 let userLoginData = reactive({
     emailAddress: '',
@@ -69,8 +74,11 @@ async function handleLogin() {
     // Form validation
     if(!areFormFieldsValid()) { return };
 
+    // Remove error message (if any)
+    errorMessage.value = '';
+
     // Backend request
-    await fetch(`${import.meta.env.VITE_BASE_URL}api/login`, {
+     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/login`, {
         mode: 'cors',
         method: 'POST',
         headers: {
@@ -82,15 +90,19 @@ async function handleLogin() {
         })
     });
 
-    // let response = await request.json();
+    // Parse response
+    let response = await request.json();
 
-    // switch(response.status) {
-    //     case '400':
-    //         break;
-    //     case '500':
-    //         break;
-        
-    // }
+    switch(response.status) {
+        case '400':
+            errorMessage.value = response.message;
+            break;
+        case '500':
+            errorMessage.value = response.message;
+            break;
+            // 200 success
+        // default:
+    };
 
 };
 

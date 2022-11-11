@@ -14,6 +14,7 @@ async function checkForValidCookie() {
         return true;
     }
     return false;
+    // return true;
 };
 
 export { checkForValidCookie }

@@ -15,8 +15,10 @@
                 Login
             </va-button>
         </span>
+
         <span v-else>
-            Hello
+            <va-button icon="settings" color="#fff" preset="plain" />
+            <va-button icon="account_circle" color="#fff" preset="plain" />
         </span>
         
     </va-app-bar>
