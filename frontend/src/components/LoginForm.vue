@@ -24,21 +24,19 @@
             />
         </template>
         </va-input>
-        
-        <va-button
+
+        <div v-if="errorMessage" class="va-title" style="color: var(--va-danger); width: 300px; text-align: center;">{{ errorMessage }}</div>
+
+        <va-button style="margin: 10px 0;"
             @click.prevent="handleLogin"
             :disabled="!areFormFieldsValid()"
         > Login </va-button>
-        <p>
+        <p v-if="!hasRegistered">
             Not regestered yet? 
             <span @click="handleSignupView()" class="va-link">
                 Register
             </span>
         </p>
-        <!-- Error message -->
-        <va-alert v-if="errorMessage" color="danger" class="mb-4">
-            {{ errorMessage }}
-        </va-alert>
     </va-form>
 
 </template>
@@ -49,6 +47,9 @@
 
 import { ref, reactive } from 'vue';
 import { handleSignupView } from '../../javascripts/ViewManager'
+import { hasRegistered, userLoggedIn,
+    showLogin, showSignup,
+    loginFailedEmailNotVerified } from '../../javascripts/stateManager';
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);
@@ -100,10 +101,21 @@ async function handleLogin() {
         case '500':
             errorMessage.value = response.message;
             break;
-            // 200 success
-        // default:
-    };
+        case '401': // Email not verified
+            errorMessage.value = response.message;
+            loginFailedEmailNotVerified.value = true;
+            // TODO: show an option to resend email
+            break;
+        default: // 200 success
+            // Handle views
+            errorMessage.value = '';
+            hasRegistered.value = false;
+            showLogin.value = false;
+            showSignup.value = false;
+            loginFailedEmailNotVerified.value = false;
 
+            userLoggedIn.value = true;
+    };
 };
 
 </script>
@@ -120,7 +132,7 @@ async function handleLogin() {
     flex-direction: column;
     align-items: center;
     p {
-        padding: .6rem 0 0 0;
+        // padding: .6rem 0 0 0;
     }
 }
 

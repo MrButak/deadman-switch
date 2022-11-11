@@ -11,7 +11,7 @@
     <span v-if="showLogin">
         <Login />
     </span>
-    <span v-else>
+    <span v-else-if="!hasRegistered && showSignup">
         <Signup />
     </span>
 
@@ -25,7 +25,7 @@
 
 import { onMounted } from 'vue';
 import { checkForValidCookie } from '../javascripts/userManager';
-import { userLoggedIn, showLogin, showSignup } from '../javascripts/stateManager';
+import { userLoggedIn, showLogin, showSignup, hasRegistered } from '../javascripts/stateManager';
 import Header from './components/global/Header.vue';
 import Login from './views/Login.vue';
 import Signup from './views/Signup.vue';

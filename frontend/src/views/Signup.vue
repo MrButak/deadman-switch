@@ -1,6 +1,6 @@
 <template>
     
-<h2 class="va-h3">Register</h2>
+<h2 class="va-h3 va-text-center" style="padding: 8px 0">Register</h2>
 <SignupForm />
 
 </template>

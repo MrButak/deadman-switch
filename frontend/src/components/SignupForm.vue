@@ -47,6 +47,9 @@
         class="form-input mr-4 mb-4"
         :rules="[value => (value && regexPassword.test(value)) || 'Field is required']"
     />
+
+    <div v-if="errorMessage" class="va-title">{{ errorMessage }}</div>
+
     <va-button
         @click.prevent="handleFormSubmission"
         :disabled="!areFormFieldsValid()"
@@ -57,10 +60,6 @@
             Login
         </span>
     </p>
-    <!-- Error message -->
-    <va-alert v-if="errorMessage" color="danger" class="mb-4">
-        {{ errorMessage }}
-    </va-alert>
 </va-form>
 
 </template>
@@ -70,6 +69,7 @@
 <script setup>
 
 import { ref, reactive, computed } from 'vue';
+import { hasRegistered, showLogin, showSignup } from '../../javascripts/stateManager';
 import { handleLoginView } from '../../javascripts/ViewManager';
 
 let errorMessage = ref('');
@@ -135,8 +135,11 @@ async function handleFormSubmission() {
         case '500':
             errorMessage.value = response.message;
             break;
-            // 200 success
-        // default:
+        // 200 success
+        default:
+            showSignup.value = false;
+            showLogin.value = true;
+            hasRegistered.value = true;
     };
 };
 

@@ -88,7 +88,7 @@ exports.loginEmail = async (req, res) => {
     // Make sure they have a verified email
     if(!userLoginDbData.email_verified) {
         // The HyperText Transfer Protocol (HTTP) 401 Unauthorized response status code indicates that the client request has not been completed because it lacks valid authentication credentials for the requested resource
-        return res.status(401).json({status: '401', message: 'Email not verified'});
+        return res.status(401).json({status: '401', message: 'Email not verified. Check your email and click on the link to verify your email address'});
     };
 
     // Issue a JWT as a cookie

@@ -6,7 +6,7 @@
         <va-button icon="info" color="#fff" preset="plain" />
         <va-spacer />
 
-        <span v-if="!userLoggedIn" style="padding-right: 10px;" >
+        <span v-if="!userLoggedIn && !hasRegistered" style="padding-right: 10px;" >
             <va-button @click="handleSignupView" color="#fff" preset="plain">
                 Register
             </va-button>
@@ -16,7 +16,7 @@
             </va-button>
         </span>
 
-        <span v-else>
+        <span v-else-if="userLoggedIn">
             <va-button icon="settings" color="#fff" preset="plain" />
             <va-button icon="account_circle" color="#fff" preset="plain" />
         </span>
@@ -29,7 +29,7 @@
 
 <script setup>
 
-import { userLoggedIn, showLogin, showSignup } from '../../../javascripts/stateManager';
+import { userLoggedIn, hasRegistered } from '../../../javascripts/stateManager';
 import { handleLoginView, handleSignupView } from '../../../javascripts/ViewManager';
 
 </script>
