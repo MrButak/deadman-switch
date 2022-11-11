@@ -49,7 +49,7 @@ exports.signupEmail = async (req, res) => {
     };
 
     // Send verification email
-    sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.verification_string);
+    sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.email_verification_string);
     
 
     return res.status(200).json({status: '200'});
