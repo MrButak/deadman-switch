@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { signupEmail, verifyUserEmail, loginEmail, getHttpCookie } = require('../controllers/userManager');
+const { signupEmail, verifyUserEmail, loginEmail, getHttpCookie, getDeadmanSwitchesWithUserId } = require('../controllers/userManager');
 
 // User signs up for an account
-router.post('/api/register', async function(req, res, next) {
+router.post('/api/user/register', async function(req, res, next) {
     await signupEmail(req, res)
 });
 
 // User logs in
-router.post('/api/login', async function(req, res, next) {
+router.post('/api/user/login', async function(req, res, next) {
     await loginEmail(req, res)
 });
 
@@ -22,4 +22,8 @@ router.get('/api/user/verify', async function(req, res) {
     await getHttpCookie(req, res);
 });
 
+// This route is called on app load ONLY if a user is logged in
+router.get('/api/user/data/deadman-switches/:userId?', async function(req, res) {
+    await getDeadmanSwitchesWithUserId(req, res, userId);
+});
 module.exports = router;

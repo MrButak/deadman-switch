@@ -1,7 +1,7 @@
 // ***********************************************************************************
 // Function is called on app mount. Will check if a user is logged in granting/blocking access to 'views'
 // ***********************************************************************************
-async function checkForValidCookie() {
+async function checkForValidCookieAndGetUserId() {
 
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/verify`, {
         method: 'GET',
@@ -18,4 +18,13 @@ async function checkForValidCookie() {
     return true;
 };
 
-export { checkForValidCookie }
+
+async function getDeadmanSwitchesWithUserId(userId) {
+
+    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/data/deadman-switches/?userId`, {
+        method: 'GET',
+    });
+
+    let response = await request.json();
+};
+export { checkForValidCookieAndGetUserId, getDeadmanSwitchesWithUserId }

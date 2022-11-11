@@ -1,5 +1,5 @@
 const { validateName, validateEmail, validatePassword } = require('../javascripts/validationManager');
-const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail } = require('../javascripts/databaseManager');
+const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail, getUserDeadmansAndData } = require('../javascripts/databaseManager');
 const { hashString, compareString } = require('../javascripts/utils/hashing');
 const { randomString, decodeUri } = require('../javascripts/utils/utils');
 const { sendVerificationEmail } = require('../javascripts/emailManager');
@@ -196,4 +196,14 @@ exports.getHttpCookie = async (req, res) => {
     //     return res.status(401).json({status: '401'});
     // };
     res.status(200).json({status: '200', loggedIn: true})
+};
+
+// Function will get the users deadman switches from the DB
+exports.getDeadmanSwitchesWithUserId = async(req, res, userId) => {
+
+    if(!userId) {
+        return res.status(200).json({status: '500', message: 'An unknown error occurred'});
+    };
+
+    let userData = await getUserDeadmanSwitches();
 };

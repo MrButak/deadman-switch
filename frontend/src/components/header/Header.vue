@@ -17,7 +17,7 @@
         </span>
 
         <span v-else-if="userLoggedIn">
-            <va-button icon="settings" color="#fff" preset="plain" />
+            <va-button icon="add_circle" color="#fff" preset="plain" />
             <va-button icon="account_circle" color="#fff" preset="plain" />
         </span>
         

@@ -24,8 +24,10 @@
 <script setup>
 
 import { onMounted } from 'vue';
-import { checkForValidCookie } from '../javascripts/userManager';
-import { userLoggedIn, showLogin, showSignup, hasRegistered } from '../javascripts/stateManager';
+import { checkForValidCookieAndGetUserId, getDeadmanSwitchesWithUserId } from '../javascripts/userManager';
+import { userLoggedIn, showLogin, showSignup, hasRegistered,
+        deadmanSwitches
+} from '../javascripts/stateManager';
 import Header from './components/header/Header.vue';
 import Login from './views/Login.vue';
 import Signup from './views/Signup.vue';
@@ -35,24 +37,34 @@ import Home from './views/Home.vue';
 onMounted(() => {
 
     (async() => {
-        await checkIfUserIsLoggedIn();
+        let isUserLoggedIn = await checkIfUserIsLoggedIn();
+        if (isUserLoggedIn[0]) {
+
+            // let switches = await getDeadmanSwitchesWithUserId()
+            
+            // TODO: Backend call to get switches and user data
+            // *Separate the logic. don't get user data until they click on their account icon*
+
+        };
     })();
 });
 
 
 async function checkIfUserIsLoggedIn() {
 
-    let userIsLoggedIn = await checkForValidCookie();
-    if(!userIsLoggedIn) {
+    let userId = await checkForValidCookieAndGetUserId();
+    if(!userId) {
         showLogin.value = true;
         showSignup.value = false;
         userLoggedIn.value = false;
+        return [false];
     }
     else {
         showLogin.value = false;
         showSignup.value = false;
         userLoggedIn.value = true;
-    }
+        return [true, userId];
+    };
 };
 
 </script>

@@ -111,7 +111,7 @@ async function handleFormSubmission() {
     errorMessage.value = '';
 
     // Backend request
-    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/register`, {
+    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/register`, {
         mode: 'cors',
         method: 'POST',
         headers: {

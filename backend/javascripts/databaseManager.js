@@ -24,7 +24,7 @@ else if(process.env.APP_ENVIRONMENT === 'production') {
 // ***********************************************************************************
 exports.insertNewUser = async(firstName, lastName, email, password, provider, verified, verificationString) => {
 
-    let dbStmt = 'INSERT INTO app_users (first_name, last_name, email, password, creation_date, provider, verification_string, email_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;'
+    let dbStmt = 'INSERT INTO app_users (first_name, last_name, email, password, creation_date, provider, email_verification_string, email_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;'
     let dbValues = [firstName, lastName, email, password, new Date(Date.now()), provider, verificationString, verified];
 
     try {
@@ -66,7 +66,25 @@ exports.getUserLoginCredsWithEmail = async (email) => {
 // ***********************************************************************************
 exports.verifyUsersEmail = async (uniqueString) => {
 
-    let dbStmt = 'UPDATE app_users SET email_verified = true, verification_string = null WHERE verification_string = ($1) RETURNING *;';
+    let dbStmt = 'UPDATE app_users SET email_verified = true, email_verification_string = null WHERE email_verification_string = ($1) RETURNING *;';
+    let dbValues = [uniqueString];
+
+    try {
+        let wasUpdated = await pool.query(dbStmt, dbValues);
+        return wasUpdated.rows.length > 0;
+    }
+    catch(err) {
+        console.log(err);
+        return false;
+    };
+};
+
+// ***********************************************************************************
+// Function will select all deadman switches user the user DB id
+// ***********************************************************************************
+exports.getUserDeadmanSwitches = async (uniqueString) => {
+
+    let dbStmt = 'SELECT * FROM deadman_switches';
     let dbValues = [uniqueString];
 
     try {

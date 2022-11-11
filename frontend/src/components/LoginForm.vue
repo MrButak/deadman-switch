@@ -79,7 +79,7 @@ async function handleLogin() {
     errorMessage.value = '';
 
     // Backend request
-     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/login`, {
+     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/login`, {
         mode: 'cors',
         method: 'POST',
         headers: {
