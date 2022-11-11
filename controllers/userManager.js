@@ -1,11 +1,14 @@
 const { validateName, validateEmail, validatePassword } = require('./javascripts/validationManager');
 const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail } = require('./javascripts/databaseManager');
 const { hashString, compareString } = require('./javascripts/utils/hashing');
-const { randomString, decodeUri, encodeUri } = require('./javascripts/utils/utils');
+const { randomString, decodeUri } = require('./javascripts/utils/utils');
 const { sendVerificationEmail } = require('./javascripts/emailManager');
 const { createJwtTokenWithDbId, verifyToken, refreshToken } = require('./javascripts/jwtManager');
 const cookieParser = require('cookie-parser');
 
+// ***********************************************************************************
+// Function is called when a user signs up for a new account
+// ***********************************************************************************
 exports.signupEmail = async (req, res) => {
 
     let firstName = lastName = email = password = '';
@@ -52,7 +55,9 @@ exports.signupEmail = async (req, res) => {
     return res.status(200).json({status: '200'});
 };
 
+// ***********************************************************************************
 // Function will handle user login and issue a cookie upon success
+// ***********************************************************************************
 exports.loginEmail = async (req, res) => {
     
     let email = password = '';
@@ -106,8 +111,9 @@ exports.loginEmail = async (req, res) => {
     return res.status(200).json({status: '200', message: 'Login Success!'});
 };
 
-
+// ***********************************************************************************
 // Function is called when a user 'clicks' on the email verification link (only when signed up with email)
+// ***********************************************************************************
 exports.verifyUserEmail = async (req, res) => {
     
 	let uniqueString = '';

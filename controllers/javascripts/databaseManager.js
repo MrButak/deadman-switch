@@ -19,6 +19,9 @@ else if(process.env.APP_ENVIRONMENT === 'production') {
     });
 };
 
+// ***********************************************************************************
+// Function is called after a successful signup
+// ***********************************************************************************
 exports.insertNewUser = async(firstName, lastName, email, password, provider, verified, verificationString) => {
 
     let dbStmt = 'INSERT INTO app_users (first_name, last_name, email, password, creation_date, provider, verification_string, email_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;'
@@ -37,6 +40,9 @@ exports.insertNewUser = async(firstName, lastName, email, password, provider, ve
     };
 };
 
+// ***********************************************************************************
+// Function is called when a user attempts to login with their email
+// ***********************************************************************************
 exports.getUserLoginCredsWithEmail = async (email) => {
 
     let dbStmt = 'SELECT * FROM app_users WHERE email ilike ($1);';
@@ -55,7 +61,9 @@ exports.getUserLoginCredsWithEmail = async (email) => {
     };
 };
 
+// ***********************************************************************************
 // Function is called when a user verifies their email. ('clicked' from the link I sent in the email '/signup/email')
+// ***********************************************************************************
 exports.verifyUsersEmail = async (uniqueString) => {
 
     let dbStmt = 'UPDATE app_users SET email_verified = true, verification_string = null WHERE verification_string = ($1) RETURNING *;';

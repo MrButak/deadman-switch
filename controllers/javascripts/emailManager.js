@@ -1,6 +1,9 @@
 config = require('dotenv').config();
 const email_sk = process.env.SEND_IN_BLUE_API;
 
+// ***********************************************************************************
+// Function is called after a successful signup. Sends a verification link to the user
+// ***********************************************************************************
 exports.sendVerificationEmail = (firstName, lastName, email, verificationString) => {
     
     var SibApiV3Sdk = require('sib-api-v3-sdk');
@@ -29,10 +32,7 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString)
     };
     
     apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
-        console.log('email API called successfully.');
-        console.log(data);
         return true;
-        
     }, 
     function(error) {
         console.error(error);

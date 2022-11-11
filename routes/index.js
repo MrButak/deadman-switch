@@ -1,11 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const app = express();
 const { signupEmail, verifyUserEmail, loginEmail, getHttpCookie } = require('../controllers/userManager');
-
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Express' });
-// });
 
 // User signs up for an account
 router.post('/api/register', async function(req, res, next) {
@@ -22,6 +17,7 @@ router.get('/api/email/verify/:uniqueString?', async function(req, res) {
     await verifyUserEmail(req, res);
 });
 
+// This route is called to check if a user is logged in
 router.get('/api/user/verify', async function(req, res) {
     await getHttpCookie(req, res);
 });
