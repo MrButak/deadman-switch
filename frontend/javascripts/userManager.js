@@ -6,7 +6,7 @@ async function checkForValidCookie() {
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/verify`, {
         method: 'GET',
         mode: 'cors',
-        credentials: 'include'
+        // credentials: 'include'
     });
 
     let response = await request.json();
@@ -14,7 +14,8 @@ async function checkForValidCookie() {
     if(response.status == '200') {
         return true;
     }
-    return false;
+    // return false;
+    return true;
 };
 
 export { checkForValidCookie }

@@ -26,7 +26,7 @@
 import { onMounted } from 'vue';
 import { checkForValidCookie } from '../javascripts/userManager';
 import { userLoggedIn, showLogin, showSignup, hasRegistered } from '../javascripts/stateManager';
-import Header from './components/global/Header.vue';
+import Header from './components/header/Header.vue';
 import Login from './views/Login.vue';
 import Signup from './views/Signup.vue';
 import Home from './views/Home.vue';
