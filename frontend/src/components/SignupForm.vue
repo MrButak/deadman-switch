@@ -48,7 +48,7 @@
         :rules="[value => (value && regexPassword.test(value)) || 'Field is required']"
     />
 
-    <div v-if="errorMessage" class="va-title">{{ errorMessage }}</div>
+    <div v-if="errorMessage" class="va-title" style="color: var(--va-danger); width: 300px; text-align: center;">{{ errorMessage }}</div>
 
     <va-button
         @click.prevent="handleFormSubmission"
