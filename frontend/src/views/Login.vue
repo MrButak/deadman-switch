@@ -5,7 +5,7 @@
 <LoginForm />
 <!-- After a successful registration, the user is taken to the login page which display these messages -->
 <span v-if="hasRegistered">
-    <RegisterSuccessMessages />
+    <!-- <RegisterSuccessMessages /> -->
 </span>
 
 </template>
