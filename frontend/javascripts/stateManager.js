@@ -10,6 +10,14 @@ let loginFailedEmailNotVerified = ref(false); // Edge case. If a user registered
 
 let showCreateDeadmanSwitch = ref(false);
 
+// Create switch
+let createSwitchNavigationViews = reactive(
+    [
+        {'text': 'Settings', 'icon': 'settings'}, 
+        {'text': 'Recipient', 'icon': 'face'}
+    ]);
+
+
 let deadmanSwitches = reactive([]);
 
 export {
@@ -17,5 +25,7 @@ export {
     showLogin, showSignup, // view
     hasRegistered, loginFailedEmailNotVerified, // view
     deadmanSwitches, // data
-    showCreateDeadmanSwitch // view
+    showCreateDeadmanSwitch, // view
+    // Create switch
+    createSwitchNavigationViews
 }

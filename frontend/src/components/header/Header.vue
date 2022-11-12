@@ -6,6 +6,11 @@
         <va-button @click="showModal = !showModal" icon="info" color="#fff" preset="plain" />
         <va-spacer />
 
+
+        <va-button-toggle v-model="theme" :options="themeOptions" class="ml-2" />
+        <!-- <va-switch v-model="theme" :options="themeOptions" color="warning" class="mr-4" /> -->
+
+
         <span v-if="!userLoggedIn && !hasRegistered" style="padding-right: 10px;" >
             <va-button @click="handleSignupView" color="#fff" preset="plain">
                 Register
@@ -23,6 +28,7 @@
         
     </va-app-bar>
   </div>
+
   <!-- About icon popup modal -->
   <va-modal
     v-model="showModal"
@@ -32,11 +38,27 @@
 
 </template>
 
+
+
 <script setup>
 
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
+import { useColors } from 'vuestic-ui';
+
 import { userLoggedIn, hasRegistered } from '../../../javascripts/stateManager';
 import { handleLoginView, handleSignupView } from '../../../javascripts/ViewManager';
+
+const { presets, applyPreset } = useColors()
+let theme = ref(localStorage.getItem('vuestic-docs-theme')?.toLowerCase() || 'dark');
+let themeOptions = Object.keys(presets.value).map((themeName) => ({
+    value: themeName,
+    label: themeName
+}));
+watchEffect(() => {
+    applyPreset(theme.value)
+});
+
+
 
 let showModal = ref(false);
 let infoMessage = 'Deadman switch is an app to help people help those who care about them know they are ok.';

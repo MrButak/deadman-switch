@@ -1,12 +1,14 @@
 <template>
-
+<CreateSwitchNavigation />
 <va-form class="signup-form">
     <p>Who should receive your message in case you don't make it home for supper?</p>
     <va-icon
         class="mr-2"
         name="person"
         size="2rem"
+        color="active"
     />
+
     <va-input
         v-model="deadmanSwitchData.recipientFirstName"
         type="text"
@@ -33,12 +35,17 @@
         class="mr-2"
         name="settings"
         size="2rem"
+        color="inactive"
     />
     <div class="check-in-option-wrapper">
         <p>Check in every</p>
         <va-select style="width: 35px;" v-model="value" :options="options" />
         <p>day(s).</p>
     </div>
+    
+    <TimePicker />
+
+
     <p>Final message</p>
     <va-input
         class="mb-4"
@@ -49,13 +56,21 @@
         :min-rows="5"
         :max-rows="20"
     />
+    
     <div class="cancel-submit-button-wrapper">
         <va-button color="danger" class="mr-4 mb-2">Cancel</va-button>
         <va-button color="success" class="mr-4 mb-2">Create</va-button>
     </div>
+
     <div v-if="errorMessage" class="va-title" style="color: var(--va-danger); width: 300px; text-align: center;">{{ errorMessage }}</div>
+
     
+
 </va-form>
+
+
+
+
 
 </template>
 
@@ -64,6 +79,10 @@
 <script setup>
 
 import { ref, reactive } from 'vue';
+import CreateSwitchNavigation from '../create-switch/CreateSwitchNavigation.vue';
+import TimePicker from '../create-switch/switchOptions/TimePicker.vue';
+
+
 
 let value = ref('');
 let options = [1, 2, 3];
@@ -83,6 +102,7 @@ let deadmanSwitchData = reactive({
 
 
 <style lang="scss" scoped>
+
 
 .signup-form {
     display: flex;
