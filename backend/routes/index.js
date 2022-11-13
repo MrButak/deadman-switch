@@ -25,7 +25,7 @@ router.get('/api/user/verify', async function(req, res) {
 
 // This route is called on app load ONLY if a user is logged in
 router.get('/api/user/data/deadman-switches/:userId?', async function(req, res) {
-    await getDeadmanSwitchesWithUserId(req, res, userId);
+    await getDeadmanSwitchesWithUserId(req, res);
 });
 
 router.post('/api/switch/create', async function(req, res) {

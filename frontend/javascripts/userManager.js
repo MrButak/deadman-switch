@@ -11,6 +11,7 @@ async function checkForValidCookieAndGetUserId() {
 
     let response = await request.json();
     // 400 401 200
+    console.log({response})
     if(response.status == '200') {
         return [true, response.userDbId];
     }

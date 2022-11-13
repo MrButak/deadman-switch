@@ -39,6 +39,7 @@ onMounted(() => {
 
     (async() => {
         let isUserLoggedIn = await checkIfUserIsLoggedIn();
+        console.log({isUserLoggedIn})
         if (isUserLoggedIn[0]) {
 
             let switches = await getDeadmanSwitchesWithUserId(isUserLoggedIn[1]);
@@ -57,6 +58,7 @@ onMounted(() => {
 async function checkIfUserIsLoggedIn() {
 
     let userId = await checkForValidCookieAndGetUserId();
+    console.log({userId})
     if(!userId[0]) {
         showLogin.value = true;
         showSignup.value = false;
