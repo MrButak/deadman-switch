@@ -10,13 +10,26 @@ let loginFailedEmailNotVerified = ref(false); // Edge case. If a user registered
 
 let showCreateDeadmanSwitch = ref(false);
 
+// ******************************************************************
 // Create switch
+// ******************************************************************
+// Navigation header (HTML tabs)
 let createSwitchNavigationViews = reactive(
     [
         {'text': 'Settings', 'icon': 'settings'}, 
-        {'text': 'Recipient', 'icon': 'face'}
+        {'text': 'Recipient', 'icon': 'face'},
+        {'text': 'Create', 'icon': 'add_circle'}
     ]);
+let creatSwitchCurrentView = ref('Settings'); // Default
 
+let newSwitchData = reactive({
+    recipientFirstName: '',
+    recipientLastName: '',
+    recipientEmail: '',
+    checkInIntervalInDays: 1,
+    checkInTime: new Date(),
+    finalMessage: ''
+});
 
 let deadmanSwitches = reactive([]);
 
@@ -27,5 +40,6 @@ export {
     deadmanSwitches, // data
     showCreateDeadmanSwitch, // view
     // Create switch
-    createSwitchNavigationViews
+    creatSwitchCurrentView,
+    createSwitchNavigationViews, newSwitchData
 }

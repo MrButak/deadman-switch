@@ -9,7 +9,7 @@
         <va-tab v-for="view in createSwitchNavigationViews" 
             :label="view.text"
             :icon="view.icon"
-            @click="handleCreateSwitchView(view.text)"
+            @click="creatSwitchCurrentView = view.text"
             >
         </va-tab>
     </template>
@@ -22,16 +22,11 @@
 <script setup>
 
 import { ref } from 'vue';
-import { createSwitchNavigationViews } from '../../../javascripts/stateManager';
+import { createSwitchNavigationViews,
+        creatSwitchCurrentView
+} from '../../../javascripts/stateManager';
 
 let defaultTabPosition = ref(0)
-
-
-
-function handleCreateSwitchView() {
-
-    console.log(defaultTabPosition.value)
-};
 
 </script>
 
