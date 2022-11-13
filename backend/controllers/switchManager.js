@@ -6,6 +6,7 @@ exports.getDeadmanSwitchesWithUserId = async(req, res) => {
     let userId = '';
 	
 	try {
+        console.log(req.params)
 		userId = req.params.userId;
 	}
 	catch(err) {

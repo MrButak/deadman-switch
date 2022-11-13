@@ -1,6 +1,6 @@
 async function getDeadmanSwitchesWithUserId(userId) {
 
-    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/data/deadman-switches/?${userId}`, {
+    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/data/deadman-switches/${userId}`, {
         method: 'GET',
     });
 
