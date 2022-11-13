@@ -29,7 +29,7 @@ router.get('/api/user/data/deadman-switches/:userId?', async function(req, res) 
 });
 
 router.post('/api/switch/create', async function(req, res) {
-    await createNewSwitch(req, res, userId)
+    await createNewSwitch(req, res);
 });
 
 module.exports = router;

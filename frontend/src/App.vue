@@ -24,7 +24,8 @@
 <script setup>
 
 import { onMounted } from 'vue';
-import { checkForValidCookieAndGetUserId, getDeadmanSwitchesWithUserId } from '../javascripts/userManager';
+import { getDeadmanSwitchesWithUserId } from '../javascripts/deadmanManager';
+import { checkForValidCookieAndGetUserId } from '../javascripts/userManager';
 import { userLoggedIn, showLogin, showSignup, hasRegistered,
         deadmanSwitches
 } from '../javascripts/stateManager';
@@ -41,7 +42,10 @@ onMounted(() => {
         if (isUserLoggedIn[0]) {
 
             let switches = await getDeadmanSwitchesWithUserId(isUserLoggedIn[1]);
-            
+            console.log({switches})
+            if(switches) {
+                // TODO: push switches into State Array
+            };
             // TODO: Backend call to get switches and user data
             // *Separate the logic. don't get user data until they click on their account icon*
 
