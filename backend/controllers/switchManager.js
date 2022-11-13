@@ -1,4 +1,4 @@
-import { getDeadmanSwitches } from '../javascripts/databaseManager';
+const { getDeadmanSwitches } = require('../javascripts/databaseManager');
 
 // Function will get the users deadman switches from the DB
 exports.getDeadmanSwitchesWithUserId = async(req, res, userId) => {

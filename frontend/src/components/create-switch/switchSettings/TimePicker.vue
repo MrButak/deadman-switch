@@ -2,7 +2,7 @@
 
 <div class="time-picker-wrapper">
     <div class="display-time-wrapper">
-        <p>At</p>
+        <p>No later than</p>
         <h6 class="va-h6">{{ doubleDigitHours }}:{{ doubleDigitMinutes }}</h6>
     </div>
     <va-time-picker v-model="newSwitchData.checkInTime" />
