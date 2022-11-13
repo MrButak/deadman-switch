@@ -10,12 +10,13 @@ async function checkForValidCookieAndGetUserId() {
     });
 
     let response = await request.json();
+    console.log(response)
     // 400 401 200
     if(response.status == '200') {
         return [true];
     }
     return [false];
-    // return [true, ];
+    // return [true];
 };
 
 
