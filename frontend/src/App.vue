@@ -53,7 +53,7 @@ onMounted(() => {
 async function checkIfUserIsLoggedIn() {
 
     let userId = await checkForValidCookieAndGetUserId();
-    if(!userId) {
+    if(!userId[0]) {
         showLogin.value = true;
         showSignup.value = false;
         userLoggedIn.value = false;
