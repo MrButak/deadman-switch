@@ -40,7 +40,7 @@ onMounted(() => {
         let isUserLoggedIn = await checkIfUserIsLoggedIn();
         if (isUserLoggedIn[0]) {
 
-            // let switches = await getDeadmanSwitchesWithUserId()
+            let switches = await getDeadmanSwitchesWithUserId(isUserLoggedIn[1]);
             
             // TODO: Backend call to get switches and user data
             // *Separate the logic. don't get user data until they click on their account icon*
@@ -63,7 +63,7 @@ async function checkIfUserIsLoggedIn() {
         showLogin.value = false;
         showSignup.value = false;
         userLoggedIn.value = true;
-        return [true, userId];
+        return [true, userId[1]];
     };
 };
 

@@ -82,17 +82,17 @@ exports.verifyUsersEmail = async (uniqueString) => {
 // ***********************************************************************************
 // Function will select all deadman switches user the user DB id
 // ***********************************************************************************
-exports.getUserDeadmanSwitches = async (uniqueString) => {
+exports.getDeadmanSwitches = async (userId) => {
 
-    let dbStmt = 'SELECT * FROM deadman_switches';
-    let dbValues = [uniqueString];
+    let dbStmt = 'SELECT * FROM deadman_switches WHERE user_id = ($1)';
+    let dbValues = [userId];
 
     try {
-        let wasUpdated = await pool.query(dbStmt, dbValues);
-        return wasUpdated.rows.length > 0;
+        let dbQuery = await pool.query(dbStmt, dbValues);
+        return [true, dbQuery.rows];
     }
     catch(err) {
         console.log(err);
-        return false;
+        return [false];
     };
 };

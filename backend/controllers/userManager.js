@@ -1,5 +1,5 @@
 const { validateName, validateEmail, validatePassword } = require('../javascripts/validationManager');
-const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail, getUserDeadmansAndData } = require('../javascripts/databaseManager');
+const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail } = require('../javascripts/databaseManager');
 const { hashString, compareString } = require('../javascripts/utils/hashing');
 const { randomString, decodeUri } = require('../javascripts/utils/utils');
 const { sendVerificationEmail } = require('../javascripts/emailManager');

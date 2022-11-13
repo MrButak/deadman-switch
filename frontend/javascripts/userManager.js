@@ -10,22 +10,30 @@ async function checkForValidCookieAndGetUserId() {
     });
 
     let response = await request.json();
-    console.log(response)
     // 400 401 200
     if(response.status == '200') {
-        return [true];
+        return [true, response.userDbId];
     }
     return [false];
-    // return [true];
+    // return [true, response.userDbId];
 };
 
 
 async function getDeadmanSwitchesWithUserId(userId) {
 
-    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/data/deadman-switches/?userId`, {
+    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/data/deadman-switches/?${userId}`, {
         method: 'GET',
     });
 
     let response = await request.json();
+    console.log(response)
+    switch(response.status) {
+        case '500':
+            // TODO: return error message (db error on backend)
+            break;
+        default:
+            // Even if no switches still return the empty Array
+            
+    }
 };
 export { checkForValidCookieAndGetUserId, getDeadmanSwitchesWithUserId }
