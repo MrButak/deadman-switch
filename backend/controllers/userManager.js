@@ -195,6 +195,6 @@ exports.getHttpCookie = async (req, res) => {
     // if(!appUserData) {
     //     return res.status(401).json({status: '401'});
     // };
-    res.status(200).json({status: '200', decodedJwt})
+    res.status(200).json({status: '200', userId: decodedJwt.userDbId})
 };
 

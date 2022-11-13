@@ -13,7 +13,7 @@ async function checkForValidCookieAndGetUserId() {
     // 400 401 200
     console.log({response})
     if(response.status == '200') {
-        return [true, response.userDbId];
+        return [true, response.userId];
     }
     return [false];
     // return [true, response.userDbId];
