@@ -18,7 +18,7 @@ let createSwitchNavigationViews = reactive(
     [
         {'text': 'Settings', 'icon': 'settings'}, 
         {'text': 'Recipient', 'icon': 'face'},
-        {'text': 'Create', 'icon': 'add_circle'}
+        {'text': 'Review', 'icon': 'content_paste_search'}
     ]);
 let creatSwitchCurrentView = ref('Settings'); // Default
 

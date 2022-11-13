@@ -10,7 +10,7 @@
     <SwitchRecipient />
 </span>
 
-<span v-else-if="creatSwitchCurrentView == 'Create'">
+<span v-else-if="creatSwitchCurrentView == 'Review'">
     <CreateSwitchView />
 </span>
 
