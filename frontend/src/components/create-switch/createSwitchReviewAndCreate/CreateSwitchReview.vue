@@ -6,15 +6,15 @@
         <va-card-title>Recipient information</va-card-title>
         <va-card-actions align="between">
           <p style="padding: 0 1rem 0 0">First name</p>
-          <p style="padding: 0 0 0 1rem" class="va-text-warning">Placeholder{{ newSwitchData.recipientFirstName }}</p>
+          <p style="padding: 0 0 0 1rem" class="va-text-warning">{{ newSwitchData.recipientFirstName }}</p>
         </va-card-actions>
         <va-card-actions align="between">
           <p style="padding: 0 1rem 0 0">Last name</p>
-          <p style="padding: 0 0 0 1rem" class="va-text-warning">Placeholder{{ newSwitchData.recipientLastName }}</p>
+          <p style="padding: 0 0 0 1rem" class="va-text-warning">{{ newSwitchData.recipientLastName }}</p>
         </va-card-actions>
         <va-card-actions align="between">
           <p style="padding: 0 1rem 0 0">Email</p>
-          <p style="padding: 0 0 0 1rem" class="va-text-warning">Placeholder{{ newSwitchData.recipientEmail }}</p>
+          <p style="padding: 0 0 0 1rem" class="va-text-warning">{{ newSwitchData.recipientEmail }}</p>
         </va-card-actions>
         <va-card-actions align="between">
           <p style="padding: 0 1rem 0 0">Final message</p>
@@ -35,8 +35,8 @@
         </va-card-actions>
         <va-card-actions align="between">
           <p>No later than</p>
-          <!-- <p style="padding: 0 0 0 1rem">Placeholder{{ newSwitchData.checkInTime }}</p> -->
-          <p class="va-text-warning">10:00</p>
+          <p style="padding: 0 0 0 1rem">{{ newSwitchData.checkInTime }}</p>
+          <!-- <p class="va-text-warning">10:00</p> -->
         </va-card-actions>
       </va-card>
     </div>
