@@ -38,7 +38,7 @@
           <p style="padding: 0 0 0 2rem" class="va-text-success">{{ newSwitchData.checkInTime.toLocaleTimeString() }}</p>
         </va-card-actions>
 
-        <va-card-actions align="between">
+        <!-- <va-card-actions align="between">
           <p style="padding: 0 2rem 0 0">Check in for the first time</p>
           <va-checkbox style="padding: 0 0 0 2rem"
                 color="success"
@@ -46,11 +46,8 @@
                 v-model="newSwitchData.checkInForTheFirstTime" 
                 @click="calculateNewSwitchTimer"
             />
-        </va-card-actions>
-        
+        </va-card-actions> -->
     </va-card>
-    
-
     </div>
 </div>
     <!-- Final message popup modal -->
@@ -67,110 +64,32 @@
 
 <script setup>
 
-import { ref, computed, onMounted } from 'vue';
-import { newSwitchData, createSwitchReviewErrorMessages,
-        regexName, regexEmail
+import { ref, computed } from 'vue';
+import { newSwitchData, secondsBeforeNewSwitchFlipped
 } from '../../../../javascripts/stateManager';
 
-//     color: 'warning', // success
-//     icon: 'info', // check_circle
-//     text: 'error message' //
 
 // Popup modal which displays user's final message
 let showFinalMessageModal = ref(false);
 
 // Function is called when a user chooses to check in for the first time during switch creation
 function calculateNewSwitchTimer() {
+
+    // Reset the switch if the clock runs down below 0
+    if(secondsBeforeNewSwitchFlipped.value < 0) {
+        secondsBeforeNewSwitchFlipped.value += newSwitchData.switchIntervalInSeconds;
+    };
+
     if(newSwitchData.checkInForTheFirstTime) {
-        newSwitchData.secondsBeforeSwitchFlipped += newSwitchData.switchIntervalInSeconds;
+        secondsBeforeNewSwitchFlipped.value += newSwitchData.switchIntervalInSeconds;
         return;
     };
-    newSwitchData.secondsBeforeSwitchFlipped -= newSwitchData.switchIntervalInSeconds;
-}
-
-// Should be moved to CreateSwitchView.vue
-let formErrorMessages = {
-    'firstName': {
-        'id': 1,
-        'text': 'Invalid first name',
-        'icon': 'info',
-        'color': 'warning'
-    },
-    'lastName': {
-        'id': 2,
-        'text': 'Invalid last name',
-        'icon': 'info',
-        'color': 'warning'
-    },
-    'email': {
-        'id': 3,
-        'text': 'Invalid email',
-        'icon': 'info',
-        'color': 'warning'
-    },
-    'checkInIntervalInDays': {
-        'id': 4,
-        'text': 'Invalid checkin interval. Must be between 1 - 3',
-        'icon': 'info',
-        'color': 'warning'
-    }
-}
-
-function errorMessageShown(errorId, errorMessagesArray) {
-
-    return errorMessagesArray.findIndex(error => error.id == errorId) != -1;
+    secondsBeforeNewSwitchFlipped.value -= newSwitchData.switchIntervalInSeconds;
 };
-
-function removeErrorMessage(errorId, errorMessagesArray) {
-
-    let errorIndex = errorMessagesArray.findIndex(error => error.id == errorId);
-    if(errorIndex == -1) { return };
-    errorMessagesArray.splice(errorIndex, 1);
-};
-
-onMounted(() => {
-
-    // Check for errors and show / remove error messages from the DOM
-
-    // First name
-    if( !regexName.test(newSwitchData.recipientFirstName) &&
-        !errorMessageShown(formErrorMessages.firstName.id, createSwitchReviewErrorMessages) ) {
-        
-            createSwitchReviewErrorMessages.push(formErrorMessages.firstName);
-    }
-    else if(regexName.test(newSwitchData.recipientFirstName) && 
-        errorMessageShown(formErrorMessages.firstName.id, createSwitchReviewErrorMessages)) {
-        
-            removeErrorMessage(formErrorMessages.firstName.id, createSwitchReviewErrorMessages);
-    };
-
-    // Last name
-    if( !regexName.test(newSwitchData.recipientLastName) &&
-        !errorMessageShown(formErrorMessages.lastName.id, createSwitchReviewErrorMessages) ) {
-
-            createSwitchReviewErrorMessages.push(formErrorMessages.lastName);
-    }
-    else if(regexName.test(newSwitchData.recipientLastName) &&
-        errorMessageShown(formErrorMessages.lastName.id, createSwitchReviewErrorMessages)) {
-        
-            removeErrorMessage(formErrorMessages.lastName.id, createSwitchReviewErrorMessages);
-    };
-
-    // Email
-    if( !regexEmail.test(newSwitchData.recipientEmail) &&
-        !errorMessageShown(formErrorMessages.email.id, createSwitchReviewErrorMessages) ) {
-
-            createSwitchReviewErrorMessages.push(formErrorMessages.email);
-    }
-    else if(regexEmail.test(newSwitchData.recipientEmail) &&
-        errorMessageShown(formErrorMessages.email.id, createSwitchReviewErrorMessages)) {
-        
-            removeErrorMessage(formErrorMessages.email.id, createSwitchReviewErrorMessages);
-    };
-});
 
 // Default final message
 let finalMessage = computed(() => {
+    // TODO: this will not work if the user gets this default, then goes back and changes to a custom final message. I should do this check right before the data is sent to the backend.
     return !newSwitchData.finalMessage ?
         'Hi ma, I won\'t be making it home for supper tonight. You know what to do.' :
         newSwitchData.finalMessage;

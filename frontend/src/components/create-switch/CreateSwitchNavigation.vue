@@ -1,6 +1,6 @@
 <template>
 
-<va-tabs 
+<va-tabs style="padding: 0 0 2rem 0"
     :center="true"
     v-model="defaultTabPosition"
     color="primary"

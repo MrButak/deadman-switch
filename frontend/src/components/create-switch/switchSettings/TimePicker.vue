@@ -4,8 +4,9 @@
     <div class="display-time-wrapper">
         <p>No later than</p>
         <h6 class="va-h6">{{ doubleDigitHours }}:{{ doubleDigitMinutes }}</h6>
+        <va-time-input v-model="newSwitchData.checkInTime" />
     </div>
-    <va-time-picker v-model="newSwitchData.checkInTime" />
+    
 </div>
 
 
@@ -42,7 +43,8 @@ let doubleDigitMinutes = computed(() => {
     flex-direction: column;
     .display-time-wrapper {
         display: flex;
-        align-items: baseline;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
         gap: .3rem;
         h6 {

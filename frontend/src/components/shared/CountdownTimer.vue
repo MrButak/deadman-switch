@@ -23,7 +23,7 @@
 import VueCountdown from '@chenfengyuan/vue-countdown';
 
 defineProps({
-    secondsBeforeSwitchFlippedProp: String,
+    secondsBeforeSwitchFlippedProp: Number,
     timerSubText: String
 });
 

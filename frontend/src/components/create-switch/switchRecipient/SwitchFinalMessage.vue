@@ -2,7 +2,7 @@
 
 <div class="final-message-wrapper">
 
-    <p>Final message</p>
+    <p style="padding: 0 1rem .4rem 1rem;">What is your final message to them?</p>
     <va-input
         style="align-items: center;"
         class="mb-4"

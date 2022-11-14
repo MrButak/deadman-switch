@@ -11,7 +11,7 @@
     </div>
 
     <div class="text-wrapper">
-        <p>I acknowledge I must checkin before the timer runs out or my deadman switch will trigger</p>
+        <p>I acknowledge my first checkin needs to be before the timer runs out or my deadman switch will trigger</p>
     </div>
 </div>
 </div>
@@ -36,6 +36,7 @@ import { newSwitchData } from '../../../../javascripts/stateManager';
 
     .checkbox-and-text-wrapper {
         display: flex;
+        justify-content: center;
         width: calc(80% - 0.5rem);
         gap: 0.5rem;
         .checkbox-wrapper {

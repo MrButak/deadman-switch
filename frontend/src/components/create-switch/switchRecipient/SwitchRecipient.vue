@@ -1,14 +1,9 @@
 <template>
 
-<!-- <p>Switch Recipient</p>
-<va-icon
-        class="mr-2"
-        name="person"
-        size="2rem"
-        color="active"
-/> -->
-
 <SwitchRecipientForm />
+<Spacer 
+    padding-prop="1rem 0"
+/>
 <SwitchFinalMessage />
 
 </template>
@@ -19,6 +14,7 @@
 
 import SwitchFinalMessage from './SwitchFinalMessage.vue';
 import SwitchRecipientForm from './SwitchRecipientForm.vue';
+import Spacer from '../../shared/Spacer.vue';
 
 </script>
 

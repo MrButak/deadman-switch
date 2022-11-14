@@ -1,15 +1,12 @@
 <template>
 
-<div style="position: relative;">
+<div style="position: relative; padding: 0 0 1rem 0;">
     <va-app-bar>
         <va-button icon="home" color="#fff" preset="plain" />
         <va-button @click="showModal = !showModal" icon="info" color="#fff" preset="plain" />
         <va-spacer />
-
-
+        <!-- Light/dark theme -->
         <va-button-toggle v-model="theme" :options="themeOptions" class="ml-2" />
-        <!-- <va-switch v-model="theme" :options="themeOptions" color="warning" class="mr-4" /> -->
-
 
         <span v-if="!userLoggedIn && !hasRegistered" style="padding-right: 10px;" >
             <va-button @click="handleSignupView" color="#fff" preset="plain">

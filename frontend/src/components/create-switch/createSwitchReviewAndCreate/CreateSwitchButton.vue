@@ -15,38 +15,52 @@
 <script setup>
 
 import { checkForValidCookieAndGetUserId } from '../../../../javascripts/userManager';
-import { newSwitchData,
+import { newSwitchData, secondsBeforeNewSwitchFlipped,
         regexName, regexEmail
 } from '../../../../javascripts/stateManager';
-// recipientFirstName: '',
-// recipientLastName: '',
-// recipientEmail: '',
-// checkInIntervalInDays: 1,
-// checkInTime: new Date(),
-// finalMessage: ''
+
 function areSwitchFieldsValid() {
 
-    // if !acknowledgeTimeUntilFirstCheckIn
-    // TODO: final message can be empty (falsy) and still pass this. Why?
+    // let newSwitchData = reactive({
+    //     recipientFirstName: '',
+    //     recipientLastName: '',
+    //     recipientEmail: '',
+    //     checkInIntervalInDays: 1,
+    //     checkInTime: new Date(),
+    //     finalMessage: '',
+    //     // Not sent to backend
+    //     acknowledgeTimeUntilFirstCheckIn: false,
+    //     checkInForTheFirstTime: false, // checkbox - will add checkInIntervalInDays to secondsBeforeSwitchFlipped (time before user needs to check in for the first time)
+    //     secondsBeforeSwitchFlipped: null, // used to display a countdown timer
+    //     switchIntervalInSeconds: null // checkInIntervalInDays to seconds
+    // });
 
-    if( newSwitchData.acknowledgeTimeUntilFirstCheckIn &&
-        regexEmail.test(newSwitchData.recipientEmail) &&
-        regexName.test(newSwitchData.recipientFirstName) &&
-        regexName.test(newSwitchData.recipientLastName) &&
-        newSwitchData.checkInIntervalInDays > 0 &&
-        newSwitchData.checkInIntervalInDays < 4 &&
-        new Date(newSwitchData.checkInTime).getTime() > 0 &&
-        newSwitchData.finalMessage) 
-            { return true }
+    if( !newSwitchData.acknowledgeTimeUntilFirstCheckIn ||
+        !regexEmail.test(newSwitchData.recipientEmail) ||
+        !regexName.test(newSwitchData.recipientFirstName) ||
+        !regexName.test(newSwitchData.recipientLastName) ||
+        newSwitchData.checkInIntervalInDays < 0 ||
+        newSwitchData.checkInIntervalInDays > 4 ||
+        new Date(newSwitchData.checkInTime).getTime() < 0 || // date validation
+        !newSwitchData.finalMessage ||
+        secondsBeforeNewSwitchFlipped.value < 300) // no switches can be set if they go off within 5 minutes 
 
-    return false;
+            { 
+                console.log(secondsBeforeNewSwitchFlipped.value)
+                return false 
+            }
+    console.log(secondsBeforeNewSwitchFlipped.value)
+    return true;
 };
 
 async function handleCreateSwitch() {
 
     // Form validation
-    if(!areSwitchFieldsValid) { return };
-
+    if(!areSwitchFieldsValid()) { 
+        console.log('nope')
+        return 
+    };
+    console.log('made it!')
     // Make sure the user is logged in and get their user id
     let userId = await checkForValidCookieAndGetUserId();
     if(!userId[0]) { return }; // not logged in

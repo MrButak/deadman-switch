@@ -26,6 +26,7 @@ let createSwitchNavigationViews = reactive(
     ]);
 let creatSwitchCurrentView = ref('Settings'); // Default
 
+let checkInTime = ref(new Date())
 let newSwitchData = reactive({
     recipientFirstName: '',
     recipientLastName: '',
@@ -36,11 +37,41 @@ let newSwitchData = reactive({
     // Not sent to backend
     acknowledgeTimeUntilFirstCheckIn: false,
     checkInForTheFirstTime: false, // checkbox - will add checkInIntervalInDays to secondsBeforeSwitchFlipped (time before user needs to check in for the first time)
-    secondsBeforeSwitchFlipped: null, // used to display a countdown timer
-    switchIntervalInSeconds: null // checkInIntervalInDays to seconds
+    switchIntervalInSeconds: 0 // checkInIntervalInDays to seconds
 });
 
+
+
+let secondsBeforeNewSwitchFlipped = ref(0);
+
 let createSwitchReviewErrorMessages = reactive([]);
+
+let formErrorMessages = {
+    'firstName': {
+        'id': 1,
+        'text': 'Invalid first name',
+        'icon': 'info',
+        'color': 'warning'
+    },
+    'lastName': {
+        'id': 2,
+        'text': 'Invalid last name',
+        'icon': 'info',
+        'color': 'warning'
+    },
+    'email': {
+        'id': 3,
+        'text': 'Invalid email',
+        'icon': 'info',
+        'color': 'warning'
+    },
+    'checkInIntervalInDays': {
+        'id': 4,
+        'text': 'Invalid checkin interval. Must be between 1 - 3',
+        'icon': 'info',
+        'color': 'warning'
+    }
+}
 
 let deadmanSwitches = reactive([]);
 
@@ -54,5 +85,7 @@ export {
     // Create switch
     creatSwitchCurrentView,
     createSwitchNavigationViews, 
-    newSwitchData, createSwitchReviewErrorMessages
+    newSwitchData, createSwitchReviewErrorMessages,
+    secondsBeforeNewSwitchFlipped,
+    formErrorMessages // global data
 }

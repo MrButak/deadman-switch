@@ -2,13 +2,7 @@
     
     <va-form class="signup-form">
         
-        <!-- <va-icon
-            class="mr-2"
-            name="person"
-            size="2rem"
-            color="primary"
-        /> -->
-        <p>Who should receive your message in case you don't make it home for supper?</p>
+        <p style="padding: 0 1rem .4rem 1rem;">Who should receive your message in case you don't make it home for supper?</p>
         <va-input
             v-model="newSwitchData.recipientFirstName"
             type="text"
