@@ -8,4 +8,4 @@ createApp(App)
     .use(createVuestic())
     .mount('#app')
 
-App.component(VueCountdown.name, VueCountdown);
+app.component(VueCountdown.name, VueCountdown);
