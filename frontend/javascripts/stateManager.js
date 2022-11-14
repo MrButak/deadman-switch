@@ -1,5 +1,9 @@
 import { reactive, ref } from 'vue';
 
+const regexName = /^([A-Za-z]){1,18}$/;
+const regexPassword = /^([A-Za-z0-9\-\_\!\@\#\$\%\^\&\*\+\=]){6,18}$/;
+const regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
 let userLoggedIn = ref(false);
 
 // Login / Signup modals
@@ -31,9 +35,13 @@ let newSwitchData = reactive({
     finalMessage: ''
 });
 
+let acknowledgeTimeUntilFirstCheckIn = ref(false);
+let createSwitchReviewErrorMessages = reactive([]);
+
 let deadmanSwitches = reactive([]);
 
 export {
+    regexName, regexPassword, regexEmail,
     userLoggedIn, // view (home page)
     showLogin, showSignup, // view
     hasRegistered, loginFailedEmailNotVerified, // view
@@ -41,5 +49,6 @@ export {
     showCreateDeadmanSwitch, // view
     // Create switch
     creatSwitchCurrentView,
-    createSwitchNavigationViews, newSwitchData
+    createSwitchNavigationViews, 
+    newSwitchData, acknowledgeTimeUntilFirstCheckIn, createSwitchReviewErrorMessages
 }

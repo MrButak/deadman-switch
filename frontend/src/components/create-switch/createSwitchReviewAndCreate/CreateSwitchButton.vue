@@ -14,12 +14,48 @@
 
 <script setup>
 
+import { checkForValidCookieAndGetUserId } from '../../../../javascripts/userManager';
+import { newSwitchData, acknowledgeTimeUntilFirstCheckIn,
+        regexName, regexEmail
+} from '../../../../javascripts/stateManager';
+// recipientFirstName: '',
+// recipientLastName: '',
+// recipientEmail: '',
+// checkInIntervalInDays: 1,
+// checkInTime: new Date(),
+// finalMessage: ''
+function areSwitchFieldsValid() {
 
-import { newSwitchData } from '../../../../javascripts/stateManager';
+    // if !acknowledgeTimeUntilFirstCheckIn
+    // TODO: final message can be empty (falsy) and still pass this. Why?
+
+    if( acknowledgeTimeUntilFirstCheckIn.value &&
+        regexEmail.test(newSwitchData.recipientEmail) &&
+        regexName.test(newSwitchData.recipientFirstName) &&
+        regexName.test(newSwitchData.recipientLastName) &&
+        newSwitchData.checkInIntervalInDays > 0 &&
+        newSwitchData.checkInIntervalInDays < 4 &&
+        new Date(newSwitchData.checkInTime).getTime() > 0 &&
+        newSwitchData.finalMessage) 
+            { return true }
+
+    return false;
+};
 
 async function handleCreateSwitch() {
 
-    // TODO: Validation
+    // Form validation
+    if(!areSwitchFieldsValid) { return };
+
+    // Make sure the user is logged in and get their user id
+    let userId = await checkForValidCookieAndGetUserId();
+    if(!userId[0]) { return }; // not logged in
+    if(!userId[1]) { return }; // logged in, but issue with user id
+
+    // TODO: handle this logic somewhere else, before it gets here
+    if(!newSwitchData.finalMessage) {
+        newSwitchData.finalMessage = 'Hi ma, I won\'t be making it home for supper tonight. You know what to do.'
+    };
 
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/switch/create`, {
         mode: 'cors',
@@ -28,13 +64,14 @@ async function handleCreateSwitch() {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: JSON.stringify({
-            'newSwitchData': newSwitchData
+            'newSwitchData': newSwitchData,
+            'userId': userId[1]
         })
     });
 
     // Parse response
     let response = await request.json();
-
+    console.log(response)
     // switch(response.status) {
     //     case '400':
     //         errorMessage.value = response.message;

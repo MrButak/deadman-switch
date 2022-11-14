@@ -6,17 +6,16 @@ async function checkForValidCookieAndGetUserId() {
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/verify`, {
         method: 'GET',
         mode: 'cors',
-        credentials: 'include'
+        // credentials: 'include' // production only
     });
 
     let response = await request.json();
     // 400 401 200
-    console.log({response})
     if(response.status == '200') {
         return [true, response.userId];
     }
-    return [false];
-    // return [true, response.userDbId];
+    // return [false];
+    return [true, 1]; // development only
 };
 
 export { checkForValidCookieAndGetUserId }

@@ -39,15 +39,13 @@ onMounted(() => {
 
     (async() => {
         let isUserLoggedIn = await checkIfUserIsLoggedIn();
-        console.log(isUserLoggedIn)
-        console.log('isUserLoggedIn')
         if (isUserLoggedIn[0]) {
 
             let switches = await getDeadmanSwitchesWithUserId(isUserLoggedIn[1]);
             console.log(switches)
-            console.log('switches')
             if(switches) {
                 // TODO: push switches into State Array
+                // Create a component to show the switches
             };
             // TODO: Backend call to get switches and user data
             // *Separate the logic. don't get user data until they click on their account icon*
@@ -60,8 +58,7 @@ onMounted(() => {
 async function checkIfUserIsLoggedIn() {
 
     let userId = await checkForValidCookieAndGetUserId();
-    console.log(userId)
-    console.log('userId')
+
     if(!userId[0]) {
         showLogin.value = true;
         showSignup.value = false;

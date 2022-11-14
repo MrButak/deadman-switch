@@ -5,7 +5,6 @@ async function getDeadmanSwitchesWithUserId(userId) {
     });
 
     let response = await request.json();
-    console.log(response)
     switch(response.status) {
         case '500':
             // TODO: return error message (db error on backend)

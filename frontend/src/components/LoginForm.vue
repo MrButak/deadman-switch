@@ -46,10 +46,12 @@
 <script setup>
 
 import { ref, reactive } from 'vue';
-import { handleSignupView } from '../../javascripts/ViewManager'
+import { handleSignupView } from '../../javascripts/viewManager'
 import { hasRegistered, userLoggedIn,
     showLogin, showSignup,
-    loginFailedEmailNotVerified } from '../../javascripts/stateManager';
+    loginFailedEmailNotVerified,
+    regexPassword, regexEmail,
+} from '../../javascripts/stateManager';
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);
@@ -58,8 +60,6 @@ let userLoginData = reactive({
     password: ''
 });
 
-let regexPassword = /^([A-Za-z0-9\-\_\!\@\#\$\%\^\&\*\+\=]){6,18}$/;
-let regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 function areFormFieldsValid() {
     
