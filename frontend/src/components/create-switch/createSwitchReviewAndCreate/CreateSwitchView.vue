@@ -1,6 +1,10 @@
 <template>
 
 <CreateSwitchReview />
+<CountdownTimer 
+    seconds-before-switch-flipped-prop="100000"
+    timer-sub-text="Before you must checkin"
+/>
 <AcknowledgeFirstCheckIn />
 <CreateSwitchReviewErrorMessages />
 <CreateSwitchButton />
@@ -14,7 +18,8 @@
 import AcknowledgeFirstCheckIn from './AcknowledgeFirstCheckIn.vue';
 import CreateSwitchButton from './CreateSwitchButton.vue';
 import CreateSwitchReview from './CreateSwitchReview.vue';
-import CreateSwitchReviewErrorMessages from './CreateSwitchReviewErrorMessages.vue';
+import CountdownTimer from '../../shared/CountdownTimer.vue';
+import CreateSwitchReviewErrorMessages from './createSwitchReviewErrorMessages.vue';
 
 </script>
 

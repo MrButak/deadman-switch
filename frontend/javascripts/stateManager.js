@@ -32,10 +32,14 @@ let newSwitchData = reactive({
     recipientEmail: '',
     checkInIntervalInDays: 1,
     checkInTime: new Date(),
-    finalMessage: ''
+    finalMessage: '',
+    // Not sent to backend
+    acknowledgeTimeUntilFirstCheckIn: false,
+    checkInForTheFirstTime: false, // checkbox - will add checkInIntervalInDays to secondsBeforeSwitchFlipped (time before user needs to check in for the first time)
+    secondsBeforeSwitchFlipped: null, // used to display a countdown timer
+    switchIntervalInSeconds: null // checkInIntervalInDays to seconds
 });
 
-let acknowledgeTimeUntilFirstCheckIn = ref(false);
 let createSwitchReviewErrorMessages = reactive([]);
 
 let deadmanSwitches = reactive([]);
@@ -50,5 +54,5 @@ export {
     // Create switch
     creatSwitchCurrentView,
     createSwitchNavigationViews, 
-    newSwitchData, acknowledgeTimeUntilFirstCheckIn, createSwitchReviewErrorMessages
+    newSwitchData, createSwitchReviewErrorMessages
 }

@@ -38,9 +38,18 @@
           <p style="padding: 0 0 0 2rem" class="va-text-success">{{ newSwitchData.checkInTime.toLocaleTimeString() }}</p>
         </va-card-actions>
 
-      </va-card>
-
-      
+        <va-card-actions align="between">
+          <p style="padding: 0 2rem 0 0">Check in for the first time</p>
+          <va-checkbox style="padding: 0 0 0 2rem"
+                color="success"
+                class="mb-4" 
+                v-model="newSwitchData.checkInForTheFirstTime" 
+                @click="calculateNewSwitchTimer"
+            />
+        </va-card-actions>
+        
+    </va-card>
+    
 
     </div>
 </div>
@@ -60,14 +69,26 @@
 
 import { ref, computed, onMounted } from 'vue';
 import { newSwitchData, createSwitchReviewErrorMessages,
-        regexName, regexPassword, regexEmail
+        regexName, regexEmail
 } from '../../../../javascripts/stateManager';
 
 //     color: 'warning', // success
 //     icon: 'info', // check_circle
 //     text: 'error message' //
+
+// Popup modal which displays user's final message
 let showFinalMessageModal = ref(false);
 
+// Function is called when a user chooses to check in for the first time during switch creation
+function calculateNewSwitchTimer() {
+    if(newSwitchData.checkInForTheFirstTime) {
+        newSwitchData.secondsBeforeSwitchFlipped += newSwitchData.switchIntervalInSeconds;
+        return;
+    };
+    newSwitchData.secondsBeforeSwitchFlipped -= newSwitchData.switchIntervalInSeconds;
+}
+
+// Should be moved to CreateSwitchView.vue
 let formErrorMessages = {
     'firstName': {
         'id': 1,

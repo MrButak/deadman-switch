@@ -15,7 +15,7 @@
 <script setup>
 
 import { checkForValidCookieAndGetUserId } from '../../../../javascripts/userManager';
-import { newSwitchData, acknowledgeTimeUntilFirstCheckIn,
+import { newSwitchData,
         regexName, regexEmail
 } from '../../../../javascripts/stateManager';
 // recipientFirstName: '',
@@ -29,7 +29,7 @@ function areSwitchFieldsValid() {
     // if !acknowledgeTimeUntilFirstCheckIn
     // TODO: final message can be empty (falsy) and still pass this. Why?
 
-    if( acknowledgeTimeUntilFirstCheckIn.value &&
+    if( newSwitchData.acknowledgeTimeUntilFirstCheckIn &&
         regexEmail.test(newSwitchData.recipientEmail) &&
         regexName.test(newSwitchData.recipientFirstName) &&
         regexName.test(newSwitchData.recipientLastName) &&
