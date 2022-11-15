@@ -47,6 +47,11 @@ function areSwitchFieldsValid() {
 
 async function handleCreateSwitch() {
 
+    // Assign default final message if empty
+    if(!newSwitchData.finalMessage) {
+        newSwitchData.finalMessage = 'Hi ma, I won\'t be making it home for supper tonight. You know what to do.'
+    };
+    
     // Form validation
     if(!areSwitchFieldsValid()) { return };
     
@@ -54,11 +59,6 @@ async function handleCreateSwitch() {
     let userId = await checkForValidCookieAndGetUserId();
     if(!userId[0]) { return }; // not logged in
     if(!userId[1]) { return }; // logged in, but issue with user id
-
-    // Assign default final message if empty
-    if(!newSwitchData.finalMessage) {
-        newSwitchData.finalMessage = 'Hi ma, I won\'t be making it home for supper tonight. You know what to do.'
-    };
 
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/switch/create`, {
         mode: 'cors',

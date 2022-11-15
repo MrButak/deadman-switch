@@ -34,9 +34,11 @@ exports.createNewSwitch = async (req, res) => {
     let userId = '';
     
     try {
-        let bodyData = Object.keys(req.body)
-        newSwitchData = JSON.parse(bodyData.newSwitchData);
-        userId = JSON.parse(bodyData.userId);
+        let bodyData = JSON.parse(Object.keys(req.body));
+        newSwitchData = bodyData.newSwitchData;
+        userId = bodyData.userId;
+        console.log({newSwitchData})
+        console.log({userId})
     }
     catch(error) {
         console.log(error);
@@ -60,22 +62,29 @@ exports.createNewSwitch = async (req, res) => {
                 return res.status(400).json({status: '400', message: 'Invalid switch settings'}); 
             };
     
+    // TODO: make sure the switch is not < 3 minutes before expiring
+
     // Calculate users first checkin time
         // checkInTime - checkInInterval
-    let firstCheckIn = 
-        new Date(newSwitchData.checkInTime).setTime(new Date(newSwitchData.checkInTime).getTime() + newSwitchData.checkInIntervalInDays * 60 * 60 * 1000);
+    let firstCheckInTimestamp = 
+        new Date(newSwitchData.checkInTime).setTime(new Date(newSwitchData.checkInTime).getTime() - newSwitchData.checkInIntervalInDays * 24 * 60 * 60 * 1000);
     
-    console.log(firstCheckIn)
-    process.exit()
-    // ****** From this point switch is good to put into db *******
+    // Invalid date for first checkin time
+    if(new Date(firstCheckInTimestamp).getTime() < 0) {
+        return res.status(400).json({status: '400', message: 'Invalid switch settings'}); 
+    };
+    
+    // Assign first checkin time to the new switch Object
+    newSwitchData.firstCheckInTimestamp = firstCheckInTimestamp;
 
+    // console.log(new Date(newSwitchData.checkInTime).toLocaleString())
+    // console.log(new Date(firstCheckInTimestamp).toLocaleString())
+    
+    // ****** From this point switch is good to put into db *******
     let switchData = await insertNewDeadmanSwitch(userId, newSwitchData);
     if(!switchData[0]) {
         return res.status(500).json({status: '500', message: 'An unknown database error occurred'}); 
     };
 
-    console.log(switchData[1]);
-
-    // console.log(newSwitchData)
-    // console.log(userId)
+    return res.status(500).json({status: '500', message: 'Switch successfully created', switch: switchData});
 };
