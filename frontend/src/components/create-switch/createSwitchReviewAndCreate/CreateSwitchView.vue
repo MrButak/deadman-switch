@@ -39,7 +39,7 @@ import AcknowledgeFirstCheckIn from './AcknowledgeFirstCheckIn.vue';
 import CreateSwitchButton from './CreateSwitchButton.vue';
 import CreateSwitchReview from './CreateSwitchReview.vue';
 import CountdownTimer from '../../shared/CountdownTimer.vue';
-import CreateSwitchReviewErrorMessages from './createSwitchReviewErrorMessages.vue';
+import CreateSwitchReviewErrorMessages from './CreateSwitchReviewErrorMessages.vue';
 import Spacer from '../../shared/Spacer.vue';
 
 
