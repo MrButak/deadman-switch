@@ -2,7 +2,7 @@
 
 <div style="position: relative; padding: 0 0 1rem 0;">
     <va-app-bar>
-        <va-button icon="home" color="#fff" preset="plain" />
+        <va-button @click="showCreateDeadmanSwitch = false" icon="home" color="#fff" preset="plain" />
         <va-button @click="showModal = !showModal" icon="info" color="#fff" preset="plain" />
         <va-spacer />
         <!-- Light/dark theme -->
@@ -19,7 +19,7 @@
         </span>
 
         <span v-else-if="userLoggedIn">
-            <va-button icon="add_circle" color="#fff" preset="plain" />
+            <va-button @click="showCreateDeadmanSwitch = true" icon="add_circle" color="#fff" preset="plain" />
             <va-button icon="account_circle" color="#fff" preset="plain" />
         </span>
         
@@ -37,29 +37,14 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script setup>
 
 import { ref, watchEffect } from 'vue';
 import { useColors } from 'vuestic-ui';
 
-import { userLoggedIn, hasRegistered } from '../../javascript/stateManager';
+import { userLoggedIn, hasRegistered,
+        showCreateDeadmanSwitch
+} from '../../javascript/stateManager';
 import { handleLoginView, handleSignupView } from '../../javascript/viewManager';
 
 const { presets, applyPreset } = useColors()

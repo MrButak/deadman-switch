@@ -39,22 +39,27 @@ onMounted(() => {
 
     (async() => {
         let isUserLoggedIn = await checkIfUserIsLoggedIn();
-        console.log({isUserLoggedIn})
+        
+        // Get any switches the user may have
         if (isUserLoggedIn[0]) {
 
             let switches = await getDeadmanSwitchesWithUserId(isUserLoggedIn[1]);
-            console.log(switches)
+            
             if(switches) {
-                // TODO: push switches into State Array
-                // Create a component to show the switches
+                deadmanSwitches.length = 0;
+                switches.forEach(dmSwitch => {
+
+                    deadmanSwitches.push(dmSwitch);
+                });
             };
+            console.log(deadmanSwitches)
+            console.log('after added')
             // TODO: Backend call to get switches and user data
             // *Separate the logic. don't get user data until they click on their account icon*
 
         };
     })();
 });
-
 
 async function checkIfUserIsLoggedIn() {
 

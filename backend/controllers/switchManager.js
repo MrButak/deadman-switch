@@ -4,7 +4,6 @@ const { validateName, validateEmail } = require('../javascripts/validationManage
 // Function will get the users deadman switches from the DB
 exports.getDeadmanSwitchesWithUserId = async(req, res) => {
 
-
     let userId = '';
 	
 	try {
@@ -37,8 +36,6 @@ exports.createNewSwitch = async (req, res) => {
         let bodyData = JSON.parse(Object.keys(req.body));
         newSwitchData = bodyData.newSwitchData;
         userId = bodyData.userId;
-        console.log({newSwitchData})
-        console.log({userId})
     }
     catch(error) {
         console.log(error);
@@ -86,5 +83,5 @@ exports.createNewSwitch = async (req, res) => {
         return res.status(500).json({status: '500', message: 'An unknown database error occurred'}); 
     };
 
-    return res.status(500).json({status: '500', message: 'Switch successfully created', switch: switchData});
+    return res.status(200).json({status: '200', message: 'Switch successfully created', switch: switchData[1]});
 };

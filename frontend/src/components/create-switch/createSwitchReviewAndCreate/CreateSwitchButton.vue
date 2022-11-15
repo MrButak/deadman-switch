@@ -51,7 +51,7 @@ async function handleCreateSwitch() {
     if(!newSwitchData.finalMessage) {
         newSwitchData.finalMessage = 'Hi ma, I won\'t be making it home for supper tonight. You know what to do.'
     };
-    
+
     // Form validation
     if(!areSwitchFieldsValid()) { return };
     
@@ -74,20 +74,20 @@ async function handleCreateSwitch() {
 
     // Parse response
     let response = await request.json();
-    console.log(response)
-    // switch(response.status) {
-    //     case '400':
-    //         errorMessage.value = response.message;
-    //         break;
-    //     case '500':
-    //         errorMessage.value = response.message;
-    //         break;
-    //     // 200 success
-    //     default:
-    //         showSignup.value = false;
-    //         showLogin.value = true;
-    //         hasRegistered.value = true;
-    // };
+    
+    switch(response.status) {
+        case '200':
+        console.log(response);    
+            break;
+        case '500':
+            
+            break;
+        case '400':
+
+            break;
+        default:
+            
+    };
 
 };
 
