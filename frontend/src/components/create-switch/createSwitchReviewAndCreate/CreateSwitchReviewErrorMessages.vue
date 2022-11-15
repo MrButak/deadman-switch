@@ -17,12 +17,6 @@
 
 import { createSwitchReviewErrorMessages } from '../../../javascript/stateManager';
 
-// {
-//     color: 'warning', // success
-//     icon: 'info', // check_circle
-//     text: 'error message' //
-// }
-
 </script>
 
 

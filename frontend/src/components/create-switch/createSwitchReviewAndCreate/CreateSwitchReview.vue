@@ -38,15 +38,6 @@
           <p style="padding: 0 0 0 2rem" class="va-text-success">{{ newSwitchData.checkInTime.toLocaleTimeString() }}</p>
         </va-card-actions>
 
-        <!-- <va-card-actions align="between">
-          <p style="padding: 0 2rem 0 0">Check in for the first time</p>
-          <va-checkbox style="padding: 0 0 0 2rem"
-                color="success"
-                class="mb-4" 
-                v-model="newSwitchData.checkInForTheFirstTime" 
-                @click="calculateNewSwitchTimer"
-            />
-        </va-card-actions> -->
     </va-card>
     </div>
 </div>
@@ -71,21 +62,6 @@ import { newSwitchData, secondsBeforeNewSwitchFlipped
 
 // Popup modal which displays user's final message
 let showFinalMessageModal = ref(false);
-
-// Function is called when a user chooses to check in for the first time during switch creation
-function calculateNewSwitchTimer() {
-
-    // Reset the switch if the clock runs down below 0
-    if(secondsBeforeNewSwitchFlipped.value < 0) {
-        secondsBeforeNewSwitchFlipped.value += newSwitchData.switchIntervalInSeconds;
-    };
-
-    if(newSwitchData.checkInForTheFirstTime) {
-        secondsBeforeNewSwitchFlipped.value += newSwitchData.switchIntervalInSeconds;
-        return;
-    };
-    secondsBeforeNewSwitchFlipped.value -= newSwitchData.switchIntervalInSeconds;
-};
 
 // Default final message
 let finalMessage = computed(() => {

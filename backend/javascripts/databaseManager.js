@@ -83,7 +83,7 @@ exports.verifyUsersEmail = async (uniqueString) => {
 // Function will select all deadman switches user the user DB id
 // ***********************************************************************************
 exports.getDeadmanSwitches = async (userId) => {
-
+    
     let dbStmt = 'SELECT * FROM deadman_switches WHERE user_id = ($1)';
     let dbValues = [userId];
 

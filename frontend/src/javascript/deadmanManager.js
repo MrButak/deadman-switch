@@ -1,10 +1,11 @@
 async function getDeadmanSwitchesWithUserId(userId) {
-
+    console.log({userId})
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/data/deadman-switches/${userId}`, {
         method: 'GET',
     });
 
     let response = await request.json();
+    console.log(response)
     switch(response.status) {
         case '500':
             // TODO: return error message (db error on backend)

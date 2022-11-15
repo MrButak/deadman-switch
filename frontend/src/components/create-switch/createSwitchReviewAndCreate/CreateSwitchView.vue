@@ -1,6 +1,5 @@
 <template>
 
-
 <CreateSwitchReview />
 <Spacer 
     padding-prop=".5rem 0"
@@ -44,26 +43,20 @@ import Spacer from '../../shared/Spacer.vue';
 
 
 onMounted(() => {
-    initTimer();
+    calculateSecondsBeforeSwitchFlipped();
     handleCreateSwitchFormErrorMessages();
 });
 
 // Function calculates the seconds before the user needs to checkin for the first time
-function initTimer() {
+function calculateSecondsBeforeSwitchFlipped() {
 
     secondsBeforeNewSwitchFlipped.value =
         ( newSwitchData.checkInTime - new Date(Date.now()) ) / 1000;
 
-    newSwitchData.switchIntervalInSeconds = 
-        newSwitchData.checkInIntervalInDays * 24 * 60 * 60;
-
-    // Reset the switch if the clock runs down below 0
+    // Add the check in interval if the time to check in has already passed
     if(secondsBeforeNewSwitchFlipped.value < 0) {
-        
-        secondsBeforeNewSwitchFlipped.value += newSwitchData.switchIntervalInSeconds;
+        secondsBeforeNewSwitchFlipped.value += newSwitchData.checkInIntervalInDays * 24 * 60 * 60;
     };
-
-
 };
 
 

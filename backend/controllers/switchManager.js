@@ -4,10 +4,10 @@ const { validateName, validateEmail } = require('../javascripts/validationManage
 // Function will get the users deadman switches from the DB
 exports.getDeadmanSwitchesWithUserId = async(req, res) => {
 
+
     let userId = '';
 	
 	try {
-        console.log(req.params)
 		userId = req.params.userId;
 	}
 	catch(err) {
@@ -20,6 +20,7 @@ exports.getDeadmanSwitchesWithUserId = async(req, res) => {
     };
 
     let switchesQuery = await getDeadmanSwitches(userId);
+
     // DB error
     if(!switchesQuery[0]) {
         return res.status(500).json({status: '500', message: 'An unknown error occurred'});
@@ -28,12 +29,7 @@ exports.getDeadmanSwitchesWithUserId = async(req, res) => {
 };
 
 exports.createNewSwitch = async (req, res) => {
-    // recipientFirstName: '',
-    // recipientLastName: '',
-    // recipientEmail: '',
-    // checkInIntervalInDays: 1,
-    // checkInTime: new Date(),
-    // finalMessage: ''
+
     let newSwitchData = '';
     let userId = '';
     
@@ -63,7 +59,14 @@ exports.createNewSwitch = async (req, res) => {
             { 
                 return res.status(400).json({status: '400', message: 'Invalid switch settings'}); 
             };
-
+    
+    // Calculate users first checkin time
+        // checkInTime - checkInInterval
+    let firstCheckIn = 
+        new Date(newSwitchData.checkInTime).setTime(new Date(newSwitchData.checkInTime).getTime() + newSwitchData.checkInIntervalInDays * 60 * 60 * 1000);
+    
+    console.log(firstCheckIn)
+    process.exit()
     // ****** From this point switch is good to put into db *******
 
     let switchData = await insertNewDeadmanSwitch(userId, newSwitchData);

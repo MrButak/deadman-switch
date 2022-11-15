@@ -26,7 +26,6 @@ let createSwitchNavigationViews = reactive(
     ]);
 let creatSwitchCurrentView = ref('Settings'); // Default
 
-let checkInTime = ref(new Date())
 let newSwitchData = reactive({
     recipientFirstName: '',
     recipientLastName: '',
@@ -37,7 +36,6 @@ let newSwitchData = reactive({
     // Not sent to backend
     acknowledgeTimeUntilFirstCheckIn: false,
     checkInForTheFirstTime: false, // checkbox - will add checkInIntervalInDays to secondsBeforeSwitchFlipped (time before user needs to check in for the first time)
-    switchIntervalInSeconds: 0 // checkInIntervalInDays to seconds
 });
 
 
@@ -68,6 +66,12 @@ let formErrorMessages = {
     'checkInIntervalInDays': {
         'id': 4,
         'text': 'Invalid checkin interval. Must be between 1 - 3',
+        'icon': 'info',
+        'color': 'warning'
+    },
+    'mustCreateSwitchWithTimeBuffer': {
+        'id': 5,
+        'text': 'Leave yourself at least 3 minutes to checkin',
         'icon': 'info',
         'color': 'warning'
     }

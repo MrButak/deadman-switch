@@ -3,19 +3,26 @@
 // ***********************************************************************************
 async function checkForValidCookieAndGetUserId() {
 
-    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/verify`, {
-        method: 'GET',
-        mode: 'cors',
-        // credentials: 'include' // production only
-    });
+    // PRODUCTION
+    if(import.meta.env.VITE_APP_ENVIRONMENT == 'production') {
 
-    let response = await request.json();
-    // 400 401 200
-    if(response.status == '200') {
-        return [true, response.userId];
+        let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/verify`, {
+            method: 'GET',
+            mode: 'cors',
+            // credentials: 'include' // production only
+        });
+    
+        let response = await request.json();
+        // 400 401 200
+        if(response.status == '200') {
+            return [true, response.userId];
+        }
+        return [false];
     }
-    // return [false];
-    return [true, 1]; // development only
+    // DEVELOPMENT
+    else {
+        return [true, 1];
+    };
 };
 
 export { checkForValidCookieAndGetUserId }

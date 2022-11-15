@@ -1,7 +1,8 @@
 import { regexEmail, regexName,
         newSwitchData,
         formErrorMessages, // Object of all error that could happen on a form
-        createSwitchReviewErrorMessages // Array holds all form and option error messages when creating a new switch
+        createSwitchReviewErrorMessages, // Array holds all form and option error messages when creating a new switch
+        secondsBeforeNewSwitchFlipped
 } from './stateManager';
 
 
@@ -62,6 +63,18 @@ function handleCreateSwitchFormErrorMessages() {
         errorMessageShown(formErrorMessages.email.id, createSwitchReviewErrorMessages)) {
         
             removeErrorMessage(formErrorMessages.email.id, createSwitchReviewErrorMessages);
+    };
+
+    // Switch creation invalid checkin time (must be > 3 minutes left before user has to checkin)
+    if( secondsBeforeNewSwitchFlipped.value < 180 &&
+        !errorMessageShown(formErrorMessages.mustCreateSwitchWithTimeBuffer.id, createSwitchReviewErrorMessages) ) {
+
+            createSwitchReviewErrorMessages.push(formErrorMessages.mustCreateSwitchWithTimeBuffer);
+    }
+    else if(secondsBeforeNewSwitchFlipped.value > 180 &&
+        errorMessageShown(formErrorMessages.mustCreateSwitchWithTimeBuffer.id, createSwitchReviewErrorMessages)) {
+        
+            removeErrorMessage(formErrorMessages.mustCreateSwitchWithTimeBuffer.id, createSwitchReviewErrorMessages);
     };
 };
 

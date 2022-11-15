@@ -39,6 +39,7 @@ onMounted(() => {
 
     (async() => {
         let isUserLoggedIn = await checkIfUserIsLoggedIn();
+        console.log({isUserLoggedIn})
         if (isUserLoggedIn[0]) {
 
             let switches = await getDeadmanSwitchesWithUserId(isUserLoggedIn[1]);

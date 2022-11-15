@@ -18,22 +18,19 @@ import { checkForValidCookieAndGetUserId } from '../../../javascript/userManager
 import { newSwitchData, secondsBeforeNewSwitchFlipped,
         regexName, regexEmail
 } from '../../../javascript/stateManager';
+import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
 
 function areSwitchFieldsValid() {
 
-    // let newSwitchData = reactive({
-    //     recipientFirstName: '',
-    //     recipientLastName: '',
-    //     recipientEmail: '',
-    //     checkInIntervalInDays: 1,
-    //     checkInTime: new Date(),
-    //     finalMessage: '',
-    //     // Not sent to backend
-    //     acknowledgeTimeUntilFirstCheckIn: false,
-    //     checkInForTheFirstTime: false, // checkbox - will add checkInIntervalInDays to secondsBeforeSwitchFlipped (time before user needs to check in for the first time)
-    //     secondsBeforeSwitchFlipped: null, // used to display a countdown timer
-    //     switchIntervalInSeconds: null // checkInIntervalInDays to seconds
-    // });
+
+    // Recalculate the secondsBeforeNewSwitchFlipped if still above 0 (below 0 will throw an error)
+    if(( newSwitchData.checkInTime - new Date(Date.now()) ) / 1000 > 0) {
+        secondsBeforeNewSwitchFlipped.value =
+            ( newSwitchData.checkInTime - new Date(Date.now()) ) / 1000;   
+    };
+    
+    // Look again for error messages / clear any old messages out
+    handleCreateSwitchFormErrorMessages();
 
     if( !newSwitchData.acknowledgeTimeUntilFirstCheckIn ||
         !regexEmail.test(newSwitchData.recipientEmail) ||
@@ -43,30 +40,22 @@ function areSwitchFieldsValid() {
         newSwitchData.checkInIntervalInDays > 4 ||
         new Date(newSwitchData.checkInTime).getTime() < 0 || // date validation
         !newSwitchData.finalMessage ||
-        secondsBeforeNewSwitchFlipped.value < 300) // no switches can be set if they go off within 5 minutes 
-
-            { 
-                console.log(secondsBeforeNewSwitchFlipped.value)
-                return false 
-            }
-    console.log(secondsBeforeNewSwitchFlipped.value)
+        secondsBeforeNewSwitchFlipped.value < 180) // no switches can be set if they go off within 5 minutes 
+            { return false }
     return true;
 };
 
 async function handleCreateSwitch() {
 
     // Form validation
-    if(!areSwitchFieldsValid()) { 
-        console.log('nope')
-        return 
-    };
-    console.log('made it!')
+    if(!areSwitchFieldsValid()) { return };
+    
     // Make sure the user is logged in and get their user id
     let userId = await checkForValidCookieAndGetUserId();
     if(!userId[0]) { return }; // not logged in
     if(!userId[1]) { return }; // logged in, but issue with user id
 
-    // TODO: handle this logic somewhere else, before it gets here
+    // Assign default final message if empty
     if(!newSwitchData.finalMessage) {
         newSwitchData.finalMessage = 'Hi ma, I won\'t be making it home for supper tonight. You know what to do.'
     };
