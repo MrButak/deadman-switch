@@ -69,8 +69,10 @@
 <script setup>
 
 import { ref, reactive, computed } from 'vue';
-import { hasRegistered, showLogin, showSignup } from '../../javascripts/stateManager';
-import { handleLoginView } from '../../javascripts/ViewManager';
+import { hasRegistered, showLogin, showSignup,
+        regexName, regexPassword, regexEmail
+} from '../javascript/stateManager';
+import { handleLoginView } from '../javascript/viewManager';
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);
@@ -85,10 +87,6 @@ let userSignupData = reactive({
 let passwordsMatch = computed(() => {
     return userSignupData.password == userSignupData.retypePassword;
 });
-
-let regexName = /^([A-Za-z]){1,18}$/;
-let regexPassword = /^([A-Za-z0-9\-\_\!\@\#\$\%\^\&\*\+\=]){6,18}$/;
-let regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 function areFormFieldsValid() {
     
@@ -111,7 +109,7 @@ async function handleFormSubmission() {
     errorMessage.value = '';
 
     // Backend request
-    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/register`, {
+    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/register`, {
         mode: 'cors',
         method: 'POST',
         headers: {

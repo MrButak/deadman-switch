@@ -6,14 +6,50 @@ CREATE TABLE app_users (
     password TEXT NOT NULL,
     creation_date TIMESTAMP NOT NULL,
     provider VARCHAR(255) NOT NULL,
-    verification_string TEXT,
+    email_verification_string TEXT,
     email_verified BOOLEAN NOT NULL
+);
+
+CREATE TABLE deadman_switches (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES app_users(id) NOT NULL,
+    switch_name VARCHAR(255), // NOT IN USE ***
+    switch_details TEXT
+    created_at TIMESTAMP NOT NULL,
+    check_in_interval_in_hours INTEGER CHECK (check_in_interval_in_hours > 0) NOT NULL,
+    check_in_by_time TIMESTAMP NOT NULL,
+    last_checked_in_at TIMESTAMP NOT NULL,
+    recipient_email TEXT NOT NULL,
+    recipient_first_name VARCHAR(255) NOT NULL,
+    recipient_last_name VARCHAR(255) NOT NULL,
+    final_message TEXT NOT NULL,
+    triggered BOOLEAN NOT NULL
+);
+
+CREATE TABLE check_ins (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES app_users(id) NOT NULL,
+    deadman_switch_id INTEGER REFERENCES deadman_switches(id) NOT NULL,
+    check_in_time TIMESTAMP NOT NULL
+);
+
+
+
+** Below is not in use ***
+CREATE TABLE user_contacts (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES app_users(id) NOT NULL,
+    added_date TIMESTAMP,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email TEXT NOT NULL,
+    active BOOLEAN NOT NULL
 );
 
 CREATE TABLE user_preferences (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES app_users(id) NOT NULL,
-    recipient TEXT [],
+    recipients TEXT [],
     check_in_interval_in_hours INTEGER CHECK (check_in_interval_in_hours > 0)
 );
 

@@ -49,7 +49,7 @@ exports.signupEmail = async (req, res) => {
     };
 
     // Send verification email
-    sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.verification_string);
+    sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.email_verification_string);
     
 
     return res.status(200).json({status: '200'});
@@ -187,7 +187,7 @@ exports.getHttpCookie = async (req, res) => {
     // Function will create a new cookie and set it - only if it expires within 2 days
 	refreshToken(res, decodedJwt);
 
-    console.log(decodedJwt)
+    // console.log(decodedJwt)
     // // Get all user data from DB using their DB id from the JWT
 	// let appUserData = await dbManager.getUserFromDbId(decodedJwt.userDbId);
 
@@ -195,5 +195,6 @@ exports.getHttpCookie = async (req, res) => {
     // if(!appUserData) {
     //     return res.status(401).json({status: '401'});
     // };
-    res.status(200).json({status: '200', loggedIn: true})
+    res.status(200).json({status: '200', userId: decodedJwt.userDbId})
 };
+
