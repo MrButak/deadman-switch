@@ -7,6 +7,7 @@
             switch-name="Switch name"
         />
     </span>
+    
 </template>
 
 
@@ -41,15 +42,15 @@ function secondsBeforeSwitchExpires(checkInBy, checkInIntervalInHours, lastCheck
     let secondsSinceEpochToNow = new Date(Date.now()).getTime() / 1000;
     let secondsUntilSwitchFlipped = secondsSinceEpochToCheckInTimeToday - secondsSinceEpochToNow;
     
-
-    // if checkInTimeNow - lastCheckInTime > checkInInterval == expired 
+    // Check for expired switch
+    // if checkInTimeNow - lastCheckInTime > checkInInterval == expired
     let checkInIntervalInSeconds = checkInByHours * 60 * 60;
     let secondsSinchEpochToLastCheckedInInSeconds = new Date(lastCheckedIn).getTime() / 1000;
-    if(secondsSinceEpochToCheckInTimeToday - secondsSinchEpochToLastCheckedInInSeconds > checkInIntervalInSeconds) {
-        return 0;
-    };
+    if( secondsSinceEpochToCheckInTimeToday - secondsSinchEpochToLastCheckedInInSeconds > checkInIntervalInSeconds ||
+        secondsUntilSwitchFlipped < 0 ) 
+            { return 0 }
+    else { return secondsUntilSwitchFlipped };
 
-    return secondsUntilSwitchFlipped > 0 ? secondsUntilSwitchFlipped : 0;
 };
 // check_in_by_time
 // : 

@@ -46,7 +46,7 @@ function areSwitchFieldsValid() {
 };
 
 async function handleCreateSwitch() {
-
+    
     // Assign default final message if empty
     if(!newSwitchData.finalMessage) {
         newSwitchData.finalMessage = 'Hi ma, I won\'t be making it home for supper tonight. You know what to do.'
