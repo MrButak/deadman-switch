@@ -46,12 +46,12 @@
 <script setup>
 
 import { ref, reactive } from 'vue';
-import { handleSignupView } from '../../javascript/viewManager'
+import { handleSignupView } from '../javascript/viewManager'
 import { hasRegistered, userLoggedIn,
     showLogin, showSignup,
     loginFailedEmailNotVerified,
     regexPassword, regexEmail,
-} from '../../javascript/stateManager';
+} from '../javascript/stateManager';
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);

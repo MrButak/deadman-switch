@@ -20,7 +20,7 @@
 <script setup>
 
 
-import { showCreateDeadmanSwitch } from '../../../javascript/stateManager';
+import { showCreateDeadmanSwitch } from '../../javascript/stateManager';
 
 </script>
 

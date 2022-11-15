@@ -66,7 +66,7 @@
 
 import { ref, computed } from 'vue';
 import { newSwitchData, secondsBeforeNewSwitchFlipped
-} from '../../../../javascript/stateManager';
+} from '../../../javascript/stateManager';
 
 
 // Popup modal which displays user's final message

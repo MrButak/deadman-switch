@@ -71,8 +71,8 @@
 import { ref, reactive, computed } from 'vue';
 import { hasRegistered, showLogin, showSignup,
         regexName, regexPassword, regexEmail
-} from '../../javascript/stateManager';
-import { handleLoginView } from '../../javascript/viewManager';
+} from '../javascript/stateManager';
+import { handleLoginView } from '../javascript/viewManager';
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);

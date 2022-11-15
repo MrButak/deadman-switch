@@ -22,7 +22,7 @@
 
 <script setup>
 
-import { newSwitchData } from '../../../../javascript/stateManager';
+import { newSwitchData } from '../../../javascript/stateManager';
 
 </script>
 

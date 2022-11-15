@@ -17,7 +17,7 @@
 <script setup>
 
 import { computed } from 'vue';
-import { newSwitchData } from '../../../../javascript/stateManager';
+import { newSwitchData } from '../../../javascript/stateManager';
 
 
 let doubleDigitHours = computed(() => {

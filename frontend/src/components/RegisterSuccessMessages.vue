@@ -18,7 +18,7 @@
 
 <script setup>
 
-import { loginFailedEmailNotVerified } from '../../javascript/stateManager';
+import { loginFailedEmailNotVerified } from '../javascript/stateManager';
 
 </script>
 

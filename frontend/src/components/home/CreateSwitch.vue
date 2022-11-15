@@ -22,7 +22,7 @@
 
 import { createSwitchNavigationViews,
         creatSwitchCurrentView
-} from '../../../javascript/stateManager';
+} from '../../javascript/stateManager';
 import CreateSwitchNavigation from '../create-switch/CreateSwitchNavigation.vue';
 import SwitchRecipient from '../create-switch/switchRecipient/SwitchRecipient.vue';
 import SwitchSettings from '../../components/create-switch/switchSettings/SwitchSettings.vue';
