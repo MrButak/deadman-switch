@@ -14,10 +14,10 @@
 
 <script setup>
 
-import { checkForValidCookieAndGetUserId } from '../../../../javascripts/userManager';
+import { checkForValidCookieAndGetUserId } from '../../../../javascript/userManager';
 import { newSwitchData, secondsBeforeNewSwitchFlipped,
         regexName, regexEmail
-} from '../../../../javascripts/stateManager';
+} from '../../../../javascript/stateManager';
 
 function areSwitchFieldsValid() {
 

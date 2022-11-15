@@ -32,7 +32,7 @@
 
 <script setup>
 
-import { newSwitchData } from '../../../../javascripts/stateManager';
+import { newSwitchData } from '../../../../javascript/stateManager';
 
 let regexName = /^([A-Za-z]){1,18}$/;
 let regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;

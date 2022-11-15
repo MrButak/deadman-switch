@@ -24,7 +24,7 @@
 import { ref } from 'vue';
 import { createSwitchNavigationViews,
         creatSwitchCurrentView
-} from '../../../javascripts/stateManager';
+} from '../../../javascript/stateManager';
 
 let defaultTabPosition = ref(0)
 

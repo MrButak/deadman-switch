@@ -15,7 +15,7 @@
 
 import { deadmanSwitches,
         showCreateDeadmanSwitch
-} from '../../javascripts/stateManager';
+} from '../../javascript/stateManager';
 import NoSwitches from '../components/home/NoSwitches.vue';
 import CreateSwitch from '../components/home/CreateSwitch.vue';
 

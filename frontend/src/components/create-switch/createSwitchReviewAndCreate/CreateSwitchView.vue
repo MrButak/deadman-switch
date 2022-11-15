@@ -31,9 +31,9 @@
 
 import { onMounted } from 'vue';
 import { newSwitchData, secondsBeforeNewSwitchFlipped
-} from '../../../../javascripts/stateManager';
+} from '../../../../javascript/stateManager';
 
-import { handleCreateSwitchFormErrorMessages } from '../../../../javascripts/ErrorManager';
+import { handleCreateSwitchFormErrorMessages } from '../../../../javascript/ErrorManager';
 
 import AcknowledgeFirstCheckIn from './AcknowledgeFirstCheckIn.vue';
 import CreateSwitchButton from './CreateSwitchButton.vue';

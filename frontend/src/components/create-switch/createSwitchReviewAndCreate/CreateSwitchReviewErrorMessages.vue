@@ -15,7 +15,7 @@
 
 <script setup>
 
-import { createSwitchReviewErrorMessages } from '../../../../javascripts/stateManager';
+import { createSwitchReviewErrorMessages } from '../../../../javascript/stateManager';
 
 // {
 //     color: 'warning', // success

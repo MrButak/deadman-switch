@@ -42,8 +42,8 @@
 import { ref, watchEffect } from 'vue';
 import { useColors } from 'vuestic-ui';
 
-import { userLoggedIn, hasRegistered } from '../../../javascripts/stateManager';
-import { handleLoginView, handleSignupView } from '../../../javascripts/viewManager';
+import { userLoggedIn, hasRegistered } from '../../../javascript/stateManager';
+import { handleLoginView, handleSignupView } from '../../../javascript/viewManager';
 
 const { presets, applyPreset } = useColors()
 let theme = ref(localStorage.getItem('vuestic-docs-theme')?.toLowerCase() || 'dark');
