@@ -66,7 +66,7 @@ async function handleFetchUserData(userId) {
 
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/account/${userId}`, {
 
-        credentials: 'include',// production only
+        // credentials: 'include', // production only
         method: 'GET',
         mode: 'cors'
     });

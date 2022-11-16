@@ -61,18 +61,9 @@ exports.createNewSwitch = async (req, res) => {
     
     // TODO: make sure the switch is not < 3 minutes before expiring
 
-    // Calculate users first checkin time
-        // checkInTime - checkInInterval
-    let firstCheckInTimestamp = 
-        new Date(newSwitchData.checkInTime).setTime(new Date(newSwitchData.checkInTime).getTime() - newSwitchData.checkInIntervalInDays * 24 * 60 * 60 * 1000);
-    
-    // Invalid date for first checkin time
-    if(new Date(firstCheckInTimestamp).getTime() < 0) {
-        return res.status(400).json({status: '400', message: 'Invalid switch settings'}); 
-    };
-    
     // Assign first checkin time to the new switch Object
-    newSwitchData.firstCheckInTimestamp = firstCheckInTimestamp;
+    //newSwitchData.firstCheckInTimestamp = firstCheckInTimestamp;
+    newSwitchData.firstCheckInTimestamp = newSwitchData.checkInTime;
 
     // console.log(new Date(newSwitchData.checkInTime).toLocaleString())
     // console.log(new Date(firstCheckInTimestamp).toLocaleString())

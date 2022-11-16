@@ -60,11 +60,7 @@ onMounted(() => {
                     deadmanSwitches.push(dmSwitch);
                 });
             };
-            console.log(deadmanSwitches)
-            console.log('after added')
-            // TODO: Backend call to get switches and user data
-            // *Separate the logic. don't get user data until they click on their account icon*
-
+            console.log(deadmanSwitches);
         };
     })();
 });
@@ -91,8 +87,11 @@ async function checkIfUserIsLoggedIn() {
 
 
 
-<style scoped>
+<style lang="scss">
 
-
+#app {
+    
+    overflow: hidden;
+}
 
 </style>
