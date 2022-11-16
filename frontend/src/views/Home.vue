@@ -8,7 +8,7 @@
     <CreateSwitch />
 </span>
 
-<span v-if="!showCreateDeadmanSwitch && deadmanSwitches.length">
+<span v-if="!showCreateDeadmanSwitch">
     <AllSwitches />
 </span>
 

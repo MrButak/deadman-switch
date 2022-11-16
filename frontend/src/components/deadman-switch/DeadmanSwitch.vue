@@ -2,17 +2,23 @@
 
 <div class="card-wrapper">
     <div class="flex md6 lg4">
-        <va-card stripe stripe-color="success">
-        <va-card-title class="switch-name">{{ switchName }}</va-card-title>
+        <va-card 
+            stripe 
+            :stripe-color="switchColor">
+        <va-card-title class="switch-name">{{ switchColor }}</va-card-title>
         <va-card-content>
             <div class="check-in-button-wrapper">
                 
                 <va-button 
                     class="mr-4 mb-2 check-in-button"
                     :color="switchColor"
-                    
+                    @click="$emit('handleCheckIn')"
                     >
-                    <h6 class="va-h6">{{ switchButtonText }}</h6>
+                    <h6 
+                        class="va-h6"
+                        
+
+                    >{{ switchButtonText }}</h6>
                 </va-button>
                 
             </div>
@@ -40,7 +46,8 @@ defineProps({
     secondsBeforeNewSwitchFlippedProp: Number,
     switchName: String,
     switchColor: String,
-    switchButtonText: String
+    switchButtonText: String,
+
 });
 
 // check_in_by_time
