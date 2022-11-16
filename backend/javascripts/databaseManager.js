@@ -114,3 +114,21 @@ exports.insertNewDeadmanSwitch = async (userId, newSwitchData) => {
         return [false];
     };
 };
+
+// ***********************************************************************************
+// Function will get users account data. Currently called only when a user selects the 'account' view
+// ***********************************************************************************
+exports.getUserAccountData = async (userId) => {
+
+    let dbStmt = 'SELECT * FROM app_users WHERE id = ($1)';
+    let dbValues = [userId];
+
+    try {
+        let dbQuery = await pool.query(dbStmt, dbValues);
+        return [true, dbQuery.rows[0]];
+    }
+    catch(err) {
+        console.log(err);
+        return [false];
+    };
+};

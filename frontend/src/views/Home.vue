@@ -8,7 +8,7 @@
     <CreateSwitch />
 </span>
 
-<span v-if="deadmanSwitches.length">
+<span v-if="!showCreateDeadmanSwitch && deadmanSwitches.length">
     <AllSwitches />
 </span>
 
@@ -24,9 +24,6 @@ import { deadmanSwitches,
 import NoSwitches from '../components/home/NoSwitches.vue';
 import CreateSwitch from '../components/home/CreateSwitch.vue';
 import AllSwitches from '../components/home/AllSwitches.vue';
-
-console.log(deadmanSwitches.length)
-console.log('***')
 
 </script>
 
