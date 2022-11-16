@@ -6,9 +6,9 @@
         :time="secondsBeforeSwitchFlippedProp * 1000" 
         v-slot="{ days, hours, minutes, seconds }"
     >
-        <span>{{ days }}</span> days, 
-        {{ hours }} hours, 
-        {{ minutes }} minutes, 
+        {{ days }} days,
+        {{ hours }} hours,
+        {{ minutes }} minutes,
         {{ seconds }} seconds.
     </vue-countdown>
     <p>{{ timerSubText }}</p>    
