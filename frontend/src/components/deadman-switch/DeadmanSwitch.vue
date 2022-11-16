@@ -9,10 +9,10 @@
                 
                 <va-button 
                     class="mr-4 mb-2 check-in-button"
-                    color="info"
+                    :color="switchColor"
                     
                     >
-                    <h6 class="va-h6">Check In</h6>
+                    <h6 class="va-h6">{{ switchButtonText }}</h6>
                 </va-button>
                 
             </div>
@@ -38,7 +38,9 @@ import CountdownTimer from '../shared/CountdownTimer.vue';
 
 defineProps({
     secondsBeforeNewSwitchFlippedProp: Number,
-    switchName: String
+    switchName: String,
+    switchColor: String,
+    switchButtonText: String
 });
 
 // check_in_by_time

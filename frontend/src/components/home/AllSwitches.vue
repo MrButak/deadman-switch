@@ -5,6 +5,8 @@
     <DeadmanSwitch 
         :seconds-before-new-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at)"
         switch-name="Switch name"
+        :switch-color="determineSwitchColor(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at))"
+        :switch-button-text="determineSwitchButtonText(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at))"
     />
 </span>
     
@@ -16,6 +18,24 @@
 
 import { deadmanSwitches } from '../../javascript/stateManager';
 import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
+
+
+function determineSwitchColor(timeLeftInSeconds) {
+
+    if(timeLeftInSeconds < 14440) { // 4 hours
+        return 'danger'
+    };
+    return 'info';
+};
+
+function determineSwitchButtonText(timeLeftInSeconds) {
+    console.log({timeLeftInSeconds})
+    if(timeLeftInSeconds <= 0) { // 4 hours
+        return 'Dead'
+    };
+
+    return 'Check In'
+};
 
 // Function calculates the seconds before the user needs to check in
 function secondsBeforeSwitchExpires(checkInBy, checkInIntervalInHours, lastCheckedIn) {
