@@ -5,8 +5,9 @@
         <va-card 
             stripe 
             :stripe-color="switchColor">
-        <va-card-title class="switch-name">{{ switchColor }}</va-card-title>
+        <va-card-title class="switch-name">Switch name</va-card-title>
         <va-card-content>
+            <p>{{ checkInByInfoText }}</p>
             <div class="check-in-button-wrapper">
                 
                 <va-button 
@@ -20,7 +21,8 @@
 
                     >{{ switchButtonText }}</h6>
                 </va-button>
-                
+                <p>Last checked in</p>
+                <p>{{ lastCheckedIn }}</p>
             </div>
             
             <CountdownTimer 
@@ -47,6 +49,8 @@ defineProps({
     switchName: String,
     switchColor: String,
     switchButtonText: String,
+    lastCheckedIn: String,
+    checkInByInfoText: String
 
 });
 
@@ -96,6 +100,9 @@ defineProps({
     justify-content: center;
     align-items: center;
     padding: 1rem 0;
+    p {
+        text-align: center;
+    }
 }
 .switch-name {
     justify-content: center;
@@ -104,6 +111,7 @@ defineProps({
 }
 .check-in-button-wrapper {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;

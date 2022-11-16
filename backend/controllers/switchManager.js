@@ -60,13 +60,6 @@ exports.createNewSwitch = async (req, res) => {
             };
     
     // TODO: make sure the switch is not < 3 minutes before expiring
-
-    // Assign first checkin time to the new switch Object
-    //newSwitchData.firstCheckInTimestamp = firstCheckInTimestamp;
-    newSwitchData.firstCheckInTimestamp = newSwitchData.checkInTime;
-
-    // console.log(new Date(newSwitchData.checkInTime).toLocaleString())
-    // console.log(new Date(firstCheckInTimestamp).toLocaleString())
     
     // ****** From this point switch is good to put into db *******
     let switchData = await insertNewDeadmanSwitch(userId, newSwitchData);

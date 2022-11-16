@@ -60,6 +60,17 @@ async function handleCreateSwitch() {
     if(!userId[0]) { return }; // not logged in
     if(!userId[1]) { return }; // logged in, but issue with user id
 
+
+    // Calculate the time the user first checked in according to the time the user selected and the time now
+    if(newSwitchData.checkInTime > new Date(Date.now()) ) {
+        //checkInTime - checkInInterval
+        newSwitchData.firstCheckedInAt = new Date(newSwitchData.checkInTime).setHours(new Date(newSwitchData.checkInTime).getHours() - (newSwitchData.checkInIntervalInDays * 24) );
+    }
+    else {
+        newSwitchData.firstCheckedInAt = newSwitchData.checkInTime;
+    };
+
+
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/switch/create`, {
         mode: 'cors',
         method: 'POST',
