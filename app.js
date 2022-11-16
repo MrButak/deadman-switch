@@ -27,6 +27,20 @@ app.use(function (req, res, next) {
     next();
 });
 
+// Check for expired switches every 1 minute
+var cron = require('node-cron');
+cron.schedule('* * * * *', () => {
+
+    // check_in_interval_in_hours INTEGER CHECK (check_in_interval_in_hours > 0) NOT NULL,
+    // check_in_by_time TIMESTAMP NOT NULL,
+    // last_checked_in_at TIMESTAMP NOT NULL,
+
+    // check_in_by_time  last_checked_in_at
+    console.log('***********************************************************')
+    console.log('running a task every minute', new Date(Date.now()));
+    console.log('***********************************************************')
+});
+
 app.use('/', express.static(path.join(__dirname, 'public', 'dist')));
 app.use('/css', express.static(path.join(__dirname, 'public', 'dist', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'dist', 'js')));
