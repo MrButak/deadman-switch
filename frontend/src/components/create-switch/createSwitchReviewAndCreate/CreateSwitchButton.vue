@@ -70,7 +70,6 @@ async function handleCreateSwitch() {
         newSwitchData.firstCheckedInAt = newSwitchData.checkInTime;
     };
 
-
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/switch/create`, {
         mode: 'cors',
         method: 'POST',

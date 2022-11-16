@@ -5,7 +5,7 @@
         <va-card 
             stripe 
             :stripe-color="switchColor">
-        <va-card-title class="switch-name">Switch name</va-card-title>
+        <va-card-title class="switch-name">{{ switchName }}</va-card-title>
         <va-card-content>
             <p>{{ checkInByInfoText }}</p>
             <div class="check-in-button-wrapper">

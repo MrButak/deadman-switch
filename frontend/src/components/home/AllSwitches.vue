@@ -4,8 +4,8 @@
 <span v-for="dmSwitch in deadmanSwitches">
     <DeadmanSwitch
         :seconds-before-new-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at)"
-        switch-name="Switch name"
-        :check-in-by-info-text="`Check in by : ${getCheckInByTime(dmSwitch.check_in_by_time)} every ${dmSwitch.check_in_interval_in_hours / 24} day(s)`"
+        :switch-name="dmSwitch.switch_name"
+        :check-in-by-info-text="`Check in by : ${extractTimeFromDateObject(dmSwitch.check_in_by_time)} every ${dmSwitch.check_in_interval_in_hours / 24} day(s)`"
         :switch-color="determineSwitchColor(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at))"
         :switch-button-text="determineSwitchButtonText(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at))"
         @handle-check-in="handleCheckIn(dmSwitch.id, dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at)"
@@ -48,15 +48,21 @@ function determineSwitchButtonText(timeLeftInSeconds) {
     return 'Check In'
 };
 
-function getCheckInByTime(checkInBy) {
-    console.log({checkInBy})
-    console.log('*************************************************************************')
-    let checkInByHours = new Date(checkInBy).getHours();
-    let checkInByMinutes = new Date(checkInBy).getMinutes();
-    let checkInBySeconds = new Date(checkInBy).getUTCSeconds();
-    let checkInByMilliseconds = new Date(checkInBy).getUTCMilliseconds();
+// Extract just the checkInBytime from the Date Object
+function extractTimeFromDateObject(dateObj) {
+  
+    let timeString = '';
+    let hoursString = new Date(dateObj).getHours();
+    let minutesString = new Date(dateObj).getMinutes();
+    let secondsString = new Date(dateObj).getSeconds();
+    let millisecondString = new Date(dateObj).getMilliseconds();
 
-    return `${checkInByHours}:${checkInByMinutes}`
+    hoursString = hoursString < 10 ? '0' + hoursString : hoursString
+    minutesString = minutesString < 10 ? '0' + minutesString : minutesString
+    secondsString = secondsString < 10 ? '0' + secondsString : secondsString
+
+    timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString
+    return timeString;
 };
 
 // Function calculates the seconds before the user needs to check in
