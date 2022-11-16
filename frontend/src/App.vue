@@ -3,18 +3,24 @@
 <Header />
 
 <span v-if="userLoggedIn">
-    <Home />
+
+    <span v-if="showUserAccount">
+        <UserAccount />
+    </span>
+
+    <span v-else>
+        <Home />
+    </span>
 </span>
 
 <span v-else>
-
     <span v-if="showLogin">
         <Login />
     </span>
+
     <span v-else-if="!hasRegistered && showSignup">
         <Signup />
     </span>
-
 </span>
 
 
@@ -27,12 +33,14 @@ import { onMounted } from 'vue';
 import { getDeadmanSwitchesWithUserId } from './javascript/deadmanManager';
 import { checkForValidCookieAndGetUserId } from './javascript/userManager';
 import { userLoggedIn, showLogin, showSignup, hasRegistered,
-        deadmanSwitches
+        deadmanSwitches,
+        showUserAccount
 } from './javascript/stateManager';
 import Header from './components/header/Header.vue';
 import Login from './views/Login.vue';
 import Signup from './views/Signup.vue';
 import Home from './views/Home.vue';
+import UserAccount from './views/UserAccount.vue';
 
 // On app mount check if the user is logged in and determine which Components to show or not
 onMounted(() => {
@@ -52,11 +60,7 @@ onMounted(() => {
                     deadmanSwitches.push(dmSwitch);
                 });
             };
-            console.log(deadmanSwitches)
-            console.log('after added')
-            // TODO: Backend call to get switches and user data
-            // *Separate the logic. don't get user data until they click on their account icon*
-
+            console.log(deadmanSwitches);
         };
     })();
 });
@@ -83,8 +87,11 @@ async function checkIfUserIsLoggedIn() {
 
 
 
-<style scoped>
+<style lang="scss">
 
-
+#app {
+    
+    overflow: hidden;
+}
 
 </style>

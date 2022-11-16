@@ -33,16 +33,23 @@ let newSwitchData = reactive({
     checkInIntervalInDays: 1,
     checkInTime: new Date(),
     finalMessage: '',
-    // Not sent to backend
+    // new switch form validation helpers
     acknowledgeTimeUntilFirstCheckIn: false,
     checkInForTheFirstTime: false, // checkbox - will add checkInIntervalInDays to secondsBeforeSwitchFlipped (time before user needs to check in for the first time)
 });
 
-
-
 let secondsBeforeNewSwitchFlipped = ref(0);
-
 let createSwitchReviewErrorMessages = reactive([]);
+
+// ******************************************************************
+// User account
+// ******************************************************************
+let showUserAccount = ref(false);
+
+
+
+
+
 
 let formErrorMessages = {
     'firstName': {
@@ -91,5 +98,7 @@ export {
     createSwitchNavigationViews, 
     newSwitchData, createSwitchReviewErrorMessages,
     secondsBeforeNewSwitchFlipped,
-    formErrorMessages // global data
+    formErrorMessages, // global data
+    // user account
+    showUserAccount
 }

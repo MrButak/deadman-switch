@@ -1,12 +1,12 @@
 <template>
     
 <h2 class="va-h2" style="text-align: center;">Your Switches</h2>
-    <span v-for="dmSwitch in deadmanSwitches">
-        <DeadmanSwitch 
-            :seconds-before-new-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at)"
-            switch-name="Switch name"
-        />
-    </span>
+<span v-for="dmSwitch in deadmanSwitches">
+    <DeadmanSwitch 
+        :seconds-before-new-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at)"
+        switch-name="Switch name"
+    />
+</span>
     
 </template>
 

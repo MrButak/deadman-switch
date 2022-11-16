@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { signupEmail, verifyUserEmail, loginEmail, getHttpCookie } = require('../controllers/userManager');
+const { signupEmail, verifyUserEmail, loginEmail, getHttpCookie, getUserDataWithUserId } = require('../controllers/userManager');
 const { getDeadmanSwitchesWithUserId, createNewSwitch } = require('../controllers/switchManager');
 
 // User signs up for an account
@@ -26,6 +26,10 @@ router.get('/api/user/verify', async function(req, res) {
 // This route is called on app load ONLY if a user is logged in
 router.get('/api/user/data/deadman-switches/:userId?', async function(req, res) {
     await getDeadmanSwitchesWithUserId(req, res);
+});
+
+router.get('/api/user/account/:userId?', async function(req, res) {
+    await getUserDataWithUserId(req, res);
 });
 
 router.post('/api/switch/create', async function(req, res) {

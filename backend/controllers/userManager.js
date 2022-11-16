@@ -1,5 +1,5 @@
 const { validateName, validateEmail, validatePassword } = require('../javascripts/validationManager');
-const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail } = require('../javascripts/databaseManager');
+const { insertNewUser, verifyUsersEmail, getUserLoginCredsWithEmail, getUserAccountData } = require('../javascripts/databaseManager');
 const { hashString, compareString } = require('../javascripts/utils/hashing');
 const { randomString, decodeUri } = require('../javascripts/utils/utils');
 const { sendVerificationEmail } = require('../javascripts/emailManager');
@@ -195,6 +195,34 @@ exports.getHttpCookie = async (req, res) => {
     // if(!appUserData) {
     //     return res.status(401).json({status: '401'});
     // };
-    res.status(200).json({status: '200', userId: decodedJwt.userDbId})
+    return res.status(200).json({status: '200', userId: decodedJwt.userDbId})
 };
 
+exports.getUserDataWithUserId = async(req, res) => {
+    let userId = '';
+	
+	try {
+		userId = req.params.userId;
+	}
+	catch(err) {
+		console.log(err);
+        return res.status(500).json({status: '500', message: 'An unknown error occurred'});
+	};
+
+    if(!userId) {
+        return res.status(500).json({status: '500', message: 'An unknown error occurred'});
+    };
+
+    let userData = await getUserAccountData(userId);
+    if(!userData[0]) {
+        return res.status(500).json({status: '500', message: 'An unknown database error occurred'});
+    };
+    console.log(userData[1])
+    return res.status(200).json({status: '200', userAccountData: {
+        firstName: userData[1].first_name,
+        lastName: userData[1].last_name,
+        email: userData[1].email,
+        creationDate: userData[1].creation_date
+    } 
+    });
+};

@@ -2,9 +2,17 @@
 
 <div style="position: relative; padding: 0 0 1rem 0;">
     <va-app-bar>
-        <va-button @click="showCreateDeadmanSwitch = false" icon="home" color="#fff" preset="plain" />
-        <va-button @click="showModal = !showModal" icon="info" color="#fff" preset="plain" />
+        <va-button @click="showCreateDeadmanSwitch = false, showUserAccount = false" 
+            icon="home" 
+            color="#fff" 
+            preset="plain" />
+        <va-button 
+            @click="showModal = !showModal" 
+            icon="info" 
+            color="#fff" 
+            preset="plain" />
         <va-spacer />
+
         <!-- Light/dark theme -->
         <va-button-toggle v-model="theme" :options="themeOptions" class="ml-2" />
 
@@ -19,8 +27,17 @@
         </span>
 
         <span v-else-if="userLoggedIn">
-            <va-button @click="showCreateDeadmanSwitch = true" icon="add_circle" color="#fff" preset="plain" />
-            <va-button icon="account_circle" color="#fff" preset="plain" />
+            <va-button 
+                @click="showCreateDeadmanSwitch = true, 
+                    showUserAccount = false" 
+                icon="add_circle" 
+                color="#fff" 
+                preset="plain" />
+            <va-button 
+                @click="showUserAccount = true, showCreateDeadmanSwitch = false, testy()"
+                icon="account_circle" 
+                color="#fff" 
+                preset="plain" />
         </span>
         
     </va-app-bar>
@@ -43,9 +60,14 @@ import { ref, watchEffect } from 'vue';
 import { useColors } from 'vuestic-ui';
 
 import { userLoggedIn, hasRegistered,
-        showCreateDeadmanSwitch
+        showCreateDeadmanSwitch,
+showUserAccount
 } from '../../javascript/stateManager';
 import { handleLoginView, handleSignupView } from '../../javascript/viewManager';
+function testy() {
+console.log('firing')
+console.log(showUserAccount.value)
+}
 
 const { presets, applyPreset } = useColors()
 let theme = ref(localStorage.getItem('vuestic-docs-theme')?.toLowerCase() || 'dark');
@@ -56,8 +78,6 @@ let themeOptions = Object.keys(presets.value).map((themeName) => ({
 watchEffect(() => {
     applyPreset(theme.value)
 });
-
-
 
 let showModal = ref(false);
 let infoMessage = 'Deadman switch is an app to help people help those who care about them know they are ok.';
