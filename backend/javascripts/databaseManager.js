@@ -167,6 +167,7 @@ exports.checkForExpiredSwitches = async () => {
 
 exports.deactivateExpiredSwitch = async(switchId, userId) => {
 
+    console.log('In deactiveExpiredSwitch() dbManager.js ***********************************************************')
     let dbStmt = 'UPDATE deadman_switch SET triggered = true WHERE id = ($1) AND user_id = ($2);';
     let dbValues = [switchId, userId];
     try {
