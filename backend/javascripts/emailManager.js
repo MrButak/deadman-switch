@@ -131,14 +131,15 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     };
     
     apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
+        console.log('email to recipient sent', data)
         return true;
     }, 
     function(error) {
         console.error(error);
-        console.log('Final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-        console.log({deadmanAccountData})
-        console.log({dmSwitch})
-        console.log('Variables used in final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        // console.log('Final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        // console.log({deadmanAccountData})
+        // console.log({dmSwitch})
+        // console.log('Variables used in final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
         return false;
     });
 };
@@ -193,14 +194,15 @@ exports.sendAlertEmailToDeadman = async(deadmanAccountData, dmSwitch) => {
     };
     
     apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
+        console.log('email to deadman sent', data)
         return true;
     }, 
     function(error) {
         console.error(error);
-        console.log('Alert deadman email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-        console.log({deadmanAccountData})
-        console.log({dmSwitch})
-        console.log('Variables used in deadman email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        // console.log('Alert deadman email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        // console.log({deadmanAccountData})
+        // console.log({dmSwitch})
+        // console.log('Variables used in deadman email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
         return false;
     });
 };
