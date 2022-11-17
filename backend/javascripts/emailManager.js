@@ -78,7 +78,7 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
 
 
     const client = require('@sendgrid/mail');
-    client.setApiKey(process.env.SENDGRID_API_KEY);
+    client.setApiKey(process.env.SEND_GRID_API);
 
     const message = {
     
