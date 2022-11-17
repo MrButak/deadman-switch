@@ -4,7 +4,7 @@ const email_sk = process.env.SEND_IN_BLUE_API;
 // ***********************************************************************************
 // Function is called after a successful signup. Sends a verification link to the user
 // ***********************************************************************************
-exports.sendVerificationEmail = (firstName, lastName, email, verificationString) => {
+exports.sendVerificationEmail = (firstName, lastName, email, verificationString, emailTemplateId) => {
     
     var SibApiV3Sdk = require('sib-api-v3-sdk');
     var defaultClient = SibApiV3Sdk.ApiClient.instance;
@@ -19,7 +19,7 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString)
             email: email,
             name: `${firstName} ${lastName}`
         }],
-        templateId: 1,
+        templateId: emailTemplateId,
         params: {
             
             'customerName': `${firstName} ${lastName}`,
@@ -38,4 +38,8 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString)
         console.error(error);
         return false;
     });
+};
+
+exports.sendFinalMessage = (deadmanEmail, recipientFirstName, recipientLastName, recipientEmail, finalMessage, lastCheckedInAt, switchIntervalInHours) => {
+
 };

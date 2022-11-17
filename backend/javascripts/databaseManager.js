@@ -148,7 +148,7 @@ exports.checkInDeadmanSwitch = async (newCheckInByTime, switchId, userId) => {
 
 exports.checkForExpiredSwitches = async () => {
 
-    let dbStmt = 'SELECT * FROM deadman_switches WHERE ($1) > check_in_by_time;';
+    let dbStmt = 'SELECT * FROM deadman_switches WHERE triggered = false AND ($1) > check_in_by_time;';
     // let dbStmt = 'SELECT check_in_by_time FROM deadman_switches';
     
     let dbValues = [new Date(Date.now())];
@@ -162,5 +162,18 @@ exports.checkForExpiredSwitches = async () => {
     catch(error) {
         console.log(error);
         return [false];
+    };
+};
+
+exports.deactivateExpiredSwitch = async(switchId) => {
+
+    let dbStmt = 'UPDATE deadman_switch SET triggered = true WHERE id = ($1);';
+    let dbValues = [switchId];
+    try {
+        await pool.query(dbStmt, dbValues);
+        return true;
+    }
+    catch(error) {
+        return false;
     };
 };

@@ -29,7 +29,8 @@ app.use(function (req, res, next) {
 
 // Check for expired switches every 1 minute
 const cron = require('node-cron');
-const { checkForExpiredSwitches } = require('./backend/javascripts/databaseManager');
+const { checkForExpiredSwitches, deactivateExpiredSwitch, getUserAccountData } = require('./backend/javascripts/databaseManager');
+const { sendFinalMessage } = require('./backend/javascripts/emailManager');
 
 cron.schedule('* * * * *', async () => {
 
@@ -37,11 +38,17 @@ cron.schedule('* * * * *', async () => {
     console.log('cron job, 1 minute')
     if(expiredSwitches[0]) {
 
-        expiredSwitches[1].forEach((dmSwitch) => {
-            console.log(new Date(dmSwitch.check_in_by_time));
-            console.log('here, expired switch ^^^^^^^^^^^^^^^^^^')
-
-        });
+        for(const dmSwitch of expiredSwitches[1]) {
+            console.log(dmSwitch)
+            console.log('here *** const * of syntax')
+        }
+        
+            
+            // let deadmanAccountData = await getUserAccountData()
+            // let finalMessageSent = sendFinalMessage()
+            // deactivateExpiredSwitch(dwSwitch.id)
+            // deadmanEmail, recipientFirstName, recipientLastName, recipientEmail, finalMessage, lastCheckedInAt, switchIntervalInHours
+      
     };
 });
 

@@ -48,8 +48,8 @@ exports.signupEmail = async (req, res) => {
         return res.status(400).json({status: '400', message: 'Invalid credentials'});
     };
 
-    // Send verification email
-    sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.email_verification_string);
+    // Send verification email // current send in blue template for this email is 1
+    sendVerificationEmail(userData.firstName, userData.lastName, userData.email, userData.email_verification_string, 1);
     
 
     return res.status(200).json({status: '200'});

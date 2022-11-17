@@ -115,20 +115,13 @@ function extractTimeFromDateObject(dateObj) {
 // Function calculates the seconds before the user needs to check in
 function secondsBeforeSwitchExpires(checkInByTime) {
 
-    // console.log( new Date(checkInByTime).toLocaleString() )
-    // console.log('check in by')
-    // console.log( checkInIntervalInHours )
-    // console.log('interval in hours')
-    // console.log( new Date(lastCheckedIn).toLocaleString() )
-    // console.log('last checked in')
-
-    // *********************************************************************************
     // Calculate seconds until switch Expires
-    // *********************************************************************************
     let secondsUntilSwitchFlipped =
         ( (new Date(checkInByTime).getTime() / 1000) - (new Date(Date.now()) ) / 1000);
 
+    // Countdown timer can't take a negative number
     if(secondsUntilSwitchFlipped < 0) { return 0 };
+
     return secondsUntilSwitchFlipped;    
 };
 
