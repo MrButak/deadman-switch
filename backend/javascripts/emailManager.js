@@ -109,12 +109,13 @@ exports.sendAlertEmailToDeadman = async(deadmanAccountData, dmSwitch) => {
         console.log('Is this time string the issue????????????????????????????')
         return timeString;
     };
-    
+    let firstName = 'Some'
+    let lastName = 'Name'
     sendSmtpEmail = {
 
         to: [{
             email: deadmanAccountData.email,
-            name: `Deadman switch creator`
+            name: `${firstName} ${lastName}`
         }],
         templateId: 4,
         params: {

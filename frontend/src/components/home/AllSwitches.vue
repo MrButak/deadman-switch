@@ -88,7 +88,7 @@ function determineSwitchButtonText(timeLeftInSeconds, checkInIntervalInHours) {
     if(timeLeftInSeconds <= 0) {
         return 'Dead'
     }
-    else if(isButtonLatchOpen(timeLeftInSeconds, checkInIntervalInHours)) {
+    else if(isButtonLatchOpen(timeLeftInSeconds, checkInIntervalInHours) && timeLeftInSeconds > 0) {
         return 'Check In';
     }
     else {
