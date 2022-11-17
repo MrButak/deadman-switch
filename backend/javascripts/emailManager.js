@@ -1,5 +1,5 @@
 config = require('dotenv').config();
-// const email_sk = process.env.SEND_IN_BLUE_API;
+const email_sk = process.env.SEND_IN_BLUE_API;
 // const SibApiV3Sdk = require('sib-api-v3-sdk');
 // Send grid
 // const client = require('@sendgrid/client');
