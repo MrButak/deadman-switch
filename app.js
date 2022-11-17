@@ -36,12 +36,14 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
 
     // Get the deadman's account information
     let deadmanAccountData = await getUserAccountData(dmSwitch.user_id);
-    
+    console.log({deadmanAccountData})
+    console.log('deadman account data from the DB ^^^^^^^ in app.js')
     
 
         // Deactivate switch
         let switchDeactivated = await deactivateExpiredSwitch(dmSwitch.id, dmSwitch.user_id);
         if(switchDeactivated) {
+            console.log('Makinging inside of the switchDeactivated block')
             // Send an email with their final message to their contact
             let finalMessageSent = await sendFinalMessage(deadmanAccountData, dmSwitch);
             console.log({finalMessageSent})
