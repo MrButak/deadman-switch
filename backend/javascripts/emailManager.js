@@ -113,16 +113,16 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
 
         to: [{
             email: dmSwitch.recipient_email,
-            name: `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`
+            name: dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name
         }],
         templateId: 3,
         params: {
             
-            'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-            'deadmanEmail': `${deadmanAccountData.email}`,
-            'finalMessage': `${dmSwitch.final_message}`,
-            'switchCreationDate': `${dmSwitch.created_at}`,
-            'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
+            'recipientName': dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name,
+            'deadmanEmail': deadmanAccountData.email,
+            'finalMessage': dmSwitch.final_message,
+            'switchCreationDate': dmSwitch.created_at,
+            'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours 
         },
     
         headers: {
@@ -177,18 +177,18 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
 
         to: [{
             email: deadmanAccountData.email,
-            name: `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`
+            name: dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name
         }],
         templateId: 4,
         params: {
             
-            'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-            'finalMessage': `${dmSwitch.final_message}`,
-            'switchName': `${dmSwitch.switch_name}`,
-            'switchCreationDate': `${dmSwitch.created_at}`,
-            'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}`,
-            'checkInByTime': `${readableCheckInByTime}`,
-            'lastCheckedInAt': `${dmSwitch.last_checked_in_at}`
+            'recipientName': dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name,
+            'finalMessage': dmSwitch.final_message,
+            'switchName': dmSwitch.switch_name,
+            'switchCreationDate': dmSwitch.created_at,
+            'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
+            'checkInByTime': readableCheckInByTime,
+            'lastCheckedInAt': dmSwitch.last_checked_in_at
         },
     
         headers: {
