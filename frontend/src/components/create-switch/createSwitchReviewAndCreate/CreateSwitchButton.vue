@@ -60,7 +60,6 @@ async function handleCreateSwitch() {
     if(!userId[0]) { return }; // not logged in
     if(!userId[1]) { return }; // logged in, but issue with user id
 
-
     // Calculate the time the user first checked in according to the time the user selected and the time now
     if(newSwitchData.checkInByTime > new Date(Date.now()) ) {
         newSwitchData.firstCheckedInAt = new Date(newSwitchData.checkInByTime).setHours(new Date(newSwitchData.checkInByTime).getHours() - (newSwitchData.checkInIntervalInDays * 24) );

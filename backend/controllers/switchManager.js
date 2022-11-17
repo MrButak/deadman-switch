@@ -1,4 +1,4 @@
-const { getDeadmanSwitches, insertNewDeadmanSwitch } = require('../javascripts/databaseManager');
+const { getDeadmanSwitches, insertNewDeadmanSwitch, checkInDeadmanSwitch } = require('../javascripts/databaseManager');
 const { validateName, validateEmail } = require('../javascripts/validationManager');
 
 // Function will get the users deadman switches from the DB
@@ -26,6 +26,7 @@ exports.getDeadmanSwitchesWithUserId = async(req, res) => {
     };
     return res.status(200).json({status: '200', switches: switchesQuery[1]});
 };
+
 
 exports.createNewSwitch = async (req, res) => {
 
@@ -60,13 +61,49 @@ exports.createNewSwitch = async (req, res) => {
             };
     
     // TODO: make sure the switch is not < 3 minutes before expiring
-    console.log(newSwitchData)
-    process.exit()
+    
+    
     // ****** From this point switch is good to put into db *******
     let switchData = await insertNewDeadmanSwitch(userId, newSwitchData);
     if(!switchData[0]) {
         return res.status(500).json({status: '500', message: 'An unknown database error occurred'}); 
     };
-
+    // console.log({switchData})
     return res.status(200).json({status: '200', message: 'Switch successfully created', switch: switchData[1]});
+};
+
+
+exports.checkIn = async (req, res) => {
+
+    let switchId = '';
+    let userId = '';
+    let newCheckInByTime = '';
+
+    try {
+        let bodyData = JSON.parse(Object.keys(req.body));
+        console.log(bodyData)
+        switchId = bodyData.deadmanSwitchId;
+        userId = bodyData.appUserId;
+        newCheckInByTime = bodyData.newCheckInByTime;
+    }
+    catch(error) {
+        console.log(error);
+        return res.status(500).json({status: '500', message: 'Unknown error'});
+    };
+    
+    // Falsy data from req.body
+    if(!switchId || !userId || !newCheckInByTime) {
+        return res.status(500).json({status: '500', message: 'Unknown error'});
+    };
+
+    let updatedSwitch = await checkInDeadmanSwitch(newCheckInByTime, switchId, userId);
+    if(!updatedSwitch[0]) {
+        return res.status(500).json({status: '500', message: 'Unknown database error'});
+    };
+
+    console.log(updatedSwitch[1])
+    console.log({switchId})
+    console.log({userId})
+    console.log({newCheckInByTime})
+    return res.status(200).json({status: '200', message: 'Switch was successfully reset', switch: updatedSwitch[1]});
 };
