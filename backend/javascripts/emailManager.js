@@ -76,10 +76,6 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
         return false;
     });
 
-
- 
-
-
     // let defaultClient = SibApiV3Sdk.ApiClient.instance;
     // let apiKey = defaultClient.authentications['api-key'];
     // apiKey.apiKey = email_sk;
