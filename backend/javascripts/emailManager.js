@@ -103,7 +103,7 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
     //     console.error(error);
     // });
 
-
+    console.log('Making it to emailManager? Send recipient email')
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     let apiKey = defaultClient.authentications['api-key'];
     apiKey.apiKey = email_sk;
@@ -145,6 +145,7 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
 };
 
 exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
+    console.log('Making it to emailManager? Send alert to deadman')
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     let apiKey = defaultClient.authentications['api-key'];
     apiKey.apiKey = email_sk;
