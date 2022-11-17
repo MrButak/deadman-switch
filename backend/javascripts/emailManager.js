@@ -116,14 +116,14 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
             name: dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name
         }],
         templateId: 3,
-        // params: {
+        params: {
             
-        //     'recipientName': dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name,
-        //     'deadmanEmail': deadmanAccountData.email,
-        //     'finalMessage': dmSwitch.final_message,
-        //     'switchCreationDate': dmSwitch.created_at,
-        //     'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours 
-        // },
+            'recipientName': dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name,
+            'deadmanEmail': deadmanAccountData.email,
+            'finalMessage': dmSwitch.final_message,
+            'switchCreationDate': dmSwitch.created_at,
+            'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours 
+        },
     
         headers: {
             'X-Mailin-custom': `api-key: ${process.env.SEND_IN_BLUE_API}|content-type: application/json|accept: application/json`
@@ -180,16 +180,16 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
             name: dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name
         }],
         templateId: 4,
-        params: {
+        // params: {
             
-            'recipientName': dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name,
-            'finalMessage': dmSwitch.final_message,
-            'switchName': dmSwitch.switch_name,
-            'switchCreationDate': dmSwitch.created_at,
-            'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
-            'checkInByTime': readableCheckInByTime,
-            'lastCheckedInAt': dmSwitch.last_checked_in_at
-        },
+        //     'recipientName': dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name,
+        //     'finalMessage': dmSwitch.final_message,
+        //     'switchName': dmSwitch.switch_name,
+        //     'switchCreationDate': dmSwitch.created_at,
+        //     'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
+        //     'checkInByTime': readableCheckInByTime,
+        //     'lastCheckedInAt': dmSwitch.last_checked_in_at
+        // },
     
         headers: {
             'X-Mailin-custom': `api-key: ${process.env.SEND_IN_BLUE_API}|content-type: application/json|accept: application/json`
