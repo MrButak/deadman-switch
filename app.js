@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
 
 // Check for expired switches every 1 minute
 const cron = require('node-cron');
-const { checkForExpiredSwitches, deactivateExpiredSwitch, getUserAccountData, disableExpiredSwitch } = require('./backend/javascripts/databaseManager');
+const { checkForExpiredSwitches, deactivateExpiredSwitch, getUserAccountData, deleteExpiredSwitch } = require('./backend/javascripts/databaseManager');
 const { sendFinalMessage, sendAlertEmailToDeadman } = require('./backend/javascripts/emailManager');
 
 async function handleDeadmanSwitchExpired(dmSwitch) {
@@ -42,7 +42,10 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
     if(finalMessageSent) {
         // Send an email to them in case they are still alive, letting them know the their switch has expired
         await sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
-        await disableExpiredSwitch(deadmanAccountData.id, dmSwitch.id);
+        // Deactivate switch
+        await deactivateExpiredSwitch (dmSwitch.id);
+        // Delete switch?
+        // await deleteExpiredSwitch(deadmanAccountData.id, dmSwitch.id);
     };
 };
 cron.schedule('* * * * *', async () => {

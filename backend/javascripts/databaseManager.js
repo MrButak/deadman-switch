@@ -178,7 +178,7 @@ exports.deactivateExpiredSwitch = async(switchId) => {
     };
 };
 
-exports.disableExpiredSwitch = async(userId, switchId) => {
+exports.deleteExpiredSwitch = async(userId, switchId) => {
 
     let dbStmt = 'DELETE FROM deadman_switches WHERE user_id = ($1) AND id = ($2);'
     let dbValues = [userId, switchId];
