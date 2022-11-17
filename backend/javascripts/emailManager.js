@@ -48,7 +48,7 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString,
     });
 };
 
-exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
+exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
     
    
 
@@ -144,7 +144,7 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     });
 };
 
-exports.sendAlertEmailToDeadman = async(deadmanAccountData, dmSwitch) => {
+exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     let apiKey = defaultClient.authentications['api-key'];
     apiKey.apiKey = email_sk;
