@@ -52,30 +52,30 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     
    
 
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(process.env.SEND_GRID_API);
-    const msg = {
-    to: 'dmSwitch.recipient_email',
-    from: 'mspence5555@gmail.com',
-    templateId: 'd-d5a538129abd45789c77ba456183cd90',
-    dynamic_template_data: {
-        'subject': 'You are a deadman switch recipient. Important.',
-        'name': 'dynamicname'
-        // 'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-        // 'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-        // 'deadmanEmail': `${deadmanAccountData.email}`,
-        // 'finalMessage': `${dmSwitch.final_message}`,
-        // 'switchCreationDate': `${dmSwitch.created_at}`,
-        // 'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
-    },
-    };
-    sgMail
-    .send(msg)
-    .then(() => { return true })
-    .catch((error) => {
-        console.log(error);
-        return false;
-    });
+    // const sgMail = require('@sendgrid/mail');
+    // sgMail.setApiKey(process.env.SEND_GRID_API);
+    // const msg = {
+    // to: 'dmSwitch.recipient_email',
+    // from: 'mspence5555@gmail.com',
+    // templateId: 'd-d5a538129abd45789c77ba456183cd90',
+    // dynamic_template_data: {
+    //     'subject': 'You are a deadman switch recipient. Important.',
+    //     'name': 'dynamicname'
+    //     // 'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+    //     // 'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+    //     // 'deadmanEmail': `${deadmanAccountData.email}`,
+    //     // 'finalMessage': `${dmSwitch.final_message}`,
+    //     // 'switchCreationDate': `${dmSwitch.created_at}`,
+    //     // 'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
+    // },
+    // };
+    // sgMail
+    // .send(msg)
+    // .then(() => { return true })
+    // .catch((error) => {
+    //     console.log(error);
+    //     return false;
+    // });
 
 
     // const client = require('@sendgrid/mail');
