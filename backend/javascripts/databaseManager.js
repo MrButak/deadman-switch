@@ -155,8 +155,6 @@ exports.checkForExpiredSwitches = async () => {
     
     try {
         let dbQuery = await pool.query(dbStmt, dbValues);
-        console.log(dbQuery.rows)
-        console.log('db query ^^^^^^^^^^^^^^^^^^^^^^^^^^')
         return [dbQuery.rows.length > 0, dbQuery.rows]
     }
     catch(error) {
@@ -168,7 +166,7 @@ exports.checkForExpiredSwitches = async () => {
 exports.deactivateExpiredSwitch = async(switchId, userId) => {
 
     console.log('In deactiveExpiredSwitch() dbManager.js ***********************************************************')
-    let dbStmt = 'UPDATE deadman_switch SET triggered = true WHERE id = ($1) AND user_id = ($2);';
+    let dbStmt = 'UPDATE deadman_switches SET triggered = true WHERE id = ($1) AND user_id = ($2);';
     let dbValues = [switchId, userId];
     try {
         await pool.query(dbStmt, dbValues);
