@@ -67,9 +67,12 @@ cron.schedule('* * * * *', async () => {
     console.log('cron job, 1 minute')
     if(expiredSwitches[0]) {
 
-        for(const dmSwitch of expiredSwitches[1]) {
-            await handleDeadmanSwitchExpired(dmSwitch);
-        };
+        // for(const dmSwitch of expiredSwitches[1]) {
+        //     await handleDeadmanSwitchExpired(dmSwitch);
+        // };
+        expiredSwitches[1].forEach((dmSwitch) => {
+            handleDeadmanSwitchExpired(dmSwitch);
+        });
         
             
             
