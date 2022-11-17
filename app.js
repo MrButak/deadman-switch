@@ -43,7 +43,7 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
         // Send an email to them in case they are still alive, letting them know the their switch has expired
         await sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
         // Deactivate switch
-        await deactivateExpiredSwitch (dmSwitch.id);
+        await deactivateExpiredSwitch (dmSwitch.id, dmSwitch.user_id);
         // Delete switch?
         // await deleteExpiredSwitch(deadmanAccountData.id, dmSwitch.id);
     };
