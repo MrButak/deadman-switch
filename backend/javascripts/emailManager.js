@@ -52,29 +52,56 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     
    
 
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(process.env.SEND_GRID_API);
-    const msg = {
-    to: 'dmSwitch.recipient_email',
-    from: 'mspence5555@gmail.com',
-    templateId: 'd-d5a538129abd45789c77ba456183cd90',
-    dynamicTemplateData: {
-        'subject': 'You are a deadman switch recipient. Important.',
-        'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-        'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-        'deadmanEmail': `${deadmanAccountData.email}`,
-        'finalMessage': `${dmSwitch.final_message}`,
-        'switchCreationDate': `${dmSwitch.created_at}`,
-        'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
-    },
+    // const sgMail = require('@sendgrid/mail');
+    // sgMail.setApiKey(process.env.SEND_GRID_API);
+    // const msg = {
+    // to: 'dmSwitch.recipient_email',
+    // from: 'mspence5555@gmail.com',
+    // templateId: 'd-d5a538129abd45789c77ba456183cd90',
+    // dynamic_template_data: {
+    //     'subject': 'You are a deadman switch recipient. Important.',
+    //     'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+    //     'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+    //     'deadmanEmail': `${deadmanAccountData.email}`,
+    //     'finalMessage': `${dmSwitch.final_message}`,
+    //     'switchCreationDate': `${dmSwitch.created_at}`,
+    //     'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
+    // },
+    // };
+    // sgMail
+    // .send(msg)
+    // .then(() => { return true })
+    // .catch((error) => {
+    //     console.log(error);
+    //     return false;
+    // });
+
+
+    const client = require('@sendgrid/mail');
+    client.setApiKey(process.env.SENDGRID_API_KEY);
+
+    const message = {
+    
+        to: 'dmSwitch.recipient_email',
+        from: 'mspence5555@gmail.com',
+        templateId: 'd-d5a538129abd45789c77ba456183cd90',
+        dynamic_template_data: {
+            'subject': 'You are a deadman switch recipient. Important.',
+            'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+            'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+            'deadmanEmail': `${deadmanAccountData.email}`,
+            'finalMessage': `${dmSwitch.final_message}`,
+            'switchCreationDate': `${dmSwitch.created_at}`,
+            'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
+        },
     };
-    sgMail
-    .send(msg)
-    .then(() => { return true })
-    .catch((error) => {
-        console.log(error);
-        return false;
+    client
+    .send(message)
+    .then(() => console.log('Mail sent successfully'))
+    .catch(error => {
+        console.error(error);
     });
+
 
     // let defaultClient = SibApiV3Sdk.ApiClient.instance;
     // let apiKey = defaultClient.authentications['api-key'];
