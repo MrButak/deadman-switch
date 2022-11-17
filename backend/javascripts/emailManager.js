@@ -103,7 +103,7 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
     //     console.error(error);
     // });
 
-    console.log('Making it to emailManager? Send recipient email')
+    
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     let apiKey = defaultClient.authentications['api-key'];
     apiKey.apiKey = email_sk;
@@ -145,6 +145,7 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
 };
 
 exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
+
     console.log('Making it to emailManager? Send alert to deadman')
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     let apiKey = defaultClient.authentications['api-key'];
@@ -169,6 +170,7 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
         console.log('Is this time string the issue????????????????????????????')
         return timeString;
     };
+    let readableCheckInByTime = extractTimeFromDateObject(dmSwitch.check_in_by_time);
     let firstName = 'Some'
     let lastName = 'Name'
     sendSmtpEmail = {
@@ -185,7 +187,7 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
             'switchName': `${dmSwitch.switch_name}`,
             'switchCreationDate': `${dmSwitch.created_at}`,
             'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}`,
-            'checkInByTime': `${extractTimeFromDateObject(dmSwitch.check_in_by_time)}`,
+            'checkInByTime': `${readableCheckInByTime}`,
             'lastCheckedInAt': `${dmSwitch.last_checked_in_at}`
         },
     
