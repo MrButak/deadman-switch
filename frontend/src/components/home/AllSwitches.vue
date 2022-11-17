@@ -24,6 +24,7 @@ import { deadmanSwitches,
 } from '../../javascript/stateManager';
 import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
 import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';
+
 function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
 
     // checkInByTime - now < interval ?
@@ -103,7 +104,6 @@ function extractTimeFromDateObject(dateObj) {
     let minutesString = new Date(dateObj).getMinutes();
     let secondsString = new Date(dateObj).getSeconds();
     let millisecondString = new Date(dateObj).getMilliseconds();
-
     hoursString = hoursString < 10 ? '0' + hoursString : hoursString
     minutesString = minutesString < 10 ? '0' + minutesString : minutesString
     secondsString = secondsString < 10 ? '0' + secondsString : secondsString

@@ -28,17 +28,21 @@ app.use(function (req, res, next) {
 });
 
 // Check for expired switches every 1 minute
-var cron = require('node-cron');
-cron.schedule('* * * * *', () => {
+const cron = require('node-cron');
+const { checkForExpiredSwitches } = require('./backend/javascripts/databaseManager');
 
-    // check_in_interval_in_hours INTEGER CHECK (check_in_interval_in_hours > 0) NOT NULL,
-    // check_in_by_time TIMESTAMP NOT NULL,
-    // last_checked_in_at TIMESTAMP NOT NULL,
+cron.schedule('* * * * *', async () => {
 
-    // if check_in_by_time(just time with now's date) + last_checked_in_at > check_in_interval
-    console.log('***********************************************************')
-    console.log('running a task every minute', new Date(Date.now()));
-    console.log('***********************************************************')
+    let expiredSwitches = await checkForExpiredSwitches();
+    console.log('cron job, 1 minute')
+    if(expiredSwitches[0]) {
+
+        expiredSwitches[1].forEach((dmSwitch) => {
+            console.log(new Date(dmSwitch.check_in_by_time));
+            console.log('here, expired switch ^^^^^^^^^^^^^^^^^^')
+
+        });
+    };
 });
 
 app.use('/', express.static(path.join(__dirname, 'public', 'dist')));

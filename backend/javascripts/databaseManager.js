@@ -101,7 +101,7 @@ exports.getDeadmanSwitches = async (userId) => {
 // Function will insert a new deadman switch into the DB
 // ***********************************************************************************
 exports.insertNewDeadmanSwitch = async (userId, newSwitchData) => {
-
+    
     let dbStmt = 'INSERT INTO deadman_switches (user_id, switch_name, created_at, check_in_interval_in_hours, check_in_by_time, last_checked_in_at, recipient_email, recipient_first_name, recipient_last_name, final_message, triggered) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *;';
     let dbValues = [userId, newSwitchData.switchName, new Date(Date.now()), newSwitchData.checkInIntervalInDays * 24, new Date(newSwitchData.checkInByTime), new Date(newSwitchData.firstCheckedInAt), newSwitchData.recipientEmail, newSwitchData.recipientFirstName, newSwitchData.recipientLastName, newSwitchData.finalMessage, false];
 
@@ -144,4 +144,23 @@ exports.checkInDeadmanSwitch = async (newCheckInByTime, switchId, userId) => {
     catch(err) {
         return [false];
     };  
+};
+
+exports.checkForExpiredSwitches = async () => {
+
+    let dbStmt = 'SELECT * FROM deadman_switches WHERE ($1) > check_in_by_time;';
+    // let dbStmt = 'SELECT check_in_by_time FROM deadman_switches';
+    
+    let dbValues = [new Date(Date.now())];
+    
+    try {
+        let dbQuery = await pool.query(dbStmt, dbValues);
+        console.log(dbQuery.rows)
+        console.log('db query ^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        return [dbQuery.rows.length > 0, dbQuery.rows]
+    }
+    catch(error) {
+        console.log(error);
+        return [false];
+    };
 };
