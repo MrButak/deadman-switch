@@ -78,8 +78,8 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
     // });
 
 
-    const client = require('@sendgrid/mail');
-    client.setApiKey(process.env.SEND_GRID_API);
+    const sgMail = require('@sendgrid/mail');
+    sgMail.setApiKey(process.env.SEND_GRID_API);
 
     const message = {
     
@@ -96,7 +96,7 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
             'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
         },
     };
-    client
+    sgMail
     .send(message)
     .then(() => console.log('send grid recipient sent successfully'))
     .catch(error => {
