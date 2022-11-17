@@ -77,69 +77,69 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     // });
 
 
-    const client = require('@sendgrid/mail');
-    client.setApiKey(process.env.SEND_GRID_API);
+    // const client = require('@sendgrid/mail');
+    // client.setApiKey(process.env.SEND_GRID_API);
 
-    const message = {
+    // const message = {
     
-        to: 'dmSwitch.recipient_email',
-        from: 'mspence5555@gmail.com',
-        templateId: 'd-d5a538129abd45789c77ba456183cd90',
-        dynamic_template_data: {
-            'subject': 'You are a deadman switch recipient. Important.',
-            'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-            'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-            'deadmanEmail': `${deadmanAccountData.email}`,
-            'finalMessage': `${dmSwitch.final_message}`,
-            'switchCreationDate': `${dmSwitch.created_at}`,
-            'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
-        },
-    };
-    client
-    .send(message)
-    .then(() => console.log('Mail sent successfully'))
-    .catch(error => {
-        console.error(error);
-    });
-
-
-    // let defaultClient = SibApiV3Sdk.ApiClient.instance;
-    // let apiKey = defaultClient.authentications['api-key'];
-    // apiKey.apiKey = email_sk;
-    // let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    // let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-    // sendSmtpEmail = {
-
-    //     to: [{
-    //         email: dmSwitch.recipient_email,
-    //         name: `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`
-    //     }],
-    //     templateId: 3,
-    //     params: {
-            
+    //     to: 'dmSwitch.recipient_email',
+    //     from: 'mspence5555@gmail.com',
+    //     templateId: 'd-d5a538129abd45789c77ba456183cd90',
+    //     dynamic_template_data: {
+    //         'subject': 'You are a deadman switch recipient. Important.',
+    //         'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
     //         'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
     //         'deadmanEmail': `${deadmanAccountData.email}`,
     //         'finalMessage': `${dmSwitch.final_message}`,
     //         'switchCreationDate': `${dmSwitch.created_at}`,
     //         'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
     //     },
-    
-    //     headers: {
-    //         'X-Mailin-custom': `api-key: ${process.env.SEND_IN_BLUE_API}|content-type: application/json|accept: application/json`
-    //     }
     // };
-    
-    // apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
-    //     return true;
-    // }, 
-    // function(error) {
+    // client
+    // .send(message)
+    // .then(() => console.log('Mail sent successfully'))
+    // .catch(error => {
     //     console.error(error);
-    //     console.log('Final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-    //     console.log({deadmanAccountData})
-    //     console.log({dmSwitch})
-    //     console.log('Variables used in final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-    //     return false;
     // });
+
+
+    let defaultClient = SibApiV3Sdk.ApiClient.instance;
+    let apiKey = defaultClient.authentications['api-key'];
+    apiKey.apiKey = email_sk;
+    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    sendSmtpEmail = {
+
+        to: [{
+            email: dmSwitch.recipient_email,
+            name: `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`
+        }],
+        templateId: 3,
+        params: {
+            
+            'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+            'deadmanEmail': `${deadmanAccountData.email}`,
+            'finalMessage': `${dmSwitch.final_message}`,
+            'switchCreationDate': `${dmSwitch.created_at}`,
+            'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
+        },
+    
+        headers: {
+            'X-Mailin-custom': `api-key: ${process.env.SEND_IN_BLUE_API}|content-type: application/json|accept: application/json`
+        }
+    };
+    
+    apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
+        return true;
+    }, 
+    function(error) {
+        console.error(error);
+        console.log('Final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        console.log({deadmanAccountData})
+        console.log({dmSwitch})
+        console.log('Variables used in final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        return false;
+    });
 };
 
 exports.sendAlertEmailToDeadman = async(deadmanAccountData, dmSwitch) => {
