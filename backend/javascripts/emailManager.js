@@ -40,7 +40,7 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString,
 };
 
 exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
-
+    
     sendSmtpEmail = {
 
         to: [{
@@ -67,6 +67,10 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     }, 
     function(error) {
         console.error(error);
+        console.log('Final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        console.log({deadmanAccountData})
+        console.log({dmSwitch})
+        console.log('Variables used in final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
         return false;
     });
 };
@@ -118,6 +122,10 @@ exports.sendAlertEmailToDeadman = async(deadmanAccountData, dmSwitch) => {
     }, 
     function(error) {
         console.error(error);
+        console.log('Alert deadman email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        console.log({deadmanAccountData})
+        console.log({dmSwitch})
+        console.log('Variables used in deadman email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
         return false;
     });
 };

@@ -12,11 +12,11 @@ let showSignup = ref(false);
 let hasRegistered = ref(false); // Determines if 'sign up success' and 'please verify your email' alerts are shown, and the 'register' modal is disabled
 let loginFailedEmailNotVerified = ref(false); // Edge case. If a user registered, then in the same session logs into their account before verifying their email. This just shows another message to the user.
 
-let showCreateDeadmanSwitch = ref(false);
-
 // ******************************************************************
 // Create switch
 // ******************************************************************
+let showCreateDeadmanSwitch = ref(false);
+
 // Navigation header (HTML tabs)
 let createSwitchNavigationViews = reactive(
     [

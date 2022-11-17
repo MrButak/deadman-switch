@@ -16,7 +16,8 @@
 
 import { checkForValidCookieAndGetUserId } from '../../../javascript/userManager';
 import { newSwitchData, secondsBeforeNewSwitchFlipped,
-        regexName, regexEmail
+        regexName, regexEmail,
+        deadmanSwitches, showCreateDeadmanSwitch
 } from '../../../javascript/stateManager';
 import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
 
@@ -87,7 +88,10 @@ async function handleCreateSwitch() {
     
     switch(response.status) {
         case '200':
-        console.log(response);    
+            deadmanSwitches.push(response.switch);
+            showCreateDeadmanSwitch.value = false;
+            console.log('switch successfully created');
+
             break;
         case '500':
             
