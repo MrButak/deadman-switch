@@ -48,30 +48,24 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString,
     });
 };
 
-let sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
+exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     
    
-        
-        
-      
-    //   client
-    //     .send(message)
-    //     .then(() => console.log('Mail sent successfully'))
-    //     .catch(error => {
-    //       console.error(error);
-    //     });
-// console.log(process.env.SEND_GRID_API)
 
     const sgMail = require('@sendgrid/mail');
     sgMail.setApiKey(process.env.SEND_GRID_API);
     const msg = {
-    to: 'smoothiedokter@gmail.com',
+    to: 'dmSwitch.recipient_email',
     from: 'mspence5555@gmail.com',
     templateId: 'd-d5a538129abd45789c77ba456183cd90',
     dynamicTemplateData: {
-        subject: 'Testing Templates',
-        name: 'Some One',
-        city: 'Denver',
+        'subject': 'You are a deadman switch recipient. Important.',
+        'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+        'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+        'deadmanEmail': `${deadmanAccountData.email}`,
+        'finalMessage': `${dmSwitch.final_message}`,
+        'switchCreationDate': `${dmSwitch.created_at}`,
+        'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
     },
     };
     sgMail
