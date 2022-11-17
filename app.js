@@ -53,11 +53,11 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
         sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
         // console.log({alertEmailSentToDeadman});
         // Only if the final message has been sent, delete the switch
-        if(finalMessageSent) {
-            console.log('final message sent and switch deactivated')
-            // Delete switch?
-            // await deleteExpiredSwitch(deadmanAccountData.id, dmSwitch.id);
-        };
+        // if(finalMessageSent) {
+        //     console.log('final message sent and switch deactivated')
+        //     // Delete switch?
+        //     // await deleteExpiredSwitch(deadmanAccountData.id, dmSwitch.id);
+        // };
     };
     
 };
