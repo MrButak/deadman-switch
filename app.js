@@ -45,7 +45,7 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
     // console.log({switchDeactivated})
     if(switchDeactivated) {
 
-        console.log('Makinging inside of the switchDeactivated block')
+        
         // Send an email with their final message to their contact
         sendFinalMessage(deadmanAccountData, dmSwitch);
         // console.log({finalMessageSent})

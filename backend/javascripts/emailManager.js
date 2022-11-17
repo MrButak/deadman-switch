@@ -166,9 +166,13 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
     };
     sgMail
     .send(msg)
-    .then(() => { return true })
+    .then(() => { 
+        console.log('sendgrid success')
+        return true 
+    })
     .catch((error) => {
         console.log(error);
+        console.log('sendgrid failed ^^^')
         return false;
     });
     // console.log({deadmanAccountData})
