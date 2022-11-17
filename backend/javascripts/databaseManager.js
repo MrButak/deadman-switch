@@ -177,3 +177,16 @@ exports.deactivateExpiredSwitch = async(switchId) => {
         return false;
     };
 };
+
+exports.disableExpiredSwitch = async(userId, switchId) => {
+
+    let dbStmt = 'DELETE FROM deadman_switches WHERE user_id = ($1) AND id = ($2);'
+    let dbValues = [userId, switchId];
+    try {
+        await pool.query(dbStmt, dbValues);
+    }
+    catch(error) {
+        console.log(error);
+        console.log('ERROR disabling switch after it has expired. The last email and alert email to the deadman have already been sent out.');
+    };
+};

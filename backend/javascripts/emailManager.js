@@ -1,17 +1,23 @@
 config = require('dotenv').config();
 const email_sk = process.env.SEND_IN_BLUE_API;
+let SibApiV3Sdk = require('sib-api-v3-sdk');
+let defaultClient = SibApiV3Sdk.ApiClient.instance;
+let apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = email_sk;
+let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
 // ***********************************************************************************
 // Function is called after a successful signup. Sends a verification link to the user
 // ***********************************************************************************
 exports.sendVerificationEmail = (firstName, lastName, email, verificationString, emailTemplateId) => {
     
-    var SibApiV3Sdk = require('sib-api-v3-sdk');
-    var defaultClient = SibApiV3Sdk.ApiClient.instance;
-    var apiKey = defaultClient.authentications['api-key'];
-    apiKey.apiKey = email_sk;
-    var apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    // let SibApiV3Sdk = require('sib-api-v3-sdk');
+    // let defaultClient = SibApiV3Sdk.ApiClient.instance;
+    // let apiKey = defaultClient.authentications['api-key'];
+    // apiKey.apiKey = email_sk;
+    // let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    // let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
     
     sendSmtpEmail = {
 
@@ -40,6 +46,10 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString,
     });
 };
 
-exports.sendFinalMessage = (deadmanEmail, recipientFirstName, recipientLastName, recipientEmail, finalMessage, lastCheckedInAt, switchIntervalInHours) => {
+exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
+
+};
+
+exports.sendAlertEmailToDeadman = async(deadmanAccountData, dmSwitch) => {
 
 };

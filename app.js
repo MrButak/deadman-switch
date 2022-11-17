@@ -29,25 +29,34 @@ app.use(function (req, res, next) {
 
 // Check for expired switches every 1 minute
 const cron = require('node-cron');
-const { checkForExpiredSwitches, deactivateExpiredSwitch, getUserAccountData } = require('./backend/javascripts/databaseManager');
-const { sendFinalMessage } = require('./backend/javascripts/emailManager');
+const { checkForExpiredSwitches, deactivateExpiredSwitch, getUserAccountData, disableExpiredSwitch } = require('./backend/javascripts/databaseManager');
+const { sendFinalMessage, sendAlertEmailToDeadman } = require('./backend/javascripts/emailManager');
 
+async function handleDeadmanSwitchExpired(dmSwitch) {
+
+    // Get the deadman's account information
+    let deadmanAccountData = await getUserAccountData(dmSwitch.user_id);
+    // Send an email with their final message to their contact
+    let finalMessageSent = await sendFinalMessage(deadmanAccountData, dmSwitch);
+    // Only if the final message has been sent, deactivate the switch
+    if(finalMessageSent) {
+        // Send an email to them in case they are still alive, letting them know the their switch has expired
+        await sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
+        await disableExpiredSwitch(deadmanAccountData.id, dmSwitch.id);
+    };
+};
 cron.schedule('* * * * *', async () => {
 
     let expiredSwitches = await checkForExpiredSwitches();
     console.log('cron job, 1 minute')
     if(expiredSwitches[0]) {
 
-        for(const dmSwitch of expiredSwitches[1]) {
-            console.log(dmSwitch)
-            console.log('here *** const * of syntax')
-        }
+        // for(const dmSwitch of expiredSwitches[1]) {
+        //     await handleDeadmanSwitchExpired(dmSwitch);
+        // };
         
             
-            // let deadmanAccountData = await getUserAccountData()
-            // let finalMessageSent = sendFinalMessage()
-            // deactivateExpiredSwitch(dwSwitch.id)
-            // deadmanEmail, recipientFirstName, recipientLastName, recipientEmail, finalMessage, lastCheckedInAt, switchIntervalInHours
+            
       
     };
 });
