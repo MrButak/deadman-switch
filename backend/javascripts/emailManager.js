@@ -146,14 +146,9 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
 
 exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
 
-    console.log('Making it to emailManager? Send alert to deadman')
-    let defaultClient = SibApiV3Sdk.ApiClient.instance;
-    let apiKey = defaultClient.authentications['api-key'];
-    apiKey.apiKey = email_sk;
-    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-
-   // Extract just the checkInBytime from the Date Object
+    console.log({deadmanAccountData})
+    console.log({dmSwitch})
+    // Extract just the checkInBytime from the Date Object
     function extractTimeFromDateObject(dateObj) {
         
         let timeString = '';
@@ -164,20 +159,25 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
         hoursString = hoursString < 10 ? '0' + hoursString : hoursString
         minutesString = minutesString < 10 ? '0' + minutesString : minutesString
         secondsString = secondsString < 10 ? '0' + secondsString : secondsString
-
-        timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString
-        console.log({timeString})
-        console.log('Is this time string the issue????????????????????????????')
+        timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString;
         return timeString;
     };
+
+
+    let defaultClient = SibApiV3Sdk.ApiClient.instance;
+    let apiKey = defaultClient.authentications['api-key'];
+    apiKey.apiKey = email_sk;
+    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
     let readableCheckInByTime = extractTimeFromDateObject(dmSwitch.check_in_by_time);
     let firstName = 'Some'
     let lastName = 'Name'
+
     sendSmtpEmail = {
 
         to: [{
             email: deadmanAccountData.email,
-            name: `${firstName} ${lastName}`
+            name: `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`
         }],
         templateId: 4,
         params: {
@@ -202,10 +202,6 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
     }, 
     function(error) {
         console.error(error);
-        // console.log('Alert deadman email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-        // console.log({deadmanAccountData})
-        // console.log({dmSwitch})
-        // console.log('Variables used in deadman email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
         return false;
     });
 };
