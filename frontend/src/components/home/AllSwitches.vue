@@ -68,18 +68,20 @@ async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHour
             break;
         case '500':
             break;
-        default:
-            
-    }
+        default:  
+    };
 
     console.log({response})
 };
 
 function determineSwitchColor(timeLeftInSeconds) {
 
-    if(timeLeftInSeconds < 14440) { // 4 hours
+    if(timeLeftInSeconds < 3600) { // 1 hour
         return 'danger'
-    };
+    }
+    else if(timeLeftInSeconds < 7200) {
+        return 'warning'
+    }
     return 'info';
 };
 
