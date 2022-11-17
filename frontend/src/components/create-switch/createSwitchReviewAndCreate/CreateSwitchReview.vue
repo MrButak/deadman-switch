@@ -35,7 +35,7 @@
         </va-card-actions>
         <va-card-actions align="between">
           <p style="padding: 0 2rem 0 0">No later than</p>
-          <p style="padding: 0 0 0 2rem" class="va-text-success">{{ newSwitchData.checkInTime.toLocaleTimeString() }}</p>
+          <p style="padding: 0 0 0 2rem" class="va-text-success">{{ newSwitchData.checkInByTime.toLocaleTimeString() }}</p>
         </va-card-actions>
 
     </va-card>

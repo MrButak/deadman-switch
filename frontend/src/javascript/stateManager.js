@@ -31,10 +31,11 @@ let newSwitchData = reactive({
     recipientLastName: '',
     recipientEmail: '',
     checkInIntervalInDays: 1,
-    checkInTime: new Date(),
+    checkInByTime: new Date(),
     finalMessage: '',
     firstCheckedInAt: null,
     switchName: 'switch name',
+    nextCheckInByTime: null,
     // new switch form validation helpers
     acknowledgeTimeUntilFirstCheckIn: false,
     checkInForTheFirstTime: false, // checkbox - will add checkInIntervalInDays to secondsBeforeSwitchFlipped (time before user needs to check in for the first time)

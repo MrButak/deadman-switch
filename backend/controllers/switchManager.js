@@ -53,14 +53,15 @@ exports.createNewSwitch = async (req, res) => {
         !validateEmail(newSwitchData.recipientEmail) ||
         newSwitchData.checkInIntervalInDays < 0 ||
         newSwitchData.checkInIntervalInDays > 3 ||
-        new Date(newSwitchData.checkInTime).getTime() < 0 ||
+        new Date(newSwitchData.checkInByTime).getTime() < 0 ||
         !newSwitchData.finalMessage)
             { 
                 return res.status(400).json({status: '400', message: 'Invalid switch settings'}); 
             };
     
     // TODO: make sure the switch is not < 3 minutes before expiring
-    
+    console.log(newSwitchData)
+    process.exit()
     // ****** From this point switch is good to put into db *******
     let switchData = await insertNewDeadmanSwitch(userId, newSwitchData);
     if(!switchData[0]) {

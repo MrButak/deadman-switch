@@ -48,14 +48,14 @@ onMounted(() => {
 });
 
 // Function calculates the seconds before the user needs to checkin for the first time
-function calculateSecondsBeforeSwitchFlipped() {
+function calculateSecondsBeforeSwitchFlipped(mustCheckInByDateObject, checkInIntervalInDays) {
 
     secondsBeforeNewSwitchFlipped.value =
-        ( newSwitchData.checkInTime - new Date(Date.now()) ) / 1000;
+        ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;
 
     // Add the check in interval if the time to check in has already passed
     if(secondsBeforeNewSwitchFlipped.value < 0) {
-        secondsBeforeNewSwitchFlipped.value += newSwitchData.checkInIntervalInDays * 24 * 60 * 60;
+        secondsBeforeNewSwitchFlipped.value += (newSwitchData.checkInIntervalInDays * 24 * 60 * 60);
     };
 };
 

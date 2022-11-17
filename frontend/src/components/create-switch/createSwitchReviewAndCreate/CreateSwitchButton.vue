@@ -24,9 +24,9 @@ function areSwitchFieldsValid() {
 
 
     // Recalculate the secondsBeforeNewSwitchFlipped if still above 0 (below 0 will throw an error)
-    if(( newSwitchData.checkInTime - new Date(Date.now()) ) / 1000 > 0) {
+    if(( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000 > 0) {
         secondsBeforeNewSwitchFlipped.value =
-            ( newSwitchData.checkInTime - new Date(Date.now()) ) / 1000;   
+            ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;   
     };
     
     // Look again for error messages / clear any old messages out
@@ -38,7 +38,7 @@ function areSwitchFieldsValid() {
         !regexName.test(newSwitchData.recipientLastName) ||
         newSwitchData.checkInIntervalInDays < 0 ||
         newSwitchData.checkInIntervalInDays > 4 ||
-        new Date(newSwitchData.checkInTime).getTime() < 0 || // date validation
+        new Date(newSwitchData.checkInByTime).getTime() < 0 || // date validation
         !newSwitchData.finalMessage ||
         secondsBeforeNewSwitchFlipped.value < 180) // no switches can be set if they go off within 5 minutes 
             { return false }
@@ -62,14 +62,15 @@ async function handleCreateSwitch() {
 
 
     // Calculate the time the user first checked in according to the time the user selected and the time now
-    if(newSwitchData.checkInTime > new Date(Date.now()) ) {
-        //checkInTime - checkInInterval
-        newSwitchData.firstCheckedInAt = new Date(newSwitchData.checkInTime).setHours(new Date(newSwitchData.checkInTime).getHours() - (newSwitchData.checkInIntervalInDays * 24) );
+    if(newSwitchData.checkInByTime > new Date(Date.now()) ) {
+        newSwitchData.firstCheckedInAt = new Date(newSwitchData.checkInByTime).setHours(new Date(newSwitchData.checkInByTime).getHours() - (newSwitchData.checkInIntervalInDays * 24) );
     }
     else {
-        newSwitchData.firstCheckedInAt = newSwitchData.checkInTime;
+        newSwitchData.firstCheckedInAt = newSwitchData.checkInByTime;
+        // NextCheckinByTime += interval
+        newSwitchData.checkInByTime.setHours(newSwitchData.checkInByTime.getHours() + (newSwitchData.checkInIntervalInDays * 24));
     };
-
+   
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/switch/create`, {
         mode: 'cors',
         method: 'POST',
