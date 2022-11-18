@@ -41,7 +41,7 @@
     </va-card>
     </div>
 </div>
-    <!-- Final message popup modal -->
+<!-- Final message popup modal -->
 <va-modal
     v-model="showFinalMessageModal"
     title="Final message"

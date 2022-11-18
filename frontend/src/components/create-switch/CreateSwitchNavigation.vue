@@ -21,12 +21,16 @@
 
 <script setup>
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { createSwitchNavigationViews,
         creatSwitchCurrentView
 } from '../../javascript/stateManager';
 
-let defaultTabPosition = ref(0)
+let defaultTabPosition = ref(0);
+// Default view
+onMounted(() => {
+    creatSwitchCurrentView.value = 'Settings';
+});
 
 </script>
 

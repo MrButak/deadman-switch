@@ -5,13 +5,22 @@
         <va-card 
             stripe 
             :stripe-color="switchColor">
-        <va-card-title class="switch-name">{{ switchName }}</va-card-title>
-        <va-icon
-            @click="$emit('handleShowSwitchInfoModal')"
-            class="mr-2"
-            name="info"
-            size="small"
-        />
+        
+        <div class="title-and-info-button-wrapper">
+            <va-card-title class="switch-name">
+                {{ switchName }}
+                <span>
+                    <va-icon
+                        @click="$emit('handleShowSwitchInfoModal')"
+                        class="mr-2"
+                        name="info"
+                        size="medium"
+                    />
+                </span>
+            </va-card-title>
+            
+        </div>
+
         <va-card-content>
             <p>{{ checkInByInfoText }}</p>
             <div class="check-in-button-wrapper">
@@ -40,6 +49,7 @@
                 timer-sub-text="Before you must checkin"
             />
         </va-card-content>
+        
         </va-card>
     </div>
 </div>
@@ -98,4 +108,7 @@ defineProps({
     border-radius: 50%;
 }
 
+.title-and-info-button-wrapper {
+    display: flex;
+}
 </style>
