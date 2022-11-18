@@ -12,8 +12,11 @@
         "debug": "~2.6.9",
         "dotenv": "^16.0.3",
         "express": "~4.16.1",
+        "install": "^0.13.0",
         "jsonwebtoken": "^8.5.1",
         "morgan": "~1.9.1",
+        "node-cron": "^3.0.2",
+        "npm": "^9.1.2",
         "pg": "^8.8.0",
         "sib-api-v3-sdk": "^8.4.2"
     }

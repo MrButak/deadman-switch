@@ -27,6 +27,35 @@ app.use(function (req, res, next) {
     next();
 });
 
+// Check for expired switches every 1 minute
+const cron = require('node-cron');
+const { checkForExpiredSwitches, deactivateExpiredSwitch, getUserAccountData, deleteExpiredSwitch } = require('./backend/javascripts/databaseManager');
+const { sendFinalMessage, sendAlertEmailToDeadman } = require('./backend/javascripts/emailManager');
+
+async function handleDeadmanSwitchExpired(dmSwitch) {
+
+    // Get the deadman's account information
+    let deadmanAccountData = await getUserAccountData(dmSwitch.user_id);
+    
+    // Send an email with their final message to their contact
+    let finalMessageSent = await sendFinalMessage(deadmanAccountData, dmSwitch);
+    
+    if(!finalMessageSent) { return };
+    
+    // Deactivate switch only after the final message has been sent
+    await deactivateExpiredSwitch(dmSwitch.id, dmSwitch.user_id);
+};
+cron.schedule('* * * * *', async () => {
+
+    let expiredSwitches = await checkForExpiredSwitches();
+    console.log('cron job, 1 minute')
+    if(expiredSwitches[0]) {
+        for(const dmSwitch of expiredSwitches[1]) {
+            await handleDeadmanSwitchExpired(dmSwitch);
+        };
+    };
+});
+
 app.use('/', express.static(path.join(__dirname, 'public', 'dist')));
 app.use('/css', express.static(path.join(__dirname, 'public', 'dist', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'dist', 'js')));

@@ -4,7 +4,7 @@
     <div class="display-time-wrapper">
         <p>No later than</p>
         <h6 class="va-h6">{{ doubleDigitHours }}:{{ doubleDigitMinutes }}</h6>
-        <va-time-input v-model="newSwitchData.checkInTime" />
+        <va-time-input v-model="newSwitchData.checkInByTime" />
     </div>
     
 </div>
@@ -21,14 +21,14 @@ import { newSwitchData } from '../../../javascript/stateManager';
 
 
 let doubleDigitHours = computed(() => {
-    return newSwitchData.checkInTime.getHours() < 10 ?
-        '0' + newSwitchData.checkInTime.getHours() :
-        newSwitchData.checkInTime.getHours();
+    return newSwitchData.checkInByTime.getHours() < 10 ?
+        '0' + newSwitchData.checkInByTime.getHours() :
+        newSwitchData.checkInByTime.getHours();
 });
 let doubleDigitMinutes = computed(() => {
-    return newSwitchData.checkInTime.getMinutes() < 10 ?
-        '0' + newSwitchData.checkInTime.getMinutes() :
-        newSwitchData.checkInTime.getMinutes();
+    return newSwitchData.checkInByTime.getMinutes() < 10 ?
+        '0' + newSwitchData.checkInByTime.getMinutes() :
+        newSwitchData.checkInByTime.getMinutes();
 });
 
 

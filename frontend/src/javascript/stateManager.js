@@ -12,11 +12,11 @@ let showSignup = ref(false);
 let hasRegistered = ref(false); // Determines if 'sign up success' and 'please verify your email' alerts are shown, and the 'register' modal is disabled
 let loginFailedEmailNotVerified = ref(false); // Edge case. If a user registered, then in the same session logs into their account before verifying their email. This just shows another message to the user.
 
-let showCreateDeadmanSwitch = ref(false);
-
 // ******************************************************************
 // Create switch
 // ******************************************************************
+let showCreateDeadmanSwitch = ref(false);
+
 // Navigation header (HTML tabs)
 let createSwitchNavigationViews = reactive(
     [
@@ -31,8 +31,10 @@ let newSwitchData = reactive({
     recipientLastName: '',
     recipientEmail: '',
     checkInIntervalInDays: 1,
-    checkInTime: new Date(),
+    checkInByTime: new Date(),
     finalMessage: '',
+    firstCheckedInAt: null,
+    switchName: 'switch name',
     // new switch form validation helpers
     acknowledgeTimeUntilFirstCheckIn: false,
     checkInForTheFirstTime: false, // checkbox - will add checkInIntervalInDays to secondsBeforeSwitchFlipped (time before user needs to check in for the first time)

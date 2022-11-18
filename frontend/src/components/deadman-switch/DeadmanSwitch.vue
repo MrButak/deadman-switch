@@ -2,19 +2,37 @@
 
 <div class="card-wrapper">
     <div class="flex md6 lg4">
-        <va-card stripe stripe-color="success">
+        <va-card 
+            stripe 
+            :stripe-color="switchColor">
         <va-card-title class="switch-name">{{ switchName }}</va-card-title>
+        <va-icon
+            @click="$emit('handleShowSwitchInfoModal')"
+            class="mr-2"
+            name="info"
+            size="small"
+        />
         <va-card-content>
+            <p>{{ checkInByInfoText }}</p>
             <div class="check-in-button-wrapper">
                 
-                <va-button 
+                <va-button
+                    @click="$emit('handleCheckIn')"
+                    border-color="primary"
                     class="mr-4 mb-2 check-in-button"
-                    color="info"
-                    
+                    :color="switchColor"
                     >
-                    <h6 class="va-h6">Check In</h6>
+                    <h6>{{ switchButtonText }}</h6>
+                        <span>
+                            <va-icon
+                                class="mr-2"
+                                :name="switchButtonIcon"
+                                size="3rem"
+                            />
+                        </span>
                 </va-button>
-                
+                <p>Last checked in</p>
+                <p>{{ lastCheckedIn }}</p>
             </div>
             
             <CountdownTimer 
@@ -26,55 +44,24 @@
     </div>
 </div>
 
-
 </template>
 
 
 
 <script setup>
 
-
 import CountdownTimer from '../shared/CountdownTimer.vue';
 
 defineProps({
     secondsBeforeNewSwitchFlippedProp: Number,
-    switchName: String
+    switchName: String,
+    switchColor: String,
+    switchButtonText: String,
+    lastCheckedIn: String,
+    checkInByInfoText: String,
+    switchButtonIcon: String
+
 });
-
-// check_in_by_time
-// : 
-// "2022-11-15T15:31:37.542Z"
-// check_in_interval_in_hours
-// : 
-// 24
-// created_at
-// : 
-// "2022-11-15T15:31:47.590Z"
-// final_message
-// : 
-// "Hi ma, I won't be making it home for supper tonight. You know what to do."
-// id
-// : 
-// 21
-// last_checked_in_at
-// : 
-// "2022-11-14T15:31:37.542Z"
-// recipient_email
-// : 
-// "sdfsd@dsfs.com"
-// recipient_first_name
-// : 
-// "dd"
-// recipient_last_name
-// : 
-// "df"
-// triggered
-// : 
-// false
-// user_id
-// : 
-// 1
-
 
 </script>
 
@@ -87,6 +74,9 @@ defineProps({
     justify-content: center;
     align-items: center;
     padding: 1rem 0;
+    p {
+        text-align: center;
+    }
 }
 .switch-name {
     justify-content: center;
@@ -95,6 +85,7 @@ defineProps({
 }
 .check-in-button-wrapper {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -106,4 +97,5 @@ defineProps({
     height: 6rem;
     border-radius: 50%;
 }
+
 </style>

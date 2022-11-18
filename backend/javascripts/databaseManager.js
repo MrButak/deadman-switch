@@ -101,9 +101,9 @@ exports.getDeadmanSwitches = async (userId) => {
 // Function will insert a new deadman switch into the DB
 // ***********************************************************************************
 exports.insertNewDeadmanSwitch = async (userId, newSwitchData) => {
-
-    let dbStmt = 'INSERT INTO deadman_switches (user_id, created_at, check_in_interval_in_hours, check_in_by_time, last_checked_in_at, recipient_email, recipient_first_name, recipient_last_name, final_message, triggered) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *;';
-    let dbValues = [userId, new Date(Date.now()), newSwitchData.checkInIntervalInDays * 24, new Date(newSwitchData.checkInTime), new Date(newSwitchData.firstCheckInTimestamp), newSwitchData.recipientEmail,  newSwitchData.recipientFirstName,  newSwitchData.recipientLastName, newSwitchData.finalMessage, false];
+    
+    let dbStmt = 'INSERT INTO deadman_switches (user_id, switch_name, created_at, check_in_interval_in_hours, check_in_by_time, last_checked_in_at, recipient_email, recipient_first_name, recipient_last_name, final_message, triggered) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *;';
+    let dbValues = [userId, newSwitchData.switchName, new Date(Date.now()), newSwitchData.checkInIntervalInDays * 24, new Date(newSwitchData.checkInByTime), new Date(newSwitchData.firstCheckedInAt), newSwitchData.recipientEmail, newSwitchData.recipientFirstName, newSwitchData.recipientLastName, newSwitchData.finalMessage, false];
 
     try {
         let dbQuery = await pool.query(dbStmt, dbValues);
@@ -130,5 +130,72 @@ exports.getUserAccountData = async (userId) => {
     catch(err) {
         console.log(err);
         return [false];
+    };
+};
+
+// ******************************************************************************
+// Function is called when a user check's in. Extends the check_in_by_time by the interval
+// ******************************************************************************
+exports.checkInDeadmanSwitch = async (newCheckInByTime, switchId, userId) => {
+    let dbStmt = 'UPDATE deadman_switches SET check_in_by_time = ($1), last_checked_in_at = ($2) WHERE id = ($3) AND user_id = ($4) RETURNING *;'
+    let dbValues = [new Date(newCheckInByTime), new Date(Date.now()), switchId, userId];
+    try {
+        let updatedData = await pool.query(dbStmt, dbValues);
+        return [updatedData.rows.length > 0, updatedData.rows[0]];
+    }
+    catch(err) {
+        return [false];
+    };  
+};
+
+// ******************************************************************************
+// Function is called on a 1 minute interval (chron job) to check for expired switches
+// ******************************************************************************
+exports.checkForExpiredSwitches = async () => {
+
+    let dbStmt = 'SELECT * FROM deadman_switches WHERE triggered = false AND ($1) > check_in_by_time;';
+    // let dbStmt = 'SELECT check_in_by_time FROM deadman_switches';
+    
+    let dbValues = [new Date(Date.now())];
+    
+    try {
+        let dbQuery = await pool.query(dbStmt, dbValues);
+        return [dbQuery.rows.length > 0, dbQuery.rows]
+    }
+    catch(error) {
+        console.log(error);
+        return [false];
+    };
+};
+
+// ******************************************************************************
+// Function is called only after a switches time has expired and the final message email has been sent
+// ******************************************************************************
+exports.deactivateExpiredSwitch = async(switchId, userId) => {
+    console.log({switchId})
+    console.log({userId})
+    console.log('Should be here in db call')
+    let dbStmt = 'UPDATE deadman_switches SET triggered = ($1) WHERE id = ($2) AND user_id = ($3);';
+    let dbValues = [true, switchId, userId];
+    try {
+        await pool.query(dbStmt, dbValues);
+        console.log('Should be here in db call success')
+        return true;
+    }
+    catch(error) {
+        return false;
+    };
+};
+
+// Function NOT IN USE
+exports.deleteExpiredSwitch = async(userId, switchId) => {
+    let dbStmt = 'DELETE FROM deadman_switches WHERE user_id = ($1) AND id = ($2);'
+    let dbValues = [userId, switchId];
+    try {
+        await pool.query(dbStmt, dbValues);
+    }
+    catch(error) {
+        console.log(error);
+        console.log('ERROR disabling switch after it has expired. The last email and alert email to the deadman have already been sent out.');
     };
 };

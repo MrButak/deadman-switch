@@ -1,25 +1,25 @@
 config = require('dotenv').config();
+// Send in blue
 const email_sk = process.env.SEND_IN_BLUE_API;
+const SibApiV3Sdk = require('sib-api-v3-sdk');
 
 // ***********************************************************************************
 // Function is called after a successful signup. Sends a verification link to the user
 // ***********************************************************************************
-exports.sendVerificationEmail = (firstName, lastName, email, verificationString) => {
+exports.sendVerificationEmail = async (firstName, lastName, email, verificationString, emailTemplateId) => {
     
-    var SibApiV3Sdk = require('sib-api-v3-sdk');
-    var defaultClient = SibApiV3Sdk.ApiClient.instance;
-    var apiKey = defaultClient.authentications['api-key'];
+    let defaultClient = SibApiV3Sdk.ApiClient.instance;
+    let apiKey = defaultClient.authentications['api-key'];
     apiKey.apiKey = email_sk;
-    var apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-    
+    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
     sendSmtpEmail = {
 
         to: [{
             email: email,
             name: `${firstName} ${lastName}`
         }],
-        templateId: 1,
+        templateId: emailTemplateId,
         params: {
             
             'customerName': `${firstName} ${lastName}`,
@@ -38,4 +38,69 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString)
         console.error(error);
         return false;
     });
+};
+
+// Extract just the checkInBytime from the Date Object
+function extractTimeFromDateObject(dateObj) {
+        
+    let timeString = '';
+    let hoursString = new Date(dateObj).getHours();
+    let minutesString = new Date(dateObj).getMinutes();
+    let secondsString = new Date(dateObj).getSeconds();
+    let millisecondString = new Date(dateObj).getMilliseconds();
+    hoursString = hoursString < 10 ? '0' + hoursString : hoursString
+    minutesString = minutesString < 10 ? '0' + minutesString : minutesString
+    secondsString = secondsString < 10 ? '0' + secondsString : secondsString
+    timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString;
+    return timeString;
+};
+
+exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
+    console.log('Making it to sendFinalEmail')
+    // Send in blue API
+    let defaultClient = SibApiV3Sdk.ApiClient.instance;
+    let apiKey = defaultClient.authentications['api-key'];
+    apiKey.apiKey = email_sk;
+    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    sendSmtpEmail = {
+
+        to: [{
+            email: dmSwitch.recipient_email,
+            name: `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`
+        }],
+        templateId: 3,
+        params: {
+            
+            'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+            'deadmanEmail': deadmanAccountData.email,
+            'finalMessage': dmSwitch.final_message,
+            'switchCreationDate': dmSwitch.created_at,
+            'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
+            'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),
+            'lastCheckedInAt': dmSwitch.last_checked_in_at
+        },
+    
+        headers: {
+            'X-Mailin-custom': `api-key: ${process.env.SEND_IN_BLUE_API}|content-type: application/json|accept: application/json`
+        }
+    };
+    
+    let messageSent = apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
+        console.log('Send final success', data)
+        return true;
+    }, 
+    function(error) {
+        console.error(error);
+        console.log('Send final fail')
+        return false;
+    });
+
+    return messageSent;
+};
+
+// Function NOT IN USE
+exports.sendAlertEmailToDeadman = async (deadmanAccountData, dmSwitch) => {
+
+    
 };

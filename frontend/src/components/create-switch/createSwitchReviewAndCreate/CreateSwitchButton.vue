@@ -16,7 +16,8 @@
 
 import { checkForValidCookieAndGetUserId } from '../../../javascript/userManager';
 import { newSwitchData, secondsBeforeNewSwitchFlipped,
-        regexName, regexEmail
+        regexName, regexEmail,
+        deadmanSwitches, showCreateDeadmanSwitch
 } from '../../../javascript/stateManager';
 import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
 
@@ -24,9 +25,9 @@ function areSwitchFieldsValid() {
 
 
     // Recalculate the secondsBeforeNewSwitchFlipped if still above 0 (below 0 will throw an error)
-    if(( newSwitchData.checkInTime - new Date(Date.now()) ) / 1000 > 0) {
+    if(( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000 > 0) {
         secondsBeforeNewSwitchFlipped.value =
-            ( newSwitchData.checkInTime - new Date(Date.now()) ) / 1000;   
+            ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;   
     };
     
     // Look again for error messages / clear any old messages out
@@ -38,7 +39,7 @@ function areSwitchFieldsValid() {
         !regexName.test(newSwitchData.recipientLastName) ||
         newSwitchData.checkInIntervalInDays < 0 ||
         newSwitchData.checkInIntervalInDays > 4 ||
-        new Date(newSwitchData.checkInTime).getTime() < 0 || // date validation
+        new Date(newSwitchData.checkInByTime).getTime() < 0 || // date validation
         !newSwitchData.finalMessage ||
         secondsBeforeNewSwitchFlipped.value < 180) // no switches can be set if they go off within 5 minutes 
             { return false }
@@ -60,6 +61,16 @@ async function handleCreateSwitch() {
     if(!userId[0]) { return }; // not logged in
     if(!userId[1]) { return }; // logged in, but issue with user id
 
+    // Calculate the time the user first checked in according to the time the user selected and the time now
+    if(newSwitchData.checkInByTime > new Date(Date.now()) ) {
+        newSwitchData.firstCheckedInAt = new Date(newSwitchData.checkInByTime).setHours(new Date(newSwitchData.checkInByTime).getHours() - (newSwitchData.checkInIntervalInDays * 24) );
+    }
+    else {
+        newSwitchData.firstCheckedInAt = newSwitchData.checkInByTime;
+        // NextCheckinByTime += interval
+        newSwitchData.checkInByTime.setHours(newSwitchData.checkInByTime.getHours() + (newSwitchData.checkInIntervalInDays * 24));
+    };
+   
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/switch/create`, {
         mode: 'cors',
         method: 'POST',
@@ -77,7 +88,10 @@ async function handleCreateSwitch() {
     
     switch(response.status) {
         case '200':
-        console.log(response);    
+            deadmanSwitches.push(response.switch);
+            showCreateDeadmanSwitch.value = false;
+            console.log('switch successfully created');
+
             break;
         case '500':
             
