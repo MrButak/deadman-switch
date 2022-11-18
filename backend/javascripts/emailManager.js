@@ -159,13 +159,11 @@ exports.sendAlertEmailToDeadman = async (deadmanAccountData, dmSwitch) => {
 
     const message = {
     
-        to: dmSwitch.recipient_email,
+        to: deadmanAccountData.email,
         from: 'mspence5555@gmail.com',
-        templateId: 'd-d5a538129abd45789c77ba456183cd90',
+        templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
         dynamic_template_data: {
-            'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-            'deadmanEmail': deadmanAccountData.email,
-            'finalMessage': dmSwitch.final_message,
+            'recipientEmail': dmSwitch.recipient_email,
             'switchCreationDate': dmSwitch.created_at,
             'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
             'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),
@@ -176,7 +174,6 @@ exports.sendAlertEmailToDeadman = async (deadmanAccountData, dmSwitch) => {
     .send(message)
     .then(() => {
         return true;
-        
     })
     .catch(error => {
         console.error(error);
