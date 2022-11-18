@@ -146,10 +146,10 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
 };
 
 exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
-
+    
     
     const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(process.env.SEND_GRID_API);
+    sgMail.setApiKey('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');
 
     const msg = {
     to: deadmanAccountData.email,
@@ -157,13 +157,12 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
     subject: 'Some subject',
     templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
     dynamic_template_data: {
-        'name': deadmanAccountData.email
-        // 'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-        // 'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-        // 'deadmanEmail': `${deadmanAccountData.email}`,
-        // 'finalMessage': `${dmSwitch.final_message}`,
-        // 'switchCreationDate': `${dmSwitch.created_at}`,
-        // 'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
+        'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+        'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+        'deadmanEmail': `${deadmanAccountData.email}`,
+        'finalMessage': `${dmSwitch.final_message}`,
+        'switchCreationDate': `${dmSwitch.created_at}`,
+        'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
     },
     };
     sgMail
