@@ -24,6 +24,7 @@ import { deadmanSwitches,
 } from '../../javascript/stateManager';
 import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
 import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';
+import { watch } from 'vue';
 
 function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
 
@@ -123,7 +124,10 @@ function secondsBeforeSwitchExpires(checkInByTime) {
 
     // Countdown timer can't take a negative number
     if(secondsUntilSwitchFlipped < 0) { return 0 };
-
+    // watch(() => {
+    //     secondsUntilSwitchFlipped,
+    //     () => {console.log('watched', secondsUntilSwitchFlipped)}
+    // })
     return secondsUntilSwitchFlipped;    
 };
 
