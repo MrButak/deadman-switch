@@ -2,8 +2,8 @@ config = require('dotenv').config();
 const email_sk = process.env.SEND_IN_BLUE_API;
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 // Send grid
-// const client = require('@sendgrid/client');
-// client.setApiKey(process.env.SEND_GRID_API);
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey('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');
 
 // let defaultClient = SibApiV3Sdk.ApiClient.instance;
 // let apiKey = defaultClient.authentications['api-key'];
@@ -50,45 +50,16 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString,
 
 exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
     
-   
-
     // const sgMail = require('@sendgrid/mail');
     // sgMail.setApiKey(process.env.SEND_GRID_API);
-    // const msg = {
-    // to: 'dmSwitch.recipient_email',
-    // from: 'mspence5555@gmail.com',
-    // templateId: 'd-d5a538129abd45789c77ba456183cd90',
-    // dynamic_template_data: {
-    //     'subject': 'You are a deadman switch recipient. Important.',
-    //     'name': 'dynamicname'
-    //     // 'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-    //     // 'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-    //     // 'deadmanEmail': `${deadmanAccountData.email}`,
-    //     // 'finalMessage': `${dmSwitch.final_message}`,
-    //     // 'switchCreationDate': `${dmSwitch.created_at}`,
-    //     // 'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
-    // },
-    // };
-    // sgMail
-    // .send(msg)
-    // .then(() => { return true })
-    // .catch((error) => {
-    //     console.log(error);
-    //     return false;
-    // });
-
-
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(process.env.SEND_GRID_API);
 
     const message = {
     
-        to: 'dmSwitch.recipient_email',
+        to: dmSwitch.recipient_email,
         from: 'mspence5555@gmail.com',
         subject: 'Some subject',
         templateId: 'd-d5a538129abd45789c77ba456183cd90',
         dynamic_template_data: {
-            'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
             'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
             'deadmanEmail': `${deadmanAccountData.email}`,
             'finalMessage': `${dmSwitch.final_message}`,
@@ -147,9 +118,22 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
 
 exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
     
+    // Extract just the checkInBytime from the Date Object
+    function extractTimeFromDateObject(dateObj) {
+        
+        let timeString = '';
+        let hoursString = new Date(dateObj).getHours();
+        let minutesString = new Date(dateObj).getMinutes();
+        let secondsString = new Date(dateObj).getSeconds();
+        let millisecondString = new Date(dateObj).getMilliseconds();
+        hoursString = hoursString < 10 ? '0' + hoursString : hoursString
+        minutesString = minutesString < 10 ? '0' + minutesString : minutesString
+        secondsString = secondsString < 10 ? '0' + secondsString : secondsString
+        timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString;
+        return timeString;
+    };
+
     
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey('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');
 
     const msg = {
     to: deadmanAccountData.email,
@@ -178,20 +162,7 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
     });
     // console.log({deadmanAccountData})
     // console.log({dmSwitch})
-    // // Extract just the checkInBytime from the Date Object
-    // function extractTimeFromDateObject(dateObj) {
-        
-    //     let timeString = '';
-    //     let hoursString = new Date(dateObj).getHours();
-    //     let minutesString = new Date(dateObj).getMinutes();
-    //     let secondsString = new Date(dateObj).getSeconds();
-    //     let millisecondString = new Date(dateObj).getMilliseconds();
-    //     hoursString = hoursString < 10 ? '0' + hoursString : hoursString
-    //     minutesString = minutesString < 10 ? '0' + minutesString : minutesString
-    //     secondsString = secondsString < 10 ? '0' + secondsString : secondsString
-    //     timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString;
-    //     return timeString;
-    // };
+    
 
 
     // let defaultClient = SibApiV3Sdk.ApiClient.instance;

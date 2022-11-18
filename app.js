@@ -50,7 +50,7 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
         sendFinalMessage(deadmanAccountData, dmSwitch);
         // console.log({finalMessageSent})
         // Send an email to them in case they are still alive, letting them know the their switch has expired
-        sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
+        // sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
         // console.log({alertEmailSentToDeadman});
         // Only if the final message has been sent, delete the switch
         // if(finalMessageSent) {
