@@ -65,9 +65,6 @@ function extractTimeFromDateObject(dateObj) {
 
 exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
     
-    // const sgMail = require('@sendgrid/mail');
-    // sgMail.setApiKey(process.env.SEND_GRID_API);
-
     const message = {
     
         to: dmSwitch.recipient_email,
@@ -86,127 +83,44 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
     };
     sgMail
     .send(message)
-    .then(() => console.log('send grid recipient sent successfully'))
+    .then(() => {
+        console.log('send grid recipient sent successfully');
+        return true;
+    })
     .catch(error => {
-        console.log('send grid recipient failed')
+        console.log('send grid recipient failed');
         console.error(error);
+        return false;
     });
 
-    
-    // let defaultClient = SibApiV3Sdk.ApiClient.instance;
-    // let apiKey = defaultClient.authentications['api-key'];
-    // apiKey.apiKey = email_sk;
-    // let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    // let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-    // sendSmtpEmail = {
-
-    //     to: [{
-    //         email: dmSwitch.recipient_email,
-    //         name: dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name
-    //     }],
-    //     templateId: 3,
-    //     params: {
-            
-    //         'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-    //         'deadmanEmail': deadmanAccountData.email,
-    //         'finalMessage': dmSwitch.final_message,
-    //         'switchCreationDate': dmSwitch.created_at,
-    //         'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours 
-    //     },
-    
-    //     headers: {
-    //         'X-Mailin-custom': `api-key: ${process.env.SEND_IN_BLUE_API}|content-type: application/json|accept: application/json`
-    //     }
-    // };
-    
-    // apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
-    //     console.log('email to recipient sent', data)
-    //     return true;
-    // }, 
-    // function(error) {
-    //     console.error(error);
-    //     // console.log('Final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-    //     // console.log({deadmanAccountData})
-    //     // console.log({dmSwitch})
-    //     // console.log('Variables used in final message email error ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-    //     return false;
-    // });
 };
 
 exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
     
+    const message = {
     
-
-    
-
-    const msg = {
-    to: deadmanAccountData.email,
-    from: 'mspence5555@gmail.com',
-    subject: 'Some subject',
-    templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
-    dynamic_template_data: {
-        'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-        'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-        'deadmanEmail': `${deadmanAccountData.email}`,
-        'finalMessage': `${dmSwitch.final_message}`,
-        'switchCreationDate': `${dmSwitch.created_at}`,
-        'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
-    },
+        to: deadmanAccountData.email,
+        from: 'mspence5555@gmail.com',
+        subject: 'Some subject',
+        templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
+        dynamic_template_data: {
+            'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+            'recipientEmail': dmSwitch.recipient_email,
+            'switchCreationDate': dmSwitch.created_at,
+            'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
+            'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),
+            'lastCheckedInAt': dmSwitch.last_checked_in_at
+        },
     };
     sgMail
-    .send(msg)
-    .then(() => { 
-        console.log('sendgrid success alert deadman')
-        return true 
+    .send(message)
+    .then(() => {
+        console.log('send grid alert deadman sent successfully');
+        return true;
     })
-    .catch((error) => {
-        console.log(error);
-        console.log('sendgrid failed alert deadman^^^')
+    .catch(error => {
+        console.log('send grid alert deadman failed');
+        console.error(error);
         return false;
     });
-    // console.log({deadmanAccountData})
-    // console.log({dmSwitch})
-    
-
-
-    // let defaultClient = SibApiV3Sdk.ApiClient.instance;
-    // let apiKey = defaultClient.authentications['api-key'];
-    // apiKey.apiKey = email_sk;
-    // let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    // let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-    // let readableCheckInByTime = extractTimeFromDateObject(dmSwitch.check_in_by_time);
-    // let firstName = 'Some'
-    // let lastName = 'Name'
-
-    // sendSmtpEmail = {
-
-    //     to: [{
-    //         email: deadmanAccountData.email,
-    //         name: dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name
-    //     }],
-    //     templateId: 4,
-    //     params: {
-            
-    //         'recipientName': dmSwitch.recipient_first_name + ' ' + dmSwitch.recipient_last_name,
-    //         'finalMessage': dmSwitch.final_message,
-    //         'switchName': dmSwitch.switch_name,
-    //         'switchCreationDate': dmSwitch.created_at,
-    //         'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
-    //         'checkInByTime': readableCheckInByTime,
-    //         'lastCheckedInAt': dmSwitch.last_checked_in_at
-    //     },
-    
-    //     headers: {
-    //         'X-Mailin-custom': `api-key: ${process.env.SEND_IN_BLUE_API}|content-type: application/json|accept: application/json`
-    //     }
-    // };
-    
-    // apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
-    //     console.log('email to deadman sent', data)
-    //     return true;
-    // }, 
-    // function(error) {
-    //     console.error(error);
-    //     return false;
-    // });
 };
