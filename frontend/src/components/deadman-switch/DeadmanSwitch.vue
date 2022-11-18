@@ -18,9 +18,13 @@
                     />
                 </span>
             </va-card-title>
-            
         </div>
-
+        <span v-if="showSwitchExpiredMessage" class="expired-message-wrapper">
+            <p class="va-text-danger">
+                Your switch has expired.
+            </p>
+        </span>
+        
         <va-card-content>
             <p>{{ checkInByInfoText }}</p>
             <div class="check-in-button-wrapper">
@@ -69,7 +73,8 @@ defineProps({
     switchButtonText: String,
     lastCheckedIn: String,
     checkInByInfoText: String,
-    switchButtonIcon: String
+    switchButtonIcon: String,
+    showSwitchExpiredMessage: Boolean
 
 });
 
@@ -99,16 +104,21 @@ defineProps({
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 0 0 1rem 0;
+    padding: 1rem 0;
 }
 .check-in-button {
-
     width: 6rem;
     height: 6rem;
     border-radius: 50%;
 }
-
 .title-and-info-button-wrapper {
     display: flex;
+}
+.expired-message-wrapper {
+    display: flex;
+    justify-content: center;
+    p {
+        width: 80%
+    }
 }
 </style>

@@ -12,6 +12,7 @@
         @handle-show-switch-info-modal="handleShowSwitchInfoModal(dmSwitch)"
         :last-checked-in="new Date(dmSwitch.last_checked_in_at).toLocaleString()"
         :switch-button-icon="determineSwitchButtonIcon(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time), dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours)"
+        :show-switch-expired-message="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time) < 1"
     /> 
 </span>
 
@@ -125,6 +126,7 @@ function determineActiveTextColor(isActive) {
         'va-text-success' :
         'va-text-danger';
 }
+
 // Function calculates the seconds before the user needs to check in
 function secondsBeforeSwitchExpires(checkInByTime) {
 
