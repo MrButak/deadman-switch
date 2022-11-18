@@ -14,7 +14,7 @@ sgMail.setApiKey('SG.IrnbXAqFRpKjAGGsjLn-uw.IpuCg3G0k25ToPJF2rcrtbUOkbgsFrBooLVb
 // ***********************************************************************************
 // Function is called after a successful signup. Sends a verification link to the user
 // ***********************************************************************************
-exports.sendVerificationEmail = (firstName, lastName, email, verificationString, emailTemplateId) => {
+exports.sendVerificationEmail = async (firstName, lastName, email, verificationString, emailTemplateId) => {
     
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     let apiKey = defaultClient.authentications['api-key'];
@@ -64,13 +64,12 @@ function extractTimeFromDateObject(dateObj) {
 };
 
 exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
-    console.log(deadmanAccountData)
-    console.log(dmSwitch)
+    console.log(console.log('send finalMessage start'))
+    
     const message = {
     
         to: dmSwitch.recipient_email,
         from: 'mspence5555@gmail.com',
-        subject: 'Some subject',
         templateId: 'd-d5a538129abd45789c77ba456183cd90',
         dynamic_template_data: {
             'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
@@ -82,7 +81,7 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
             'lastCheckedInAt': dmSwitch.last_checked_in_at
         },
     };
-    sgMail
+    let emailSent = sgMail
     .send(message)
     .then(() => {
         return true;
@@ -93,15 +92,47 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
         return false;
     });
 
+    return emailSent;
 };
 
-exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
-    console.log('God dammit, can we make it here???????')
+
+// (async() => {
+//     let deadmanAccountData = {
+//         id: 4,
+//         first_name: 'Billy',
+//         last_name: 'Hoggins',
+//         email: 'mspence6666@gmail.com',
+//         password: '$2a$10$x5H6Cq/8UfWSSzaelwksM.H5Qab8iqOS0EC3sBirxBy43GOSeUv8a',
+//         creation_date: new Date('2022-11-17T15:50:46.317Z'),
+//         provider: 'email',
+//         email_verification_string: null,
+//         email_verified: true
+//     };
+//     let dmSwitch = {
+//         id: 55,
+//         user_id: 4,
+//         switch_name: 'switch name',
+//         created_at: new Date('2022-11-18T11:52:40.535Z'),
+//         check_in_interval_in_hours: 24,
+//         check_in_by_time: new Date('2022-11-18T11:56:21.627Z'),
+//         last_checked_in_at: new Date('2022-11-17T11:56:21.627Z'),
+//         recipient_email: 'smoothiedokter@gmail.com',
+//         recipient_first_name: 'dsfdsf',
+//         recipient_last_name: 'sdfs',
+//         final_message: "Hi ma, I won't be making it home for supper tonight. You know what to do.",
+//         triggered: false
+//     }
+//     let switchSent = await sendFinalMessage(deadmanAccountData, dmSwitch);
+//     console.log({switchSent})
+// })();
+
+
+exports.sendAlertEmailToDeadman = async (deadmanAccountData, dmSwitch) => {
+    console.log(console.log('sendAlertEmailToDeadman start'))
     const message = {
     
         to: deadmanAccountData.email,
         from: 'mspence5555@gmail.com',
-        subject: 'Some subject',
         templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
         dynamic_template_data: {
             'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
@@ -112,7 +143,7 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
             'lastCheckedInAt': dmSwitch.last_checked_in_at
         },
     };
-    sgMail
+    let mailSent = sgMail
     .send(message)
     .then(() => {
         console.log('send grid alert deadman sent successfully');
@@ -123,4 +154,6 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
         console.error(error);
         return false;
     });
+
+    return mailSent;
 };

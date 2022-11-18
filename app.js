@@ -46,7 +46,9 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
     console.log({switchDeactivated})
     if(!switchDeactivated) { return };
     // Send an email to the deadman letting them know their switch has expired
-    sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
+    let alertToDeadmanSent = await sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
+    console.log({alertToDeadmanSent})
+    
 };
 cron.schedule('* * * * *', async () => {
 
