@@ -58,7 +58,7 @@ function extractTimeFromDateObject(dateObj) {
     return timeString;
 };
 
-exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
+exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     console.log('Making it to sendFinalEmail')
     // Send in blue API
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
@@ -89,7 +89,7 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
         }
     };
     
-    apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
+    let messageSent = apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
         console.log('Send final success', data)
         return true;
     }, 
@@ -98,6 +98,8 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
         console.log('Send final fail')
         return false;
     });
+
+    return messageSent
 
     // Send grid API
     //     const message = {
