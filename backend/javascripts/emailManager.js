@@ -48,6 +48,21 @@ exports.sendVerificationEmail = (firstName, lastName, email, verificationString,
     });
 };
 
+// Extract just the checkInBytime from the Date Object
+function extractTimeFromDateObject(dateObj) {
+        
+    let timeString = '';
+    let hoursString = new Date(dateObj).getHours();
+    let minutesString = new Date(dateObj).getMinutes();
+    let secondsString = new Date(dateObj).getSeconds();
+    let millisecondString = new Date(dateObj).getMilliseconds();
+    hoursString = hoursString < 10 ? '0' + hoursString : hoursString
+    minutesString = minutesString < 10 ? '0' + minutesString : minutesString
+    secondsString = secondsString < 10 ? '0' + secondsString : secondsString
+    timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString;
+    return timeString;
+};
+
 exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
     
     // const sgMail = require('@sendgrid/mail');
@@ -61,10 +76,12 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
         templateId: 'd-d5a538129abd45789c77ba456183cd90',
         dynamic_template_data: {
             'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-            'deadmanEmail': `${deadmanAccountData.email}`,
-            'finalMessage': `${dmSwitch.final_message}`,
-            'switchCreationDate': `${dmSwitch.created_at}`,
-            'checkInIntervalInHours': `${dmSwitch.check_in_interval_in_hours}` 
+            'deadmanEmail': deadmanAccountData.email,
+            'finalMessage': dmSwitch.final_message,
+            'switchCreationDate': dmSwitch.created_at,
+            'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
+            'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),
+            'lastCheckedInAt': dmSwitch.last_checked_in_at
         },
     };
     sgMail
@@ -118,20 +135,7 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
 
 exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
     
-    // Extract just the checkInBytime from the Date Object
-    function extractTimeFromDateObject(dateObj) {
-        
-        let timeString = '';
-        let hoursString = new Date(dateObj).getHours();
-        let minutesString = new Date(dateObj).getMinutes();
-        let secondsString = new Date(dateObj).getSeconds();
-        let millisecondString = new Date(dateObj).getMilliseconds();
-        hoursString = hoursString < 10 ? '0' + hoursString : hoursString
-        minutesString = minutesString < 10 ? '0' + minutesString : minutesString
-        secondsString = secondsString < 10 ? '0' + secondsString : secondsString
-        timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString;
-        return timeString;
-    };
+    
 
     
 
