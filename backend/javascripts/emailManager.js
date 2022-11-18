@@ -58,7 +58,7 @@ function extractTimeFromDateObject(dateObj) {
     return timeString;
 };
 
-sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
+exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     console.log('Making it to sendFinalEmail')
     // Send in blue API
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
