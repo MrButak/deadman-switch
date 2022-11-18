@@ -42,7 +42,7 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
 
     // Deactivate switch only after the final message has been sent
     await deactivateExpiredSwitch(dmSwitch.id, dmSwitch.user_id);
-
+    if(!deactivateExpiredSwitch) { return };
     // Send an email to the deadman letting them know their switch has expired
     sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
 };
