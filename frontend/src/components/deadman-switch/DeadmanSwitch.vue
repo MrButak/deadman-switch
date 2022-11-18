@@ -10,16 +10,20 @@
             <p>{{ checkInByInfoText }}</p>
             <div class="check-in-button-wrapper">
                 
-                <va-button 
+                <va-button
+                    border-color="primary"
                     class="mr-4 mb-2 check-in-button"
                     :color="switchColor"
                     @click="$emit('handleCheckIn')"
                     >
-                    <h6 
-                        class="va-h6"
-                        
-
-                    >{{ switchButtonText }}</h6>
+                    <h6>{{ switchButtonText }}</h6>
+                        <span>
+                            <va-icon
+                                class="mr-2"
+                                :name="switchButtonIcon"
+                                size="3rem"
+                            />
+                        </span>
                 </va-button>
                 <p>Last checked in</p>
                 <p>{{ lastCheckedIn }}</p>
@@ -50,7 +54,8 @@ defineProps({
     switchColor: String,
     switchButtonText: String,
     lastCheckedIn: String,
-    checkInByInfoText: String
+    checkInByInfoText: String,
+    switchButtonIcon: String
 
 });
 

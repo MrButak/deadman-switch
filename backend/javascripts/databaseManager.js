@@ -132,8 +132,10 @@ exports.getUserAccountData = async (userId) => {
         return [false];
     };
 };
-// check_in_by_time TIMESTAMP NOT NULL,
-//     last_checked_in_at
+
+// ******************************************************************************
+// Function is called when a user check's in. Extends the check_in_by_time by the interval
+// ******************************************************************************
 exports.checkInDeadmanSwitch = async (newCheckInByTime, switchId, userId) => {
     let dbStmt = 'UPDATE deadman_switches SET check_in_by_time = ($1), last_checked_in_at = ($2) WHERE id = ($3) AND user_id = ($4) RETURNING *;'
     let dbValues = [new Date(newCheckInByTime), new Date(Date.now()), switchId, userId];
@@ -146,6 +148,9 @@ exports.checkInDeadmanSwitch = async (newCheckInByTime, switchId, userId) => {
     };  
 };
 
+// ******************************************************************************
+// Function is called on a 1 minute interval (chron job) to check for expired switches
+// ******************************************************************************
 exports.checkForExpiredSwitches = async () => {
 
     let dbStmt = 'SELECT * FROM deadman_switches WHERE triggered = false AND ($1) > check_in_by_time;';
@@ -163,6 +168,9 @@ exports.checkForExpiredSwitches = async () => {
     };
 };
 
+// ******************************************************************************
+// Function is called only after a switches time has expired and the final message email has been sent
+// ******************************************************************************
 exports.deactivateExpiredSwitch = async(switchId, userId) => {
     console.log({switchId})
     console.log({userId})
@@ -179,8 +187,8 @@ exports.deactivateExpiredSwitch = async(switchId, userId) => {
     };
 };
 
+// Function NOT IN USE
 exports.deleteExpiredSwitch = async(userId, switchId) => {
-
     let dbStmt = 'DELETE FROM deadman_switches WHERE user_id = ($1) AND id = ($2);'
     let dbValues = [userId, switchId];
     try {

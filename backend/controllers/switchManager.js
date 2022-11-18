@@ -1,9 +1,10 @@
 const { getDeadmanSwitches, insertNewDeadmanSwitch, checkInDeadmanSwitch } = require('../javascripts/databaseManager');
 const { validateName, validateEmail } = require('../javascripts/validationManager');
 
-// Function will get the users deadman switches from the DB
+// ******************************************************************************
+// // Function will get the users deadman switches from the DB
+// ******************************************************************************
 exports.getDeadmanSwitchesWithUserId = async(req, res) => {
-
     let userId = '';
 	
 	try {
@@ -14,6 +15,7 @@ exports.getDeadmanSwitchesWithUserId = async(req, res) => {
         return res.status(500).json({status: '500', message: 'An unknown error occurred'});
 	};
 
+    // Falsy data from req.body
     if(!userId) {
         return res.status(400).json({status: '400', message: 'Invalid user id'});
     };
@@ -24,12 +26,15 @@ exports.getDeadmanSwitchesWithUserId = async(req, res) => {
     if(!switchesQuery[0]) {
         return res.status(500).json({status: '500', message: 'An unknown error occurred'});
     };
+
+    // Even if no switches, return an empty array
     return res.status(200).json({status: '200', switches: switchesQuery[1]});
 };
 
-
+// ******************************************************************************
+// Function will create a new switch and insert it into the DB
+// ******************************************************************************
 exports.createNewSwitch = async (req, res) => {
-
     let newSwitchData = '';
     let userId = '';
     
@@ -72,9 +77,10 @@ exports.createNewSwitch = async (req, res) => {
     return res.status(200).json({status: '200', message: 'Switch successfully created', switch: switchData[1]});
 };
 
-
+// ******************************************************************************
+// Function is called when a user checks in. Extend the switches check_in_by_time by the interval
+// ******************************************************************************
 exports.checkIn = async (req, res) => {
-
     let switchId = '';
     let userId = '';
     let newCheckInByTime = '';
@@ -100,10 +106,5 @@ exports.checkIn = async (req, res) => {
     if(!updatedSwitch[0]) {
         return res.status(500).json({status: '500', message: 'Unknown database error'});
     };
-
-    console.log(updatedSwitch[1])
-    console.log({switchId})
-    console.log({userId})
-    console.log({newCheckInByTime})
     return res.status(200).json({status: '200', message: 'Switch was successfully reset', switch: updatedSwitch[1]});
 };

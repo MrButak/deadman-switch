@@ -33,23 +33,17 @@ const { checkForExpiredSwitches, deactivateExpiredSwitch, getUserAccountData, de
 const { sendFinalMessage, sendAlertEmailToDeadman } = require('./backend/javascripts/emailManager');
 
 async function handleDeadmanSwitchExpired(dmSwitch) {
+
     // Get the deadman's account information
-    
     let deadmanAccountData = await getUserAccountData(dmSwitch.user_id);
-    console.log({deadmanAccountData})
-    console.log('Need this id ^^^^^^')
+    
     // Send an email with their final message to their contact
     let finalMessageSent = await sendFinalMessage(deadmanAccountData, dmSwitch);
-    console.log({finalMessageSent})
+    
     if(!finalMessageSent) { return };
-    console.log('Final message was sent, should be here!!')
+    
     // Deactivate switch only after the final message has been sent
     await deactivateExpiredSwitch(dmSwitch.id, dmSwitch.user_id);
-    
-    // if(!switchDeactivated) { return };
-    // Send an email to the deadman letting them know their switch has expired only after the final message has been sent and the switch is deactivated
-    // let alertToDeadmanSent = await sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
-    
 };
 cron.schedule('* * * * *', async () => {
 
