@@ -64,7 +64,8 @@ function extractTimeFromDateObject(dateObj) {
 };
 
 exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
-    
+    console.log(deadmanAccountData)
+    console.log(dmSwitch)
     const message = {
     
         to: dmSwitch.recipient_email,
@@ -84,11 +85,10 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     sgMail
     .send(message)
     .then(() => {
-        console.log('send grid recipient sent successfully');
         return true;
+        
     })
     .catch(error => {
-        console.log('send grid recipient failed');
         console.error(error);
         return false;
     });
