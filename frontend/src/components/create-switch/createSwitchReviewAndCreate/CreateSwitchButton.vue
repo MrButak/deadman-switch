@@ -88,10 +88,17 @@ async function handleCreateSwitch() {
     
     switch(response.status) {
         case '200':
+            // Push newly created switch into the State
             deadmanSwitches.push(response.switch);
+            // Hide the create switch view
             showCreateDeadmanSwitch.value = false;
+            // Reset form data
+            newSwitchData.recipientFirstName = '';
+            newSwitchData.recipientFirstName = '';
+            newSwitchData.recipientEmail = '';
+            newSwitchData.finalMessage = '';
+            newSwitchData.firstCheckedInAt = null;
             console.log('switch successfully created');
-
             break;
         case '500':
             

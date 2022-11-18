@@ -55,10 +55,13 @@
 
 <script setup>
 
-import { ref, computed } from 'vue';
-import { newSwitchData, secondsBeforeNewSwitchFlipped
-} from '../../../javascript/stateManager';
+import { ref, computed, onMounted } from 'vue';
+import { newSwitchData } from '../../../javascript/stateManager';
 
+// Set the acknowledge checkbox to false
+onMounted(() => {
+    newSwitchData.acknowledgeTimeUntilFirstCheckIn = false;
+});
 
 // Popup modal which displays user's final message
 let showFinalMessageModal = ref(false);
