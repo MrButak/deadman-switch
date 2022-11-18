@@ -37,7 +37,7 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
     let deadmanAccountData = await getUserAccountData(dmSwitch.user_id);
 
     // Send an email with their final message to their contact
-    let finalMessageSent = sendFinalMessage(deadmanAccountData, dmSwitch);
+    let finalMessageSent = await sendFinalMessage(deadmanAccountData, dmSwitch);
     console.log({finalMessageSent})
     if(!finalMessageSent) { return };
 

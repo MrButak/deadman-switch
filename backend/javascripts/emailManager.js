@@ -63,7 +63,7 @@ function extractTimeFromDateObject(dateObj) {
     return timeString;
 };
 
-exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
+exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     
     const message = {
     
