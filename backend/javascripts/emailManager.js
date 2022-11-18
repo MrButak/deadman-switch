@@ -96,7 +96,7 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
 };
 
 exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
-    
+    console.log('God dammit, can we make it here???????')
     const message = {
     
         to: deadmanAccountData.email,

@@ -38,10 +38,12 @@ async function handleDeadmanSwitchExpired(dmSwitch) {
 
     // Send an email with their final message to their contact
     let finalMessageSent = sendFinalMessage(deadmanAccountData, dmSwitch);
+    console.log({finalMessageSent})
     if(!finalMessageSent) { return };
 
     // Deactivate switch only after the final message has been sent
     let switchDeactivated = await deactivateExpiredSwitch(dmSwitch.id, dmSwitch.user_id);
+    console.log({switchDeactivated})
     if(!switchDeactivated) { return };
     // Send an email to the deadman letting them know their switch has expired
     sendAlertEmailToDeadman(deadmanAccountData, dmSwitch);
@@ -52,7 +54,7 @@ cron.schedule('* * * * *', async () => {
     console.log('cron job, 1 minute')
     if(expiredSwitches[0]) {
         for(const dmSwitch of expiredSwitches[1]) {
-            handleDeadmanSwitchExpired(dmSwitch);
+            await handleDeadmanSwitchExpired(dmSwitch);
         };
         // expiredSwitches[1].forEach((dmSwitch) => {
         //     handleDeadmanSwitchExpired(dmSwitch);
