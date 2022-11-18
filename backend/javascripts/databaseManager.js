@@ -164,8 +164,8 @@ exports.checkForExpiredSwitches = async () => {
 };
 
 exports.deactivateExpiredSwitch = async(switchId, userId) => {
-    let dbStmt = 'UPDATE deadman_switches SET triggered = true WHERE id = ($1) AND user_id = ($2);';
-    let dbValues = [switchId, userId];
+    let dbStmt = 'UPDATE deadman_switches SET triggered = ($1) WHERE id = ($2) AND user_id = ($3);';
+    let dbValues = [true, switchId, userId];
     try {
         await pool.query(dbStmt, dbValues);
         return true;
