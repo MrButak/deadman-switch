@@ -59,7 +59,7 @@ function extractTimeFromDateObject(dateObj) {
 };
 
 sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
-
+    console.log('Making it to sendFinalEmail')
     // Send in blue API
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     let apiKey = defaultClient.authentications['api-key'];
@@ -90,10 +90,12 @@ sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     };
     
     apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
+        console.log('Send final success', data)
         return true;
     }, 
     function(error) {
         console.error(error);
+        console.log('Send final fail')
         return false;
     });
 
