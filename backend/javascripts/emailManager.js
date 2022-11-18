@@ -63,7 +63,7 @@ function extractTimeFromDateObject(dateObj) {
     return timeString;
 };
 
-exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
+sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     console.log(console.log('send finalMessage start'))
     
     const message = {
@@ -86,6 +86,39 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     .then(() => {
         return true;
         
+    })
+    .catch(error => {
+        console.error(error);
+        return false;
+    });
+
+    return emailSent;
+};
+
+
+sendAlertEmailToDeadman = async (deadmanAccountData, dmSwitch) => {
+    // console.log('*************************************************')
+    // console.log(deadmanAccountData)
+    // console.log(dmSwitch)
+    // console.log('*************************************************')
+
+    const message = {
+    
+        to: deadmanAccountData.email,
+        from: 'mspence5555@gmail.com',
+        templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
+        dynamic_template_data: {
+            'recipientEmail': dmSwitch.recipient_email,
+            'switchCreationDate': dmSwitch.created_at,
+            'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
+            'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),
+            'lastCheckedInAt': dmSwitch.last_checked_in_at
+        },
+    };
+    let emailSent = sgMail
+    .send(message)
+    .then(() => {
+        return true;
     })
     .catch(error => {
         console.error(error);
@@ -122,39 +155,8 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
 //         final_message: "Hi ma, I won't be making it home for supper tonight. You know what to do.",
 //         triggered: false
 //     }
-//     let switchSent = await sendFinalMessage(deadmanAccountData, dmSwitch);
-//     console.log({switchSent})
+//     let finalMessageSent = await sendFinalMessage(deadmanAccountData, dmSwitch);
+//     console.log({finalMessageSent})
+//     let alertMessageSent = await sendAlertEmailToDeadman(deadmanAccountData, dmSwitch)
+//     console.log({alertMessageSent})
 // })();
-
-
-exports.sendAlertEmailToDeadman = async (deadmanAccountData, dmSwitch) => {
-    console.log('*************************************************')
-    console.log(deadmanAccountData)
-    console.log(dmSwitch)
-    console.log('*************************************************')
-
-    const message = {
-    
-        to: deadmanAccountData.email,
-        from: 'mspence5555@gmail.com',
-        templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
-        dynamic_template_data: {
-            'recipientEmail': dmSwitch.recipient_email,
-            'switchCreationDate': dmSwitch.created_at,
-            'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
-            'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),
-            'lastCheckedInAt': dmSwitch.last_checked_in_at
-        },
-    };
-    let emailSent = sgMail
-    .send(message)
-    .then(() => {
-        return true;
-    })
-    .catch(error => {
-        console.error(error);
-        return false;
-    });
-
-    return emailSent;
-};
