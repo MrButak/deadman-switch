@@ -6,15 +6,21 @@
             stripe 
             :stripe-color="switchColor">
         <va-card-title class="switch-name">{{ switchName }}</va-card-title>
+        <va-icon
+            @click="$emit('handleShowSwitchInfoModal')"
+            class="mr-2"
+            name="info"
+            size="small"
+        />
         <va-card-content>
             <p>{{ checkInByInfoText }}</p>
             <div class="check-in-button-wrapper">
                 
                 <va-button
+                    @click="$emit('handleCheckIn')"
                     border-color="primary"
                     class="mr-4 mb-2 check-in-button"
                     :color="switchColor"
-                    @click="$emit('handleCheckIn')"
                     >
                     <h6>{{ switchButtonText }}</h6>
                         <span>
@@ -38,13 +44,11 @@
     </div>
 </div>
 
-
 </template>
 
 
 
 <script setup>
-
 
 import CountdownTimer from '../shared/CountdownTimer.vue';
 
@@ -58,41 +62,6 @@ defineProps({
     switchButtonIcon: String
 
 });
-
-// check_in_by_time
-// : 
-// "2022-11-15T15:31:37.542Z"
-// check_in_interval_in_hours
-// : 
-// 24
-// created_at
-// : 
-// "2022-11-15T15:31:47.590Z"
-// final_message
-// : 
-// "Hi ma, I won't be making it home for supper tonight. You know what to do."
-// id
-// : 
-// 21
-// last_checked_in_at
-// : 
-// "2022-11-14T15:31:37.542Z"
-// recipient_email
-// : 
-// "sdfsd@dsfs.com"
-// recipient_first_name
-// : 
-// "dd"
-// recipient_last_name
-// : 
-// "df"
-// triggered
-// : 
-// false
-// user_id
-// : 
-// 1
-
 
 </script>
 
@@ -128,4 +97,5 @@ defineProps({
     height: 6rem;
     border-radius: 50%;
 }
+
 </style>

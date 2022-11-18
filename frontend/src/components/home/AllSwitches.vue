@@ -1,18 +1,18 @@
 <template>
     
-    <h2 class="va-h2" style="text-align: center;">Your Switches</h2>
-    <span v-for="dmSwitch in deadmanSwitches">
-        <DeadmanSwitch
-            :seconds-before-new-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time)"
-            :switch-name="dmSwitch.switch_name"
-            :check-in-by-info-text="`Check in by : ${extractTimeFromDateObject(dmSwitch.check_in_by_time)} every ${dmSwitch.check_in_interval_in_hours / 24} day(s)`"
-            :switch-color="determineSwitchColor(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time), dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours)"
-            :switch-button-text="determineSwitchButtonText(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time), dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours)"
-            @handle-check-in="handleCheckIn(dmSwitch.id, dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at)"
-            :last-checked-in="new Date(dmSwitch.last_checked_in_at).toLocaleString()"
-            :switch-button-icon="determineSwitchButtonIcon(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time), dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours)"
-        />
-        
+<h2 class="va-h2" style="text-align: center;">Your Switches</h2>
+<span v-for="dmSwitch in deadmanSwitches">
+    <DeadmanSwitch
+        :seconds-before-new-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time)"
+        :switch-name="dmSwitch.switch_name"
+        :check-in-by-info-text="`Check in by : ${extractTimeFromDateObject(dmSwitch.check_in_by_time)} every ${dmSwitch.check_in_interval_in_hours / 24} day(s)`"
+        :switch-color="determineSwitchColor(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time), dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours)"
+        :switch-button-text="determineSwitchButtonText(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time), dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours)"
+        @handle-check-in="handleCheckIn(dmSwitch.id, dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours, dmSwitch.last_checked_in_at)"
+        @handle-show-switch-info-modal="handleShowSwitchInfoModal(dmSwitch)"
+        :last-checked-in="new Date(dmSwitch.last_checked_in_at).toLocaleString()"
+        :switch-button-icon="determineSwitchButtonIcon(secondsBeforeSwitchExpires(dmSwitch.check_in_by_time), dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours)"
+    /> 
 </span>
     
 </template>
@@ -27,14 +27,32 @@ import { deadmanSwitches,
 import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
 import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';
 
+// Function calculates the seconds before the user needs to check in
+function secondsBeforeSwitchExpires(checkInByTime) {
+
+    // Calculate seconds until switch Expires
+    let secondsUntilSwitchFlipped =
+        ( (new Date(checkInByTime).getTime() / 1000 ) - ( new Date(Date.now()) ) / 1000 );
+
+    // Countdown timer can't take a negative number
+    if(secondsUntilSwitchFlipped < 0) { return 0 };
+
+    return secondsUntilSwitchFlipped;    
+};
+
 function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
 
     // checkInByTime - now < interval ?
     let secondsFromEpochToCheckInByTime = new Date(checkInByTimestamp).getTime() / 1000;
     let secondsFromEpochToNow = new Date(Date.now()).getTime() / 1000;
     let isButtonOpen = (secondsFromEpochToCheckInByTime - secondsFromEpochToNow) < (checkInIntervalInHours * 60 * 60);
-    console.log({isButtonOpen})
-    return isButtonOpen;
+    return secondsBeforeSwitchExpires(checkInByTimestamp) <= 0 ?
+        false :
+        isButtonOpen;
+};
+
+function handleShowSwitchInfoModal() {
+    console.log('info button emit firing');
 };
 
 function determineSwitchButtonText(timeLeftInSeconds, checkInByTimestamp, checkInIntervalInHours) {
@@ -44,10 +62,10 @@ function determineSwitchButtonText(timeLeftInSeconds, checkInByTimestamp, checkI
     }
     else if(isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) && timeLeftInSeconds > 0) {
         return 'Check In';
-    }
+    };
 };
 
-async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHours, lastCheckedInAtTimestamp) {
+async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHours) {
 
     if(!isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours)) { return };
     
@@ -77,7 +95,7 @@ async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHour
     let response = await request.json();
     switch(response.status) {
         case '200':
-            // Update the switch data
+            // Replace the old switch with the newly updated check_in_by_time switch
             deadmanSwitches[deadmanSwitches.findIndex(dmSwitch => dmSwitch.id == response.switch.id)] = response.switch;
             console.log(response.message)
             break;
@@ -85,8 +103,6 @@ async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHour
             break;
         default:  
     };
-
-    console.log({response})
 };
 
 function determineSwitchButtonIcon(timeLeftInSeconds, checkInByTimestamp, checkInIntervalInHours) {
@@ -106,42 +122,24 @@ function determineSwitchColor(timeLeftInSeconds, checkInByTimestamp, checkInInte
         return 'warning'; // yellow
     }
     else if(!isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) && timeLeftInSeconds > 0) {
-        return 'success';
+        return 'success'; // green
     };
     return 'info'; // blue
 };
 
-
-// Extract just the checkInBytime from the Date Object
+// Extract just the Time (HH:MM:SS) from a Date Object
 function extractTimeFromDateObject(dateObj) {
     
     let timeString = '';
     let hoursString = new Date(dateObj).getHours();
     let minutesString = new Date(dateObj).getMinutes();
     let secondsString = new Date(dateObj).getSeconds();
-    let millisecondString = new Date(dateObj).getMilliseconds();
     hoursString = hoursString < 10 ? '0' + hoursString : hoursString
     minutesString = minutesString < 10 ? '0' + minutesString : minutesString
     secondsString = secondsString < 10 ? '0' + secondsString : secondsString
 
-    timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString
+    timeString += hoursString + ':' + minutesString + ':' + secondsString
     return timeString;
-};
-
-// Function calculates the seconds before the user needs to check in
-function secondsBeforeSwitchExpires(checkInByTime) {
-
-    // Calculate seconds until switch Expires
-    let secondsUntilSwitchFlipped =
-        ( (new Date(checkInByTime).getTime() / 1000) - (new Date(Date.now()) ) / 1000);
-
-    // Countdown timer can't take a negative number
-    if(secondsUntilSwitchFlipped < 0) { return 0 };
-    // watch(() => {
-    //     secondsUntilSwitchFlipped,
-    //     () => {console.log('watched', secondsUntilSwitchFlipped)}
-    // })
-    return secondsUntilSwitchFlipped;    
 };
 
 </script>
