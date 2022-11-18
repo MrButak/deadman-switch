@@ -85,9 +85,9 @@ exports.sendFinalMessage = (deadmanAccountData, dmSwitch) => {
     
         to: 'dmSwitch.recipient_email',
         from: 'mspence5555@gmail.com',
+        subject: 'Some subject',
         templateId: 'd-d5a538129abd45789c77ba456183cd90',
         dynamic_template_data: {
-            'subject': 'You are a deadman switch recipient. Important.',
             'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
             'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
             'deadmanEmail': `${deadmanAccountData.email}`,
@@ -150,13 +150,14 @@ exports.sendAlertEmailToDeadman = (deadmanAccountData, dmSwitch) => {
     
     const sgMail = require('@sendgrid/mail');
     sgMail.setApiKey(process.env.SEND_GRID_API);
+
     const msg = {
     to: deadmanAccountData.email,
     from: 'mspence5555@gmail.com',
+    subject: 'Some subject',
     templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
     dynamic_template_data: {
-        'subject': 'Deadman switch tripped.',
-        'name': 'dynamicname'
+        'name': deadmanAccountData.email
         // 'name': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
         // 'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
         // 'deadmanEmail': `${deadmanAccountData.email}`,
