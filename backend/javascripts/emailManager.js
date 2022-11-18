@@ -129,31 +129,59 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
 
 exports.sendAlertEmailToDeadman = async (deadmanAccountData, dmSwitch) => {
     console.log(console.log('sendAlertEmailToDeadman start'))
+    // const message = {
+    
+    //     to: deadmanAccountData.email,
+    //     from: 'mspence5555@gmail.com',
+    //     templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
+    //     dynamic_template_data: {
+    //         'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+    //         'recipientEmail': dmSwitch.recipient_email,
+    //         'switchCreationDate': dmSwitch.created_at,
+    //         'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
+    //         'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),
+    //         'lastCheckedInAt': dmSwitch.last_checked_in_at
+    //     },
+    // };
+    // let emailSent = sgMail
+    // .send(message)
+    // .then(() => {
+    //     console.log('send grid alert deadman sent successfully');
+    //     return true;
+    // })
+    // .catch(error => {
+    //     console.log('send grid alert deadman failed');
+    //     console.error(error);
+    //     return false;
+    // });
+
+    // return emailSent;
+
     const message = {
     
-        to: deadmanAccountData.email,
+        to: dmSwitch.recipient_email,
         from: 'mspence5555@gmail.com',
-        templateId: 'd-03185b92e17f4e98bd8720b240ef7152',
+        templateId: 'd-d5a538129abd45789c77ba456183cd90',
         dynamic_template_data: {
             'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
-            'recipientEmail': dmSwitch.recipient_email,
+            'deadmanEmail': deadmanAccountData.email,
+            'finalMessage': dmSwitch.final_message,
             'switchCreationDate': dmSwitch.created_at,
             'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
             'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),
             'lastCheckedInAt': dmSwitch.last_checked_in_at
         },
     };
-    let mailSent = sgMail
+    let emailSent = sgMail
     .send(message)
     .then(() => {
-        console.log('send grid alert deadman sent successfully');
         return true;
+        
     })
     .catch(error => {
-        console.log('send grid alert deadman failed');
         console.error(error);
         return false;
     });
 
-    return mailSent;
+    return emailSent;
 };
