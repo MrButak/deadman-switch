@@ -34,8 +34,10 @@ const { sendFinalMessage, sendAlertEmailToDeadman } = require('./backend/javascr
 
 async function handleDeadmanSwitchExpired(dmSwitch) {
     // Get the deadman's account information
+    
     let deadmanAccountData = await getUserAccountData(dmSwitch.user_id);
-
+    console.log({deadmanAccountData})
+    console.log('Need this id ^^^^^^')
     // Send an email with their final message to their contact
     let finalMessageSent = await sendFinalMessage(deadmanAccountData, dmSwitch);
     console.log({finalMessageSent})
