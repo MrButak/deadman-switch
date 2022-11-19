@@ -33,7 +33,7 @@
         <p style="padding: 0 2rem 0 0">Final message</p>
         <va-icon
             v-model="showFinalMessageModal"
-            @click="showFinalMessageModal = !showFinalMessageModal"
+            @click="showFinalMessageModal = true"
             class="mr-2"
             name="preview"
             size="2rem"
@@ -47,7 +47,7 @@
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Active</p>
-        <p style="padding: 0 0 0 2rem" :class="activeTextColor"></p>
+        <p style="padding: 0 0 0 2rem" :class="activeTextColor">{{ isActive }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
@@ -82,13 +82,13 @@
     </template>
 </va-modal>
 <!-- Final message popup modal -->
-<va-modal
+<!-- <va-modal
     v-model="showFinalMessageModal"
     @click="showFinalMessageModal = !showFinalMessageModal"
     title="Final message"
     :message="finalMessage"
     fixed-layout
-/>
+/> -->
 </template>
 
 
@@ -110,7 +110,8 @@ defineProps({
     checkInByTime: String,
     lastCheckedInAt: String,
     finalMessage: String,
-    activeTextColor: String
+    activeTextColor: String,
+    isActive: Boolean
 });
 
 </script>

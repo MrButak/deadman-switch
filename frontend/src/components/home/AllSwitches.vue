@@ -18,8 +18,9 @@
     /> 
 </span>
 
+<!-- Switch info modal -->
 <DeadmanSwitchInfoModal 
-    :final-message="currentlyViewedSwitch.final_messagge"
+    :final-message="currentlyViewedSwitch.final_message"
     :recipient-first-name="currentlyViewedSwitch.recipient_first_name"
     :recipient-last-name="currentlyViewedSwitch.recipient_last_name"
     :recipient-email="currentlyViewedSwitch.recipient_email"
@@ -28,7 +29,17 @@
     :check-in-interval-in-hours="currentlyViewedSwitch.check_in_interval_in_hours"
     :check-in-by-time="currentlyViewedSwitch.check_in_by_time"
     :last-checked-in-at="currentlyViewedSwitch.last_checked_in_at"
-    :active-text-color="determineActiveTextColor(secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0)"
+    :active-text-color="secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0 ? 'va-text-success' : 'va-text-danger'"
+    :is-active="secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0"
+/>
+
+<!-- Final message popup modal -->
+<va-modal
+    v-model="showFinalMessageModal"
+    @click="showFinalMessageModal = false"
+    title="Final message"
+    :message="currentlyViewedSwitch.final_message"
+    fixed-layout
 />
 
 </template>
@@ -37,38 +48,21 @@
 
 <script setup>
 
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { deadmanSwitches, showSwitchInfoModal, showFinalMessageModal } from '../../javascript/stateManager';
-
-import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
 import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';
+import { secondsBeforeSwitchExpires } from '../../javascript/switchManager';
+import { extractTimeFromDateObject } from '../../javascript/utils';
 import DeadmanSwitchInfoModal from '../deadman-switch/DeadmanSwitchInfoModal.vue';
+import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
 
-
+// This data will populate the switch info modal
 let currentlyViewedSwitch = reactive({});
 
-function determineActiveTextColor(isActive) {
-    return isActive ?
-        'va-text-success' : // green
-        'va-text-danger'; // red
-};
-
-// Function calculates the seconds before the user needs to check in
-function secondsBeforeSwitchExpires(checkInByTime) {
-
-    // Calculate seconds until switch Expires
-    let secondsUntilSwitchFlipped =
-        ( (new Date(checkInByTime).getTime() / 1000 ) - ( new Date(Date.now()) ) / 1000 );
-
-    // Countdown timer can't take a negative number
-    if(secondsUntilSwitchFlipped < 0) { return 0 };
-
-    return secondsUntilSwitchFlipped;    
-};
-
+// ********************************************************************
 // Function will determine if a user can reset their switch.
+// ********************************************************************
 function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
-
     // checkInByTime - now < interval ?
     let secondsFromEpochToCheckInByTime = new Date(checkInByTimestamp).getTime() / 1000;
     let secondsFromEpochToNow = new Date(Date.now()).getTime() / 1000;
@@ -78,26 +72,9 @@ function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
         isButtonOpen;
 };
 
-// Function will show a pop up modal displaying all switch details
-function handleShowSwitchInfoModal(dmSwitch) {
-
-    // Assign the currently viewed switch to the reactive Object
-    Object.assign(currentlyViewedSwitch, dmSwitch);
-    // Show pop up modal
-    showSwitchInfoModal.value = !showSwitchInfoModal.value
-};
-
-
-function determineSwitchButtonText(timeLeftInSeconds, checkInByTimestamp, checkInIntervalInHours) {
-    
-    if(timeLeftInSeconds <= 0) {
-        return 'Dead'
-    }
-    else if(isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) && timeLeftInSeconds > 0) {
-        return 'Check In';
-    };
-};
-
+// ********************************************************************
+// Function is called when a user clicks the check in button
+// ********************************************************************
 async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHours) {
 
     if(!isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours)) { return };
@@ -130,7 +107,6 @@ async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHour
         case '200':
             // Replace the old switch with the newly updated check_in_by_time switch
             deadmanSwitches[deadmanSwitches.findIndex(dmSwitch => dmSwitch.id == response.switch.id)] = response.switch;
-            console.log(response.message)
             break;
         case '500':
             break;
@@ -138,14 +114,25 @@ async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHour
     };
 };
 
-function determineSwitchButtonIcon(timeLeftInSeconds, checkInByTimestamp, checkInIntervalInHours) {
-
-    if(!isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) && timeLeftInSeconds > 0) {
-        return 'done'; // check mark
-    }
-    return '';
+// ********************************************************************
+// Function will show a pop up modal displaying all switch details and assign Component State
+// ********************************************************************
+function handleShowSwitchInfoModal(dmSwitch) {
+    // Assign the currently viewed switch to the Component State
+    Object.assign(currentlyViewedSwitch, dmSwitch);
+    // Show pop up modal
+    showSwitchInfoModal.value = !showSwitchInfoModal.value;
 };
 
+// ********************************************************************
+// Switch UI helpers
+// ********************************************************************
+function determineSwitchButtonIcon(timeLeftInSeconds, checkInByTimestamp, checkInIntervalInHours) {
+
+    return !isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) && timeLeftInSeconds > 0 ?
+        'done' : // check mark
+        '';
+};
 function determineSwitchColor(timeLeftInSeconds, checkInByTimestamp, checkInIntervalInHours) {
 
     if(timeLeftInSeconds < 3600) { // 1 hour
@@ -159,20 +146,14 @@ function determineSwitchColor(timeLeftInSeconds, checkInByTimestamp, checkInInte
     };
     return 'info'; // blue
 };
+function determineSwitchButtonText(timeLeftInSeconds, checkInByTimestamp, checkInIntervalInHours) {
 
-// Extract just the Time (HH:MM:SS) from a Date Object
-function extractTimeFromDateObject(dateObj) {
-    
-    let timeString = '';
-    let hoursString = new Date(dateObj).getHours();
-    let minutesString = new Date(dateObj).getMinutes();
-    let secondsString = new Date(dateObj).getSeconds();
-    hoursString = hoursString < 10 ? '0' + hoursString : hoursString
-    minutesString = minutesString < 10 ? '0' + minutesString : minutesString
-    secondsString = secondsString < 10 ? '0' + secondsString : secondsString
-
-    timeString += hoursString + ':' + minutesString + ':' + secondsString
-    return timeString;
+    if(timeLeftInSeconds <= 0) {
+        return 'Dead'
+    }
+    else if(isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) && timeLeftInSeconds > 0) {
+        return 'Check In';
+    };
 };
 
 </script>
