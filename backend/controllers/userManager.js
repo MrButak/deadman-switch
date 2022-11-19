@@ -214,7 +214,7 @@ exports.getUserDataWithUserId = async(req, res) => {
     };
 
     let userData = await getUserAccountData(userId);
-    if(!userData[0]) {
+    if(!userData[0] || !userData[1]) {
         return res.status(500).json({status: '500', message: 'An unknown database error occurred'});
     };
     
