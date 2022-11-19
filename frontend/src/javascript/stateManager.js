@@ -88,6 +88,10 @@ let formErrorMessages = {
 
 let deadmanSwitches = reactive([]);
 
+// Switch info modal
+let showSwitchInfoModal = ref(false); // prop
+let showFinalMessageModal = ref(false); // prop
+
 export {
     regexName, regexPassword, regexEmail,
     userLoggedIn, // view (home page)
@@ -102,5 +106,7 @@ export {
     secondsBeforeNewSwitchFlipped,
     formErrorMessages, // global data
     // user account
-    showUserAccount
+    showUserAccount,
+    // Switch info modal
+    showFinalMessageModal, showSwitchInfoModal
 }

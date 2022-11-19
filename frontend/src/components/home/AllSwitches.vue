@@ -1,6 +1,8 @@
 <template>
     
-<h2 class="va-h2" style="text-align: center;">Your Switches</h2>
+<h2 class="va-h2" style="text-align: center;">
+    Your Switches
+</h2>
 <span v-for="dmSwitch in deadmanSwitches">
     <DeadmanSwitch
         :seconds-before-new-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time)"
@@ -16,94 +18,17 @@
     /> 
 </span>
 
-<!-- Switch info modal -->
-<va-modal
-    v-model="showCustomContent"
-    no-padding
->
-    <template #content="{ ok }">
-    <!-- <va-image :ratio="16/9" src="https://picsum.photos/1500" /> -->
-    <va-card-title>
-        Switch Details
-    </va-card-title>
-
-    <va-card-content>
-        <h6>Recipient details</h6>
-    </va-card-content>
-    
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">First name</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.recipient_first_name }}</p>
-    </va-card-actions>
-
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">Last name</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.recipient_last_name }}</p>
-    </va-card-actions>
-
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">Email</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.recipient_email }}</p>
-    </va-card-actions>
-
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">Final message</p>
-        <va-icon
-            @click="showFinalMessageModal = !showFinalMessageModal"
-            class="mr-2"
-            name="preview"
-            size="2rem"
-            color="success"
-        />
-    </va-card-actions>
-
-    <va-card-content>
-        <h6>Switch details</h6>
-    </va-card-content>
-
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">Active</p>
-        <p style="padding: 0 0 0 2rem" :class="determineActiveTextColor(secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0)">{{ secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0 }}</p>
-    </va-card-actions>
-
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">Name</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.switch_name }}</p>
-    </va-card-actions>
-
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">Creation date</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(currentlyViewedSwitch.created_at).toLocaleString() }}</p>
-    </va-card-actions>
-
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">Check in every</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.check_in_interval_in_hours / 24 }} day(s)</p>
-    </va-card-actions>
-
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">No later than</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(currentlyViewedSwitch.check_in_by_time).toLocaleTimeString() }}</p>
-    </va-card-actions>
-
-    <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">Last check in</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(currentlyViewedSwitch.last_checked_in_at).toLocaleString() }}</p>
-    </va-card-actions>
-
-    <va-card-actions>
-        <va-button @click="ok" color="warning">Ok!</va-button>
-    </va-card-actions>
-
-    </template>
-</va-modal>
-
-<!-- Final message popup modal -->
-<va-modal
-    v-model="showFinalMessageModal"
-    title="Final message"
-    :message="currentlyViewedSwitch.final_message"
-    fixed-layout
+<DeadmanSwitchInfoModal 
+    :final-message="currentlyViewedSwitch.final_messagge"
+    :recipient-first-name="currentlyViewedSwitch.recipient_first_name"
+    :recipient-last-name="currentlyViewedSwitch.recipient_last_name"
+    :recipient-email="currentlyViewedSwitch.recipient_email"
+    :switch-name="currentlyViewedSwitch.switch_name"
+    :created-at="currentlyViewedSwitch.created_at"
+    :check-in-interval-in-hours="currentlyViewedSwitch.check_in_interval_in_hours"
+    :check-in-by-time="currentlyViewedSwitch.check_in_by_time"
+    :last-checked-in-at="currentlyViewedSwitch.last_checked_in_at"
+    :active-text-color="determineActiveTextColor(secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0)"
 />
 
 </template>
@@ -113,19 +38,20 @@
 <script setup>
 
 import { reactive, ref } from 'vue';
-import { deadmanSwitches } from '../../javascript/stateManager';
+import { deadmanSwitches, showSwitchInfoModal, showFinalMessageModal } from '../../javascript/stateManager';
+
 import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
 import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';
+import DeadmanSwitchInfoModal from '../deadman-switch/DeadmanSwitchInfoModal.vue';
 
-// Pop up switch info modal
-let showCustomContent = ref(false);
+
 let currentlyViewedSwitch = reactive({});
-let showFinalMessageModal = ref(false); // final message modal
+
 function determineActiveTextColor(isActive) {
     return isActive ?
-        'va-text-success' :
-        'va-text-danger';
-}
+        'va-text-success' : // green
+        'va-text-danger'; // red
+};
 
 // Function calculates the seconds before the user needs to check in
 function secondsBeforeSwitchExpires(checkInByTime) {
@@ -155,10 +81,10 @@ function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
 // Function will show a pop up modal displaying all switch details
 function handleShowSwitchInfoModal(dmSwitch) {
 
-    // Show pop up modal
-    showCustomContent.value = !showCustomContent.value
     // Assign the currently viewed switch to the reactive Object
     Object.assign(currentlyViewedSwitch, dmSwitch);
+    // Show pop up modal
+    showSwitchInfoModal.value = !showSwitchInfoModal.value
 };
 
 
