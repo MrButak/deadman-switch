@@ -75,7 +75,6 @@ defineProps({
     checkInByInfoText: String,
     switchButtonIcon: String,
     showSwitchExpiredMessage: Boolean
-
 });
 
 </script>

@@ -30,7 +30,7 @@
 <script setup>
 
 import { onMounted } from 'vue';
-import { getDeadmanSwitchesWithUserId } from './javascript/deadmanManager';
+import { getDeadmanSwitchesWithUserId } from './javascript/switchManager';
 import { checkForValidCookieAndGetUserId } from './javascript/userManager';
 import { userLoggedIn, showLogin, showSignup, hasRegistered,
         deadmanSwitches,

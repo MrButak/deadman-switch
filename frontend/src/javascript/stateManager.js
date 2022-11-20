@@ -88,9 +88,11 @@ let formErrorMessages = {
 
 let deadmanSwitches = reactive([]);
 
+// When a user clicks on the 'info' icon on the deadman switch
 // Switch info modal
 let showSwitchInfoModal = ref(false); // prop
 let showFinalMessageModal = ref(false); // prop
+let currentlyViewedSwitch = reactive({}); // This data will populate the switch info modal
 
 export {
     regexName, regexPassword, regexEmail,
@@ -108,5 +110,5 @@ export {
     // user account
     showUserAccount,
     // Switch info modal
-    showFinalMessageModal, showSwitchInfoModal
+    showFinalMessageModal, showSwitchInfoModal, currentlyViewedSwitch
 }

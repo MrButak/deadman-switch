@@ -94,7 +94,7 @@ async function handleCreateSwitch() {
             showCreateDeadmanSwitch.value = false;
             // Reset form data
             newSwitchData.recipientFirstName = '';
-            newSwitchData.recipientFirstName = '';
+            newSwitchData.recipientLastName = '';
             newSwitchData.recipientEmail = '';
             newSwitchData.finalMessage = '';
             newSwitchData.firstCheckedInAt = null;

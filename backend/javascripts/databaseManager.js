@@ -24,7 +24,7 @@ else if(process.env.APP_ENVIRONMENT === 'production') {
 // ***********************************************************************************
 exports.insertNewUser = async(firstName, lastName, email, password, provider, verified, verificationString) => {
 
-    let dbStmt = 'INSERT INTO app_users (first_name, last_name, email, password, creation_date, provider, email_verification_string, email_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;'
+    let dbStmt = 'INSERT INTO app_users (first_name, last_name, email, password, account_created_at, provider, email_verification_string, email_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;'
     let dbValues = [firstName, lastName, email, password, new Date(Date.now()), provider, verificationString, verified];
 
     try {

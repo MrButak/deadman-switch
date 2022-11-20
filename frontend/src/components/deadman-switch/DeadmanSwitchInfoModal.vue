@@ -16,17 +16,17 @@
     
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">First name</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ recipientFirstName }}</p>
+        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.recipient_first_name }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Last name</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ recipientLastName }}</p>
+        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.recipient_last_name }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Email</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ recipientEmail }}</p>
+        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.recipient_email }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
@@ -47,32 +47,32 @@
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Active</p>
-        <p style="padding: 0 0 0 2rem" :class="activeTextColor">{{ isActive }}</p>
+        <p style="padding: 0 0 0 2rem" :class="secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0 ? 'va-text-success' : 'va-text-danger'">{{ secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0 }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Name</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ switchName }}</p>
+        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.switch_name }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Creation date</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(createdAt).toLocaleString() }}</p>
+        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(currentlyViewedSwitch.created_at).toLocaleString() }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Check in every</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ checkInIntervalInHours / 24 }} day(s)</p>
+        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.check_in_interval_in_hours / 24 }} day(s)</p>
     </va-card-actions>
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">No later than</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(checkInByTime).toLocaleTimeString() }}</p>
+        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(currentlyViewedSwitch.check_in_by_time).toLocaleTimeString() }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Last check in</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(lastCheckedInAt).toLocaleString() }}</p>
+        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(currentlyViewedSwitch.last_checked_in_at).toLocaleString() }}</p>
     </va-card-actions>
 
     <va-card-actions>
@@ -81,30 +81,25 @@
 
     </template>
 </va-modal>
+
 <!-- Final message popup modal -->
-<!-- <va-modal
+<va-modal
     v-model="showFinalMessageModal"
-    @click="showFinalMessageModal = !showFinalMessageModal"
+    @click="showFinalMessageModal = false"
     title="Final message"
-    :message="finalMessage"
+    :message="currentlyViewedSwitch.final_message"
     fixed-layout
-/> -->
+/>
+
 </template>
 
 
 
 <script setup>
-import { ref } from 'vue';
-import { showSwitchInfoModal, showFinalMessageModal } from '../../javascript/stateManager';
-// let showSwitchInfoModal = ref(false);
-// let showFinalMessageModal = ref(false)
-defineProps({
 
-    recipientFirstName: String,
-    recipientLastName: String,
-    recipientEmail: String,
-    checkInByTime: String,
-    switchName: String,
+import { showSwitchInfoModal, showFinalMessageModal, currentlyViewedSwitch } from '../../javascript/stateManager';
+import { secondsBeforeSwitchExpires } from '../../javascript/switchManager';
+defineProps({
     createdAt: String,
     checkInIntervalInHours: Number,
     checkInByTime: String,

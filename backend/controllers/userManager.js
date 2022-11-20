@@ -222,7 +222,7 @@ exports.getUserDataWithUserId = async(req, res) => {
         firstName: userData[1].first_name,
         lastName: userData[1].last_name,
         email: userData[1].email,
-        creationDate: userData[1].creation_date
+        creationDate: userData[1].account_created_at
     } 
     });
 };
