@@ -1,3 +1,7 @@
+config = require('dotenv').config();
+let CryptoJS = require("crypto-js");
+
+
 // ***********************************************************************************
 // Function returns a random string of numbers (for signup email verification)
 // ***********************************************************************************
@@ -24,4 +28,12 @@ exports.decodeUri = (encoded) => {
 // ***********************************************************************************
 exports.encodeUri = (decoded) => {
 	return encodeURIComponent(decoded).replace(/'/g,"%27").replace(/"/g,"%22");	
+};
+
+function encryptString (stringToEncrypt) {
+    return CryptoJS.AES.encrypt(stringToEncrypt, process.env.CRYPTO_JS_KEY).toString();
+};
+
+exports.decryptString = async (encryptedStringToDecrypt) => {
+    CryptoJS.AES.decrypt(encryptedStringToDecrypt, process.env.CRYPTO_JS_KEY);
 };
