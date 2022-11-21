@@ -30,7 +30,7 @@ exports.encodeUri = (decoded) => {
 	return encodeURIComponent(decoded).replace(/'/g,"%27").replace(/"/g,"%22");	
 };
 
-function encryptString (stringToEncrypt) {
+exports.encryptString = (stringToEncrypt) => {
     return CryptoJS.AES.encrypt(stringToEncrypt, process.env.CRYPTO_JS_KEY).toString();
 };
 
