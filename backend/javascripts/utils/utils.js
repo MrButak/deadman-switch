@@ -34,6 +34,7 @@ exports.encryptString = (stringToEncrypt) => {
     return CryptoJS.AES.encrypt(stringToEncrypt, process.env.CRYPTO_JS_KEY).toString();
 };
 
-exports.decryptString = async (encryptedStringToDecrypt) => {
-    return CryptoJS.AES.decrypt(encryptedStringToDecrypt, process.env.CRYPTO_JS_KEY).toString();
+exports.decryptString = (encryptedStringToDecrypt) => {
+    let bytes = CryptoJS.AES.decrypt(encryptedStringToDecrypt, process.env.CRYPTO_JS_KEY);
+    return bytes.toString(CryptoJS.enc.Utf8);
 };
