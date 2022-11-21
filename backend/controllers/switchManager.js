@@ -92,11 +92,11 @@ exports.createNewSwitch = async (req, res) => {
     // ****** From this point switch is good to put into db *******
 
     // Encrypt
-    newSwitchData.recipientFirstName = await encryptString(newSwitchData.recipientFirstName);
-    newSwitchData.recipientLastName = await encryptString(newSwitchData.recipientLastName);
-    newSwitchData.recipientEmail = await encryptString(newSwitchData.recipientEmail);
-    newSwitchData.finalMessage = await encryptString(newSwitchData.finalMessage);
-    newSwitchData.switchName = await encryptString(newSwitchData.switchName);
+    newSwitchData.recipientFirstName = encryptString(newSwitchData.recipientFirstName);
+    newSwitchData.recipientLastName = encryptString(newSwitchData.recipientLastName);
+    newSwitchData.recipientEmail = encryptString(newSwitchData.recipientEmail);
+    newSwitchData.finalMessage = encryptString(newSwitchData.finalMessage);
+    newSwitchData.switchName = encryptString(newSwitchData.switchName);
 
     let switchData = await insertNewDeadmanSwitch(userId, newSwitchData);
     if(!switchData[0]) {
