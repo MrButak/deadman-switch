@@ -41,12 +41,15 @@ exports.getDeadmanSwitchesWithUserId = async(req, res) => {
     // recipient_last_name: 'Buggs',
     // final_message: "Hi ma, I won't be making it home for supper tonight. You know what to do.",     
     // triggered: false
-    switchesQuery[1].forEach((dmSwitch) => {
-        dmSwitch.recipient_first_name = decryptString(dmSwitch.recipient_first_name);
-        dmSwitch.recipient_last_name = decryptString(dmSwitch.recipient_last_name);
-        dmSwitch.recipient_email = decryptString(dmSwitch.recipient_email);
-        dmSwitch.final_message = decryptString(dmSwitch.final_message);
-    });
+    if(switchesQuery[1].length) {
+        switchesQuery[1].forEach((dmSwitch) => {
+            dmSwitch.recipient_first_name = decryptString(dmSwitch.recipient_first_name);
+            dmSwitch.recipient_last_name = decryptString(dmSwitch.recipient_last_name);
+            dmSwitch.recipient_email = decryptString(dmSwitch.recipient_email);
+            dmSwitch.final_message = decryptString(dmSwitch.final_message);
+        });
+    };
+    
 
     // Even if no switches, return an empty array
     return res.status(200).json({status: '200', switches: switchesQuery[1]});
