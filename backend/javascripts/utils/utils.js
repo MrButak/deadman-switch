@@ -30,11 +30,14 @@ exports.encodeUri = (decoded) => {
 	return encodeURIComponent(decoded).replace(/'/g,"%27").replace(/"/g,"%22");	
 };
 
-exports.encryptString = (stringToEncrypt) => {
+let encryptString = (stringToEncrypt) => {
     return CryptoJS.AES.encrypt(stringToEncrypt, process.env.CRYPTO_JS_KEY).toString();
 };
 
-exports.decryptString = (encryptedStringToDecrypt) => {
+let decryptString = (encryptedStringToDecrypt) => {
     let bytes = CryptoJS.AES.decrypt(encryptedStringToDecrypt, process.env.CRYPTO_JS_KEY);
     return bytes.toString(CryptoJS.enc.Utf8);
 };
+
+let stringToEncrypt = 'testing';
+console.log(encryptString(stringToEncrypt));

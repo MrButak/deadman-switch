@@ -99,15 +99,15 @@
 
 import { showSwitchInfoModal, showFinalMessageModal, currentlyViewedSwitch } from '../../javascript/stateManager';
 import { secondsBeforeSwitchExpires } from '../../javascript/switchManager';
-defineProps({
-    createdAt: String,
-    checkInIntervalInHours: Number,
-    checkInByTime: String,
-    lastCheckedInAt: String,
-    finalMessage: String,
-    activeTextColor: String,
-    isActive: Boolean
-});
+// defineProps({
+//     createdAt: String,
+//     checkInIntervalInHours: Number,
+//     checkInByTime: String,
+//     lastCheckedInAt: String,
+//     finalMessage: String,
+//     activeTextColor: String,
+//     isActive: Boolean
+// });
 
 </script>
 
