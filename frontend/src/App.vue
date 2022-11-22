@@ -42,7 +42,7 @@ import Signup from './views/Signup.vue';
 import Home from './views/Home.vue';
 import UserAccount from './views/UserAccount.vue';
 
-// On app mount check if the user is logged in and determine which Components to show or not
+// On app mount check if the user is logged in and determine what Components to show or not
 onMounted(() => {
 
     (async() => {
@@ -60,7 +60,6 @@ onMounted(() => {
                     deadmanSwitches.push(dmSwitch);
                 });
             };
-            console.log(deadmanSwitches);
         };
     })();
 });

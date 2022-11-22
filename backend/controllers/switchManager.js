@@ -29,27 +29,14 @@ exports.getDeadmanSwitchesWithUserId = async(req, res) => {
     };
 
     // Decrypt
-    // id: 3,
-    // user_id: 1,
-    // switch_name: 'switch name',
-    // created_at: 2022-11-20T14:43:41.375Z,
-    // check_in_interval_in_hours: 24,
-    // check_in_by_time: 2022-11-22T14:47:40.769Z,
-    // last_checked_in_at: 2022-11-20T14:50:16.873Z,
-    // recipient_email: 'ssdsd@dsfsd.com',
-    // recipient_first_name: 'dfgfd',
-    // recipient_last_name: 'Buggs',
-    // final_message: "Hi ma, I won't be making it home for supper tonight. You know what to do.",     
-    // triggered: false
     if(switchesQuery[1].length) {
         switchesQuery[1].forEach((dmSwitch) => {
             dmSwitch.recipient_first_name = decryptString(dmSwitch.recipient_first_name);
             dmSwitch.recipient_last_name = decryptString(dmSwitch.recipient_last_name);
             dmSwitch.recipient_email = decryptString(dmSwitch.recipient_email);
             dmSwitch.final_message = decryptString(dmSwitch.final_message);
+            dmSwitch.switch_name = decryptString(dmSwitch.switch_name);
         });
-        console.log(switchesQuery[1])
-        console.log('*********** Should be decrypted!!! **************')
     };
     
 
@@ -107,7 +94,6 @@ exports.createNewSwitch = async (req, res) => {
     if(!switchData[0]) {
         return res.status(500).json({status: '500', message: 'An unknown database error occurred'}); 
     };
-    // console.log({switchData})
     return res.status(200).json({status: '200', message: 'Switch successfully created', switch: switchData[1]});
 };
 
