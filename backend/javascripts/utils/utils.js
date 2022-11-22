@@ -31,10 +31,10 @@ exports.encodeUri = (decoded) => {
 };
 
 exports.encryptString = (stringToEncrypt) => {
-    return CryptoJS.AES.encrypt(stringToEncrypt, process.env.CRYPTO_JS_KEY).toString();
+    return CryptoJS.AES.encrypt(stringToEncrypt, CRYPTO_JS_KEY).toString();
 };
 
 exports.decryptString = (encryptedStringToDecrypt) => {
-    let bytes = CryptoJS.AES.decrypt(encryptedStringToDecrypt, process.env.CRYPTO_JS_KEY);
+    let bytes = CryptoJS.AES.decrypt(encryptedStringToDecrypt, CRYPTO_JS_KEY);
     return bytes.toString(CryptoJS.enc.Utf8);
 };

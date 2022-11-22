@@ -48,6 +48,8 @@ exports.getDeadmanSwitchesWithUserId = async(req, res) => {
             dmSwitch.recipient_email = decryptString(dmSwitch.recipient_email);
             dmSwitch.final_message = decryptString(dmSwitch.final_message);
         });
+        console.log(switchesQuery[1])
+        console.log('*********** Should be decrypted!!! **************')
     };
     
 
