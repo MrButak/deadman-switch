@@ -79,6 +79,8 @@ async function handleFetchUserData(userId) {
             userAccountData.lastName = response.userAccountData.lastName;
             userAccountData.email = response.userAccountData.email;
             userAccountData.creationDate = response.userAccountData.creationDate;
+            console.log(userAccountData.creationDate)
+            console.log('*******')
             break;
         case '400':
             break;

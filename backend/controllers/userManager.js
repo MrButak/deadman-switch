@@ -218,11 +218,12 @@ exports.getUserDataWithUserId = async(req, res) => {
         return res.status(500).json({status: '500', message: 'An unknown database error occurred'});
     };
     
-    return res.status(200).json({status: '200', userAccountData: {
-        firstName: userData[1].first_name,
-        lastName: userData[1].last_name,
-        email: userData[1].email,
-        creationDate: userData[1].account_created_at
-    } 
+    return res.status(200).json({status: '200', 
+        userAccountData: {
+            firstName: userData[1].first_name,
+            lastName: userData[1].last_name,
+            email: userData[1].email,
+            creationDate: userData[1].account_created_at
+        } 
     });
 };
