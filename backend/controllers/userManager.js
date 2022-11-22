@@ -144,7 +144,7 @@ exports.verifyUserEmail = async (req, res) => {
 };
 
 // ***********************************************************************************
-// Function will attempt to get the http only cookie from the browser
+// Function will attempt to get the http only cookie from the browser, see if it's valid and send the user id to the frontend
 // ***********************************************************************************
 exports.getHttpCookie = async (req, res) => {
 
@@ -187,7 +187,7 @@ exports.getHttpCookie = async (req, res) => {
     // Function will create a new cookie and set it - only if it expires within 2 days
 	refreshToken(res, decodedJwt);
 
-    // console.log(decodedJwt)
+    
     // // Get all user data from DB using their DB id from the JWT
 	// let appUserData = await dbManager.getUserFromDbId(decodedJwt.userDbId);
 

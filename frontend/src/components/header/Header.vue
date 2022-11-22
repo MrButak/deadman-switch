@@ -34,7 +34,7 @@
                 color="#fff" 
                 preset="plain" />
             <va-button 
-                @click="showUserAccount = true, showCreateDeadmanSwitch = false, testy()"
+                @click="showUserAccount = true, showCreateDeadmanSwitch = false"
                 icon="account_circle" 
                 color="#fff" 
                 preset="plain" />
@@ -64,11 +64,8 @@ import { userLoggedIn, hasRegistered,
 showUserAccount
 } from '../../javascript/stateManager';
 import { handleLoginView, handleSignupView } from '../../javascript/viewManager';
-function testy() {
-console.log('firing')
-console.log(showUserAccount.value)
-}
 
+// Vuestic Component library color theme and header switch
 const { presets, applyPreset } = useColors()
 let theme = ref(localStorage.getItem('vuestic-docs-theme')?.toLowerCase() || 'dark');
 let themeOptions = Object.keys(presets.value).map((themeName) => ({
