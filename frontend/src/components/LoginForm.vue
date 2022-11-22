@@ -38,7 +38,9 @@
             </span>
         </p>
     </va-form>
-
+<p>testing login</p>
+<p>email: test@test.com</p>
+<p>password: password</p>
 </template>
     
     
