@@ -4,6 +4,7 @@ const { hashString, compareString } = require('../javascripts/utils/hashing');
 const { randomString, decodeUri } = require('../javascripts/utils/utils');
 const { sendVerificationEmail } = require('../javascripts/emailManager');
 const { createJwtTokenWithDbId, verifyToken, refreshToken } = require('../javascripts/jwtManager');
+const { encryptString, decryptString } = require('../javascripts/utils/utils');
 const cookieParser = require('cookie-parser');
 
 // ***********************************************************************************
@@ -35,6 +36,7 @@ exports.signupEmail = async (req, res) => {
 
     // Insert user into DB
     let userData = await insertNewUser(
+        // TODO: consider encrypting this
         firstName, 
         lastName, 
         email, 

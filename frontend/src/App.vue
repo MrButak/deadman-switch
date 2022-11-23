@@ -64,6 +64,7 @@ onMounted(() => {
     })();
 });
 
+// Function will check users cookie to see if they are logged in and show/hide Components based on that data
 async function checkIfUserIsLoggedIn() {
 
     let userId = await checkForValidCookieAndGetUserId();
