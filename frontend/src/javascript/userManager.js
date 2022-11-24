@@ -3,13 +3,16 @@
 // ***********************************************************************************
 async function checkForValidCookieAndGetUserId() {
 
+    let creds = () => { 
+        return import.meta.env.VITE_APP_ENVIRONMENT == 'development' ? 'omit' : 'include'
+    };
     // PRODUCTION
     if(import.meta.env.VITE_APP_ENVIRONMENT == 'production') {
         
         let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/verify`, {
             method: 'GET',
             mode: 'cors',
-            credentials: 'include' // production only
+            credentials: creds()
         });
     
         let response = await request.json();

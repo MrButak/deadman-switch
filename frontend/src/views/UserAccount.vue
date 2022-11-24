@@ -64,9 +64,13 @@ onMounted(() => {
 
 async function handleFetchUserData(userId) {
 
+    let creds = () => { 
+        return import.meta.env.VITE_APP_ENVIRONMENT == 'development' ? 'omit' : 'include'
+    };
+
     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/user/account/${userId}`, {
 
-        credentials: 'include', // production only
+        credentials: creds(),
         method: 'GET',
         mode: 'cors'
     });

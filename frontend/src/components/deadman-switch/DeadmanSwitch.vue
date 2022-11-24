@@ -2,16 +2,18 @@
 
 <div class="card-wrapper">
     <div class="flex md6 lg4">
+        
         <va-card 
             stripe 
-            :stripe-color="switchColor">
+            :stripe-color="determineSwitchColorTheme">
         
         <div class="title-and-info-button-wrapper">
             <va-card-title class="switch-name">
                 {{ switchName }}
                 <span>
+                    
                     <va-icon
-                        @click="$emit('handleShowSwitchInfoModal')"
+                        @click="handleShowSwitchInfoModal(dmSwitch)"    
                         class="mr-2"
                         name="info"
                         size="medium"
@@ -19,37 +21,36 @@
                 </span>
             </va-card-title>
         </div>
-        <span v-if="showSwitchExpiredMessage" class="expired-message-wrapper">
+
+        <span v-if="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time) <= 0" class="expired-message-wrapper">
             <p class="va-text-danger">
                 Your switch has expired.
             </p>
         </span>
         
         <va-card-content>
-            <p>{{ checkInByInfoText }}</p>
             <div class="check-in-button-wrapper">
-                
                 <va-button
-                    @click="$emit('handleCheckIn')"
+                    @click="handleCheckIn(dmSwitch.id, dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours)"    
                     border-color="primary"
                     class="mr-4 mb-2 check-in-button"
-                    :color="switchColor"
+                    :color="determineSwitchColorTheme"
                     >
                     <h6>{{ switchButtonText }}</h6>
                         <span>
+                            
                             <va-icon
                                 class="mr-2"
-                                :name="switchButtonIcon"
+                                :name="switchButtonIcon"    
                                 size="3rem"
                             />
                         </span>
                 </va-button>
                 <p>Last checked in</p>
-                <p>{{ lastCheckedIn }}</p>
+                <p>{{ lastCheckedInTimeDate }}</p>
             </div>
-            
             <CountdownTimer 
-                :seconds-before-switch-flipped-prop="secondsBeforeNewSwitchFlippedProp"
+                :seconds-before-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time)"
                 timer-sub-text="Before you must checkin"
             />
         </va-card-content>
@@ -58,23 +59,130 @@
     </div>
 </div>
 
+<DeadmanSwitchInfoModal />
+
 </template>
 
 
 
 <script setup>
 
+import { computed } from 'vue';
+import DeadmanSwitchInfoModal from './DeadmanSwitchInfoModal.vue';
 import CountdownTimer from '../shared/CountdownTimer.vue';
+import { deadmanSwitches, currentlyViewedSwitch, showSwitchInfoModal } from '../../javascript/stateManager';
+import { secondsBeforeSwitchExpires } from '../../javascript/switchManager';
+import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';
 
-defineProps({
-    secondsBeforeNewSwitchFlippedProp: Number,
-    switchName: String,
-    switchColor: String,
-    switchButtonText: String,
-    lastCheckedIn: String,
-    checkInByInfoText: String,
-    switchButtonIcon: String,
-    showSwitchExpiredMessage: Boolean
+// Assign the props to a variable so I will have access to it here in <script>
+const props = defineProps({
+    dmSwitch: Object
+});
+
+// ********************************************************************
+// Function is called when a user clicks the check in button
+// ********************************************************************
+async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHours) {
+
+    if(!isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours)) { return };
+
+    // Make sure user is logged in and get user id
+    let userId = await checkForValidCookieAndGetUserId();
+    if(!userId[0]) { return }; // not logged in
+    if(!userId[1]) { return }; // logged in, but issue with user id
+
+    // Extend the switch checkInByTime by the check in interval    
+    let newCheckInTime = new Date(new Date(checkInByTimestamp).setHours(new Date(checkInByTimestamp).getHours() + (checkInIntervalInHours)));
+
+    // Write the switches new checkInByTime to the DB
+    let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/switch/checkin`, {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: JSON.stringify({
+            'deadmanSwitchId': switchId,
+            'appUserId': userId[1],
+            'newCheckInByTime': newCheckInTime
+        })
+    });
+
+    // Parse response
+    let response = await request.json();
+        switch(response.status) {
+            case '200':
+                // Replace the old switch with the newly updated check_in_by_time switch
+                deadmanSwitches[deadmanSwitches.findIndex(dmSwitch => dmSwitch.id == response.switch.id)] = response.switch;
+                break;
+            case '500':
+                break;
+            default:  
+        };
+};
+
+// ********************************************************************
+// Function will determine if a user can reset their switch.
+// ********************************************************************
+function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
+    // checkInByTime - now < interval ?
+    let secondsFromEpochToCheckInByTime = new Date(checkInByTimestamp).getTime() / 1000;
+    let secondsFromEpochToNow = new Date(Date.now()).getTime() / 1000;
+    let isButtonOpen = (secondsFromEpochToCheckInByTime - secondsFromEpochToNow) < (checkInIntervalInHours * 60 * 60);
+    return secondsBeforeSwitchExpires(checkInByTimestamp) <= 0 ?
+        false :
+        isButtonOpen;
+};
+
+// ********************************************************************
+// Function will show a pop up modal displaying all switch details and assign Component State
+// ********************************************************************
+function handleShowSwitchInfoModal(dmSwitch) {
+    // Assign the currently viewed switch to the Component State
+    Object.assign(currentlyViewedSwitch, dmSwitch);
+    // Show pop up modal
+    showSwitchInfoModal.value = !showSwitchInfoModal.value;
+};
+
+// ********************************************************************
+// Switch UI computed properties
+// ********************************************************************
+let switchButtonIcon = computed(() => {
+    return !isButtonLatchOpen(props.dmSwitch.check_in_by_time, props.dmSwitch.check_in_interval_in_hours) && secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_time) > 0 ?
+        'done' : // check mark
+        '';
+});
+
+let switchButtonText = computed(() => {
+
+    if(secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_time) <= 0) {
+        return 'Dead'
+    }
+    else if(isButtonLatchOpen(props.dmSwitch.check_in_by_time, props.dmSwitch.check_in_interval_in_hours) && secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_time) > 0) {
+        return 'Check In';
+    };
+});
+
+let determineSwitchColorTheme = computed(() => {
+    let timeLeftInSeconds = secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_time)
+    if(timeLeftInSeconds < 3600) { // 1 hour
+        return 'danger'; // red
+    }
+    else if(timeLeftInSeconds < 7200) {
+        return 'warning'; // yellow
+    }
+    else if(!isButtonLatchOpen(props.dmSwitch.check_in_by_time, props.dmSwitch.check_in_interval_in_hours) && timeLeftInSeconds > 0) {
+        return 'success'; // green
+    };
+    return 'info'; // blue
+});
+
+let lastCheckedInTimeDate = computed(() => {
+    return new Date(props.dmSwitch.last_checked_in_at).toLocaleString()
+});
+
+let switchName = computed(() => {
+    return props.dmSwitch.switch_name;
 });
 
 </script>
@@ -120,4 +228,5 @@ defineProps({
         width: 80%
     }
 }
+
 </style>
