@@ -12,8 +12,7 @@ export const useLoginSignupStore = defineStore('loginSignupStore', {
         showLogin: false,
         showSignup: false,
         hasRegistered: false,
-        loginFailedEmailNotVerified: false,
-        userLoggedIn: false
+        loginFailedEmailNotVerified: false
     }),
     getters: {
 
@@ -97,17 +96,33 @@ export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
 });
 
 export const useViewStore = defineStore('viewStore', {
+    
     state: () => ({
-        showUserAccount: false,
-        showLogin: false,
-        showSignup: false,
-        showCreateDeadmanSwitchCreationView: false,
+       
     }),
     actions: {
         
     },
     getters: {
-
+        showUserAccount() {
+            const createSwitchStore = useCreateSwitchStore();
+            const createLoginSignupStore = useLoginSignupStore();
+            return createLoginSignupStore.userLoggedIn && !createSwitchStore.showCreateDeadmanSwitchCreationView;
+        },
+        showLogin() {
+            const createLoginSignupStore = useLoginSignupStore();
+            return !createLoginSignupStore.userLoggedIn && !createLoginSignupStore.showSignup;
+        },
+        showSignup() {
+            const createLoginSignupStore = useLoginSignupStore();
+            return !createLoginSignupStore.userLoggedIn && !createLoginSignupStore.showLogin && !!createLoginSignupStore.hasRegistered;
+        },
+        showHome() {
+            // user must be logged in
+            // user must not be @ /user-account
+            const createLoginSignupStore = useLoginSignupStore();
+            return createLoginSignupStore.userLoggedIn && !this.showUserAccount;
+        }
     }
 });
 

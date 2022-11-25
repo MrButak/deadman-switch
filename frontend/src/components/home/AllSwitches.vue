@@ -19,7 +19,8 @@
 
 <script setup>
 
-// import { deadmanSwitches } from '../../javascript/stateManager';
+// Component responsibility:
+// 1. Display all
 import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
 import {useDeadmanSwitchStore} from '../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();

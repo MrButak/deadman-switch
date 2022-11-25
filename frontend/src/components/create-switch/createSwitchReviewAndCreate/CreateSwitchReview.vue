@@ -47,6 +47,7 @@
     title="Final message"
     :message="finalMessage"
     fixed-layout
+    blur
 />
 
 </template>

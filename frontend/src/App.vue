@@ -2,7 +2,24 @@
 
 <Header />
 
-<span v-if="userLoggedIn">
+<span v-if="viewStore.showUserAccount">
+    <UserAccount />
+</span>
+
+<span v-if="viewStore.showHome">
+    <Home />
+</span>
+
+<span v-if="viewStore.showLogin">
+    <Login />
+</span>
+
+<span v-if="viewStore.showSignup">
+    <Signup />
+</span>
+
+
+<!-- <span v-if="userLoggedIn">
 
     <span v-if="showUserAccount">
         <UserAccount />
@@ -21,7 +38,7 @@
     <span v-else-if="!hasRegistered && showSignup">
         <Signup />
     </span>
-</span>
+</span> -->
 
 
 </template>
@@ -45,10 +62,12 @@ import UserAccount from './views/UserAccount.vue';
 
 // Pinia stores
 import { storeToRefs } from 'pinia';
-import { useDeadmanSwitchStore, useLoginSignupStore } from './javascript/stateManager';
+import { useDeadmanSwitchStore, useLoginSignupStore, useViewStore } from './javascript/stateManager';
 
 const deadmanSwitchStore = useDeadmanSwitchStore();
 const loginSignupStore = useLoginSignupStore();
+const viewStore = useViewStore();
+
 const { deadmanSwitches } = deadmanSwitchStore;
 const { userLoggedIn, showLogin, showSignup, showUserAccount, hasRegistered } = storeToRefs(loginSignupStore);
 

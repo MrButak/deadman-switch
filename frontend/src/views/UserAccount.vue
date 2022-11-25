@@ -26,8 +26,8 @@
         </va-card-actions>
 
         <va-card-actions align="between">
-          <p style="padding: 0 2rem 0 0">Account created at</p>
-          <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(userAccountData.creationDate).toLocaleString() }}</p>
+          <p style="padding: 0 3rem 0 0">Account created at</p>
+          <p style="padding: 0 0 0 3rem" class="va-text-success">{{ new Date(userAccountData.creationDate).toLocaleString() }}</p>
         </va-card-actions>
         
     </va-card>
@@ -103,7 +103,8 @@ async function handleFetchUserData(userId) {
 <style lang="scss" scoped>
 
 .user-account-wrapper {
-    justify-content: center
+    justify-content: center;
+    padding: 0 1rem;
 };
 
 </style>
