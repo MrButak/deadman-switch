@@ -12,7 +12,13 @@
 
 <script setup>
 
-import { newSwitchData } from '../../../javascript/stateManager';
+// import { newSwitchData } from '../../../javascript/stateManager';
+
+// Pinia store
+import { storeToRefs } from 'pinia';
+import { useCreateSwitchStore } from '../../../javascript/stateManager';
+const createSwitchStore = useCreateSwitchStore();
+const { newSwitchData } = storeToRefs(createSwitchStore);
 
 </script>
 

@@ -48,12 +48,20 @@
 <script setup>
 
 import { ref, reactive } from 'vue';
-import { handleSignupView } from '../javascript/viewManager'
-import { hasRegistered, userLoggedIn,
-    showLogin, showSignup,
-    loginFailedEmailNotVerified,
+// import { handleSignupView } from '../javascript/viewManager'
+import { 
+    // hasRegistered, userLoggedIn,
+    // showLogin, showSignup,
+    // loginFailedEmailNotVerified,
     regexPassword, regexEmail,
 } from '../javascript/stateManager';
+
+// Pinia store
+import { storeToRefs } from 'pinia';
+import { useLoginSignupStore } from '../javascript/stateManager';
+const loginSignupStore = useLoginSignupStore();
+const { hasRegistered, userLoggedIn, showLogin, showSignup, handleSignupView } = loginSignupStore;
+
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);

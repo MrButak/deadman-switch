@@ -17,8 +17,13 @@
 <script setup>
 
 import { computed } from 'vue';
-import { newSwitchData } from '../../../javascript/stateManager';
+// import { newSwitchData } from '../../../javascript/stateManager';
 
+// Pinia store
+import { storeToRefs } from 'pinia';
+import { useCreateSwitchStore } from '../../../javascript/stateManager';
+const createSwitchStore = useCreateSwitchStore();
+const { newSwitchData } = createSwitchStore;
 
 let doubleDigitHours = computed(() => {
     return newSwitchData.checkInByTime.getHours() < 10 ?

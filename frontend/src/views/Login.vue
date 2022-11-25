@@ -15,9 +15,15 @@
 
 <script setup>
 
-import { hasRegistered } from '../javascript/stateManager';
+// import { hasRegistered } from '../javascript/stateManager';
 import LoginForm from '../components/LoginForm.vue';
 import RegisterSuccessMessages from '../components/RegisterSuccessMessages.vue';
+
+// Pinia store
+import { storeToRefs } from 'pinia';
+import { useLoginSignupStore } from '../javascript/stateManager';
+const loginSignupStore = useLoginSignupStore();
+const {  hasRegistered } = loginSignupStore;
 
 </script>
 

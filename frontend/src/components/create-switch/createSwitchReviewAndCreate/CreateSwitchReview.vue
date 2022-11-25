@@ -56,7 +56,13 @@
 <script setup>
 
 import { ref, computed, onMounted } from 'vue';
-import { newSwitchData } from '../../../javascript/stateManager';
+// import { newSwitchData } from '../../../javascript/stateManager';
+
+// Pinia stores
+import { storeToRefs } from 'pinia'
+import { useCreateSwitchStore } from '../../../javascript/stateManager';
+let createSwitchStore = useCreateSwitchStore();
+const { newSwitchData } = createSwitchStore;
 
 // Set the acknowledge checkbox to false
 onMounted(() => {

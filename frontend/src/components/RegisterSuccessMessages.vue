@@ -18,7 +18,12 @@
 
 <script setup>
 
-import { loginFailedEmailNotVerified } from '../javascript/stateManager';
+// import { loginFailedEmailNotVerified } from '../javascript/stateManager';
+// Pinia store
+import { storeToRefs } from 'pinia';
+import { useLoginSignupStore } from '../javascript/stateManager';
+const loginSignupStore = useLoginSignupStore();
+const { loginFailedEmailNotVerified } = loginSignupStore;
 
 </script>
 

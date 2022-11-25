@@ -22,7 +22,14 @@
 
 <script setup>
 
-import { newSwitchData } from '../../../javascript/stateManager';
+import { onMounted } from 'vue';
+// import { newSwitchData } from '../../../javascript/stateManager';
+
+// Pinia stores
+import { storeToRefs } from 'pinia'
+import { useCreateSwitchStore } from '../../../javascript/stateManager';
+let createSwitchStore = useCreateSwitchStore();
+const { newSwitchData } = storeToRefs(createSwitchStore);
 
 </script>
 

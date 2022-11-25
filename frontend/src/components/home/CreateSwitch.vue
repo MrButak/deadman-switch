@@ -31,8 +31,15 @@ import CreateSwitchView from '../create-switch/createSwitchReviewAndCreate/Creat
 // Pinia stores
 import { storeToRefs } from 'pinia'
 import { useCreateSwitchStore } from '../../javascript/stateManager';
+import { onMounted } from 'vue';
 let createSwitchStore = useCreateSwitchStore();
-const { creatSwitchCurrentView } = createSwitchStore;
+const { creatSwitchCurrentView } = storeToRefs(createSwitchStore);
+
+
+// Default view
+onMounted(() => {
+    creatSwitchCurrentView.value = 'Settings'
+});
 
 </script>
 

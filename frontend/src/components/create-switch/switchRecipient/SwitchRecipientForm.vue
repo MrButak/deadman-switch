@@ -32,7 +32,13 @@
 
 <script setup>
 
-import { newSwitchData } from '../../../javascript/stateManager';
+// import { newSwitchData } from '../../../javascript/stateManager';
+
+// Pinia stores
+import { storeToRefs } from 'pinia'
+import { useCreateSwitchStore } from '../../../javascript/stateManager';
+let createSwitchStore = useCreateSwitchStore();
+const { newSwitchData } = createSwitchStore;
 
 let regexName = /^([A-Za-z]){1,18}$/;
 let regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;

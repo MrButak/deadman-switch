@@ -1,34 +1,48 @@
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
 const regexName = /^([A-Za-z]){1,18}$/;
 const regexPassword = /^([A-Za-z0-9\-\_\!\@\#\$\%\^\&\*\+\=]){6,18}$/;
 const regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
-// ******************************************************************
-// Login, Signup, Logged in  Views
-// ******************************************************************
-export const useLoginSignupStore = defineStore('counter', {
+export const useLoginSignupStore = defineStore('loginSignupStore', {
     state: () => ({
+        showUserAccount: false,
         userLoggedIn: false,
         showLogin: false,
         showSignup: false,
         hasRegistered: false,
-        loginFailedEmailNotVerified: false
+        loginFailedEmailNotVerified: false,
+        userLoggedIn: false
     }),
+    getters: {
+
+    },
+    actions: {
+        handleLoginView() {
+            // Shouldn't be showing if logged in OR the login view is already showing
+            if(this.userLoggedIn || this.showLogin) { return };
+             // Change views
+            this.showLogin = true;
+            this.showSignup = false;
+        },
+        handleSignupView() {
+            // If already successfully registered, don't show Signup.vue Component
+            if(this.hasRegistered) { return }
+
+            // Shouldn't be showing if logged in OR the signup view is already showing
+            if(this.userLoggedIn || this.showSignup) { return };
+            // Change views
+            this.showSignup = true;
+            this.showLogin = false;
+        },
+        testImport() {
+            const createSwitchStore = useCreateSwitchStore();
+            console.log(createSwitchStore)
+        }
+        
+    }
 })
-
-let userLoggedIn = ref(false);
-
-// Login / Signup modals
-let showLogin = ref(false);
-let showSignup = ref(false);
-let hasRegistered = ref(false); // Determines if 'sign up success' and 'please verify your email' alerts are shown, and the 'register' modal is disabled
-let loginFailedEmailNotVerified = ref(false); // Edge case. If a user registered, then in the same session logs into their account before verifying their email. This just shows another message to the user.
-
-// ******************************************************************
-// Create switch
-// ******************************************************************
 
 export const useCreateSwitchStore = defineStore('createSwitchStore', {
     state: () => ({
@@ -54,44 +68,12 @@ export const useCreateSwitchStore = defineStore('createSwitchStore', {
         createSwitchReviewErrorMessages: []
         
     }),
+    actions: {
+
+    }
 });
-
-let showCreateDeadmanSwitchCreationView = ref(false);
-
-// Navigation header (HTML tabs)
-let createSwitchNavigationViews = reactive(
-    [
-        {'text': 'Settings', 'icon': 'settings'}, 
-        {'text': 'Recipient', 'icon': 'face'},
-        {'text': 'Review', 'icon': 'content_paste_search'}
-    ]);
-let creatSwitchCurrentView = ref('Settings'); // Default
-
-let newSwitchData = reactive({
-    recipientFirstName: '',
-    recipientLastName: '',
-    recipientEmail: '',
-    checkInIntervalInDays: 1,
-    checkInByTime: new Date(),
-    finalMessage: '',
-    firstCheckedInAt: null,
-    switchName: 'switch name',
-    // new switch form validation helpers
-    acknowledgeTimeUntilFirstCheckIn: false
-});
-
-let createSwitchReviewErrorMessages = reactive([]);
-
 
 let secondsBeforeNewSwitchFlipped = ref(0); // Not in store yet
-
-// ******************************************************************
-// User account
-// ******************************************************************
-let showUserAccount = ref(false);
-
-
-
 
 export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
     state: () => ({
@@ -111,6 +93,21 @@ export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
             this.deadmanSwitches[switchIndex].check_in_by_time = newCheckInByTime;
             this.deadmanSwitches[switchIndex].last_checked_in_at = newLastCheckedInAt;
         }
+    }
+});
+
+export const useViewStore = defineStore('viewStore', {
+    state: () => ({
+        showUserAccount: false,
+        showLogin: false,
+        showSignup: false,
+        showCreateDeadmanSwitchCreationView: false,
+    }),
+    actions: {
+        
+    },
+    getters: {
+
     }
 });
 
@@ -148,30 +145,9 @@ let formErrorMessages = {
     }
 };
 
-// let deadmanSwitches = reactive([]);
-
-// When a user clicks on the 'info' icon on the deadman switch
-// Switch info modal
-// let showSwitchInfoModal = ref(false); // prop
-// let showFinalMessageModal = ref(false); // prop
-// let currentlyViewedSwitch = reactive({}); // This data will populate the switch info modal
-
-
 export {
     regexName, regexPassword, regexEmail,
-    userLoggedIn, // view (home page)
-    showLogin, showSignup, // view
-    hasRegistered, loginFailedEmailNotVerified, // view
-    // deadmanSwitches, // data
-    showCreateDeadmanSwitchCreationView, // view
-    // Create switch
-    creatSwitchCurrentView,
-    createSwitchNavigationViews, 
-    newSwitchData, createSwitchReviewErrorMessages,
     secondsBeforeNewSwitchFlipped,
-    formErrorMessages, // global data
-    // user account
-    showUserAccount,
-    // Switch info modal
-    // showFinalMessageModal, showSwitchInfoModal, currentlyViewedSwitch
+    formErrorMessages,
+
 }

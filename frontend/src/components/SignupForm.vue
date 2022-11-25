@@ -69,10 +69,17 @@
 <script setup>
 
 import { ref, reactive, computed } from 'vue';
-import { hasRegistered, showLogin, showSignup,
+import { 
+        // hasRegistered, showLogin, showSignup,
         regexName, regexPassword, regexEmail
 } from '../javascript/stateManager';
-import { handleLoginView } from '../javascript/viewManager';
+// import { handleLoginView } from '../javascript/viewManager';
+
+// Pinia store
+import { storeToRefs } from 'pinia';
+import { useLoginSignupStore } from '../javascript/stateManager';
+const loginSignupStore = useLoginSignupStore();
+const { hasRegistered, showLogin, showSignup, handleLoginView } = loginSignupStore;
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);

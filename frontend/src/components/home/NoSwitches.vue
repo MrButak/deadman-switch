@@ -19,8 +19,13 @@
 
 <script setup>
 
+// import { showCreateDeadmanSwitchCreationView } from '../../javascript/stateManager';
 
-import { showCreateDeadmanSwitchCreationView } from '../../javascript/stateManager';
+// Pinia store
+import { storeToRefs } from 'pinia';
+import { useCreateSwitchStore } from '../../javascript/stateManager';
+const createSwitchStore = useCreateSwitchStore();
+const { showCreateDeadmanSwitchCreationView } = storeToRefs(createSwitchStore);
 
 </script>
 

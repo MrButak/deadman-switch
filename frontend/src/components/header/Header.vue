@@ -2,7 +2,7 @@
 
 <div style="position: relative; padding: 0 0 1rem 0;">
     <va-app-bar>
-        <va-button @click="showCreateDeadmanSwitchCreationView = false, showUserAccount = false" 
+        <va-button @click="createSwitchStore.showCreateDeadmanSwitchCreationView = false, loginSignupStore.showUserAccount = false" 
             icon="home" 
             color="#fff" 
             preset="plain" />
@@ -16,25 +16,25 @@
         <!-- Light/dark theme -->
         <va-button-toggle v-model="theme" :options="themeOptions" class="ml-2" />
 
-        <span v-if="!userLoggedIn && !hasRegistered" style="padding-right: 10px;" >
-            <va-button @click="handleSignupView" color="#fff" preset="plain">
+        <span v-if="!loginSignupStore.userLoggedIn && !loginSignupStore.hasRegistered" style="padding-right: 10px;" >
+            <va-button @click="loginSignupStore.handleSignupView" color="#fff" preset="plain">
                 Register
             </va-button>
             <span style="color:#fff; padding:0 5px">/</span>
-            <va-button @click="handleLoginView" color="#fff" preset="plain">
+            <va-button @click="loginSignupStore.handleLoginView" color="#fff" preset="plain">
                 Login
             </va-button>
         </span>
 
-        <span v-else-if="userLoggedIn">
+        <span v-else-if="loginSignupStore.userLoggedIn">
             <va-button 
-                @click="showCreateDeadmanSwitchCreationView = true, 
-                    showUserAccount = false" 
+                @click="createSwitchStore.showCreateDeadmanSwitchCreationView = true, loginSignupStore.showUserAccount = false" 
                 icon="add_circle" 
                 color="#fff" 
                 preset="plain" />
+                
             <va-button 
-                @click="showUserAccount = true, showCreateDeadmanSwitchCreationView = false"
+                @click="loginSignupStore.showUserAccount = true, createSwitchStore.showCreateDeadmanSwitchCreationView = false"
                 icon="account_circle" 
                 color="#fff" 
                 preset="plain" />
@@ -59,11 +59,16 @@
 import { ref, watchEffect } from 'vue';
 import { useColors } from 'vuestic-ui';
 
-import { userLoggedIn, hasRegistered,
-        showCreateDeadmanSwitchCreationView,
-showUserAccount
-} from '../../javascript/stateManager';
-import { handleLoginView, handleSignupView } from '../../javascript/viewManager';
+
+
+// Pinia store
+import { storeToRefs } from 'pinia';
+import { useCreateSwitchStore, useLoginSignupStore } from '../../javascript/stateManager';
+
+const createSwitchStore = useCreateSwitchStore();
+const loginSignupStore = useLoginSignupStore();
+// const { showCreateDeadmanSwitchCreationView } = storeToRefs(createSwitchStore);
+
 
 // Vuestic Component library color theme and header switch
 const { presets, applyPreset } = useColors()
@@ -79,4 +84,10 @@ watchEffect(() => {
 let showModal = ref(false);
 let infoMessage = 'Deadman switch is an app to help people help those who care about them know they are ok.';
 
+function testy() {
+    console.log('firing');
+    
+    console.log(loginSignupStore.showUserAccount)
+// showCreateDeadmanSwitchCreationView
+}
 </script>

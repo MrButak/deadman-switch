@@ -5,7 +5,7 @@
     color="secondary"
     > 
     Cancel </va-button>
-    <va-button @click="handleCreateSwitch"> Create </va-button>
+    <va-button @emit="('')" @click="handleCreateSwitch"> Create </va-button>
 </div>
 
 </template>
@@ -15,20 +15,26 @@
 <script setup>
 
 import { checkForValidCookieAndGetUserId } from '../../../javascript/userManager';
-import { newSwitchData, secondsBeforeNewSwitchFlipped,
+import { 
+    // newSwitchData, 
+        secondsBeforeNewSwitchFlipped,
         regexName, regexEmail,
         // deadmanSwitches, 
-        showCreateDeadmanSwitchCreationView
+        // showCreateDeadmanSwitchCreationView
 } from '../../../javascript/stateManager';
-import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
+// import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
 
+// Pinia store
 import { storeToRefs } from 'pinia';
-import {useDeadmanSwitchStore} from '../../../javascript/stateManager';
+import { useDeadmanSwitchStore, useCreateSwitchStore } from '../../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
-const { deadmanSwitches } = deadmanSwitchStore;
+let { deadmanSwitches } = deadmanSwitchStore;
+
+let { newSwitchData } = useCreateSwitchStore();
+let { showCreateDeadmanSwitchCreationView } = storeToRefs(useCreateSwitchStore());
+
 
 function areSwitchFieldsValid() {
-
 
     // Recalculate the secondsBeforeNewSwitchFlipped if still above 0 (below 0 will throw an error)
     if(( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000 > 0) {
@@ -37,7 +43,7 @@ function areSwitchFieldsValid() {
     };
     
     // Look again for error messages / clear any old messages out
-    handleCreateSwitchFormErrorMessages();
+    // handleCreateSwitchFormErrorMessages();
 
     if( !newSwitchData.acknowledgeTimeUntilFirstCheckIn ||
         !regexEmail.test(newSwitchData.recipientEmail) ||
