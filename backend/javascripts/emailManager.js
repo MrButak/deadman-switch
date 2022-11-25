@@ -2,6 +2,7 @@ config = require('dotenv').config();
 // Send in blue
 const email_sk = process.env.SEND_IN_BLUE_API;
 const SibApiV3Sdk = require('sib-api-v3-sdk');
+const { decryptString } = require('./utils/utils');
 
 // ***********************************************************************************
 // Function is called after a successful signup. Sends a verification link to the user
@@ -66,15 +67,15 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
     sendSmtpEmail = {
 
         to: [{
-            email: dmSwitch.recipient_email,
-            name: `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`
+            email: decryptString(dmSwitch.recipient_email),
+            name: `${decryptString(dmSwitch.recipient_first_name)} ${decryptString(dmSwitch.recipient_last_name)}`
         }],
         templateId: 3,
         params: {
             
-            'recipientName': `${dmSwitch.recipient_first_name} ${dmSwitch.recipient_last_name}`,
+            'recipientName': `${decryptString(dmSwitch.recipient_first_name)} ${decryptString(dmSwitch.recipient_last_name)}`,
             'deadmanEmail': deadmanAccountData.email,
-            'finalMessage': dmSwitch.final_message,
+            'finalMessage': decryptString(dmSwitch.final_message),
             'switchCreationDate': dmSwitch.created_at,
             'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
             'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),

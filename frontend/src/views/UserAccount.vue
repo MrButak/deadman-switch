@@ -41,8 +41,13 @@
 <script setup>
 
 import { reactive, onMounted } from 'vue';
-import { deadmanSwitches } from '../javascript/stateManager';
+// import { deadmanSwitches } from '../javascript/stateManager';
 import { checkForValidCookieAndGetUserId } from '../javascript/userManager';
+
+// Pinia store
+import { useDeadmanSwitchStore } from '../javascript/stateManager';
+let deadmanSwitchStore = useDeadmanSwitchStore();
+const { deadmanSwitches } = deadmanSwitchStore;
 
 let userAccountData = reactive({
     firstName: '',

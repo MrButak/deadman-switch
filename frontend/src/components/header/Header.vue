@@ -2,7 +2,7 @@
 
 <div style="position: relative; padding: 0 0 1rem 0;">
     <va-app-bar>
-        <va-button @click="showCreateDeadmanSwitch = false, showUserAccount = false" 
+        <va-button @click="showCreateDeadmanSwitchCreationView = false, showUserAccount = false" 
             icon="home" 
             color="#fff" 
             preset="plain" />
@@ -28,13 +28,13 @@
 
         <span v-else-if="userLoggedIn">
             <va-button 
-                @click="showCreateDeadmanSwitch = true, 
+                @click="showCreateDeadmanSwitchCreationView = true, 
                     showUserAccount = false" 
                 icon="add_circle" 
                 color="#fff" 
                 preset="plain" />
             <va-button 
-                @click="showUserAccount = true, showCreateDeadmanSwitch = false"
+                @click="showUserAccount = true, showCreateDeadmanSwitchCreationView = false"
                 icon="account_circle" 
                 color="#fff" 
                 preset="plain" />
@@ -60,7 +60,7 @@ import { ref, watchEffect } from 'vue';
 import { useColors } from 'vuestic-ui';
 
 import { userLoggedIn, hasRegistered,
-        showCreateDeadmanSwitch,
+        showCreateDeadmanSwitchCreationView,
 showUserAccount
 } from '../../javascript/stateManager';
 import { handleLoginView, handleSignupView } from '../../javascript/viewManager';

@@ -1,8 +1,22 @@
 import { reactive, ref } from 'vue';
+import { defineStore } from 'pinia';
 
 const regexName = /^([A-Za-z]){1,18}$/;
 const regexPassword = /^([A-Za-z0-9\-\_\!\@\#\$\%\^\&\*\+\=]){6,18}$/;
 const regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
+// ******************************************************************
+// Login, Signup, Logged in  Views
+// ******************************************************************
+export const useLoginSignupStore = defineStore('counter', {
+    state: () => ({
+        userLoggedIn: false,
+        showLogin: false,
+        showSignup: false,
+        hasRegistered: false,
+        loginFailedEmailNotVerified: false
+    }),
+})
 
 let userLoggedIn = ref(false);
 
@@ -15,7 +29,34 @@ let loginFailedEmailNotVerified = ref(false); // Edge case. If a user registered
 // ******************************************************************
 // Create switch
 // ******************************************************************
-let showCreateDeadmanSwitch = ref(false);
+
+export const useCreateSwitchStore = defineStore('createSwitchStore', {
+    state: () => ({
+        showCreateDeadmanSwitchCreationView: false,
+        createSwitchNavigationViews: [
+            {'text': 'Settings', 'icon': 'settings'}, 
+            {'text': 'Recipient', 'icon': 'face'},
+            {'text': 'Review', 'icon': 'content_paste_search'}
+        ],
+        creatSwitchCurrentView: 'Settings',
+        newSwitchData: {
+            recipientFirstName: '',
+            recipientLastName: '',
+            recipientEmail: '',
+            checkInIntervalInDays: 1,
+            checkInByTime: new Date(),
+            finalMessage: '',
+            firstCheckedInAt: null,
+            switchName: 'switch name',
+            // new switch form validation helpers
+            acknowledgeTimeUntilFirstCheckIn: false
+        },
+        createSwitchReviewErrorMessages: []
+        
+    }),
+});
+
+let showCreateDeadmanSwitchCreationView = ref(false);
 
 // Navigation header (HTML tabs)
 let createSwitchNavigationViews = reactive(
@@ -36,12 +77,13 @@ let newSwitchData = reactive({
     firstCheckedInAt: null,
     switchName: 'switch name',
     // new switch form validation helpers
-    acknowledgeTimeUntilFirstCheckIn: false,
-    checkInForTheFirstTime: false, // checkbox - will add checkInIntervalInDays to secondsBeforeSwitchFlipped (time before user needs to check in for the first time)
+    acknowledgeTimeUntilFirstCheckIn: false
 });
 
-let secondsBeforeNewSwitchFlipped = ref(0);
 let createSwitchReviewErrorMessages = reactive([]);
+
+
+let secondsBeforeNewSwitchFlipped = ref(0); // Not in store yet
 
 // ******************************************************************
 // User account
@@ -51,6 +93,26 @@ let showUserAccount = ref(false);
 
 
 
+export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
+    state: () => ({
+        deadmanSwitches: [],
+        showSwitchInfoModal: false,
+        showFinalMessageModal: false,
+        currentlyViewedSwitch: {}
+    }),
+    actions: {
+        assignCurrentlyViewedSwitch(dmSwitch) {
+            Object.assign(this.currentlyViewedSwitch, dmSwitch);
+        },
+        handleShowSwitchInfoModal() {
+            this.showSwitchInfoModal = !this.showSwitchInfoModal;
+        },
+        afterSuccessfulCheckInAssignNewVariablesToSwitch(switchIndex, newCheckInByTime, newLastCheckedInAt) {
+            this.deadmanSwitches[switchIndex].check_in_by_time = newCheckInByTime;
+            this.deadmanSwitches[switchIndex].last_checked_in_at = newLastCheckedInAt;
+        }
+    }
+});
 
 
 let formErrorMessages = {
@@ -84,23 +146,24 @@ let formErrorMessages = {
         'icon': 'info',
         'color': 'warning'
     }
-}
+};
 
-let deadmanSwitches = reactive([]);
+// let deadmanSwitches = reactive([]);
 
 // When a user clicks on the 'info' icon on the deadman switch
 // Switch info modal
-let showSwitchInfoModal = ref(false); // prop
-let showFinalMessageModal = ref(false); // prop
-let currentlyViewedSwitch = reactive({}); // This data will populate the switch info modal
+// let showSwitchInfoModal = ref(false); // prop
+// let showFinalMessageModal = ref(false); // prop
+// let currentlyViewedSwitch = reactive({}); // This data will populate the switch info modal
+
 
 export {
     regexName, regexPassword, regexEmail,
     userLoggedIn, // view (home page)
     showLogin, showSignup, // view
     hasRegistered, loginFailedEmailNotVerified, // view
-    deadmanSwitches, // data
-    showCreateDeadmanSwitch, // view
+    // deadmanSwitches, // data
+    showCreateDeadmanSwitchCreationView, // view
     // Create switch
     creatSwitchCurrentView,
     createSwitchNavigationViews, 
@@ -110,5 +173,5 @@ export {
     // user account
     showUserAccount,
     // Switch info modal
-    showFinalMessageModal, showSwitchInfoModal, currentlyViewedSwitch
+    // showFinalMessageModal, showSwitchInfoModal, currentlyViewedSwitch
 }

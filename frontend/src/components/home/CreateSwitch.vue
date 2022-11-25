@@ -20,13 +20,20 @@
 
 <script setup>
 
-import { createSwitchNavigationViews,
-        creatSwitchCurrentView
-} from '../../javascript/stateManager';
+// import { createSwitchNavigationViews,
+//         creatSwitchCurrentView
+// } from '../../javascript/stateManager';
 import CreateSwitchNavigation from '../create-switch/CreateSwitchNavigation.vue';
 import SwitchRecipient from '../create-switch/switchRecipient/SwitchRecipient.vue';
 import SwitchSettings from '../../components/create-switch/switchSettings/SwitchSettings.vue';
 import CreateSwitchView from '../create-switch/createSwitchReviewAndCreate/CreateSwitchView.vue';
+
+// Pinia stores
+import { storeToRefs } from 'pinia'
+import { useCreateSwitchStore } from '../../javascript/stateManager';
+let createSwitchStore = useCreateSwitchStore();
+const { creatSwitchCurrentView } = createSwitchStore;
+
 </script>
 
 

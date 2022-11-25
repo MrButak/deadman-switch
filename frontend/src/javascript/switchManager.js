@@ -1,5 +1,5 @@
 import { checkForValidCookieAndGetUserId } from './userManager';
-import { deadmanSwitches } from './stateManager';
+// import { deadmanSwitches } from './stateManager';
 
 // ********************************************************************
 // Function calculates the seconds before the user needs to check in
@@ -45,60 +45,5 @@ async function getDeadmanSwitchesWithUserId(userId) {
             return response.switches     
     };
 };
-
-// // ********************************************************************
-// // Function is called when a user clicks the check in button
-// // ********************************************************************
-// async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHours) {
-
-//     if(!isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours)) { return };
-    
-//     // Make sure user is logged in and get user id
-//     let userId = await checkForValidCookieAndGetUserId();
-//     if(!userId[0]) { return }; // not logged in
-//     if(!userId[1]) { return }; // logged in, but issue with user id
-    
-//     // Extend the switch checkInByTime by the check in interval    
-//     let newCheckInTime = new Date(new Date(checkInByTimestamp).setHours(new Date(checkInByTimestamp).getHours() + (checkInIntervalInHours)));
-    
-//     // Write the switches new checkInByTime to the DB
-//     let request = await fetch(`${import.meta.env.VITE_BASE_URL}api/switch/checkin`, {
-//         mode: 'cors',
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/x-www-form-urlencoded'
-//         },
-//         body: JSON.stringify({
-//             'deadmanSwitchId': switchId,
-//             'appUserId': userId[1],
-//             'newCheckInByTime': newCheckInTime
-//         })
-//     });
-
-//     // Parse response
-//     let response = await request.json();
-//     switch(response.status) {
-//         case '200':
-//             // Replace the old switch with the newly updated check_in_by_time switch
-//             deadmanSwitches[deadmanSwitches.findIndex(dmSwitch => dmSwitch.id == response.switch.id)] = response.switch;
-//             break;
-//         case '500':
-//             break;
-//         default:  
-//     };
-// };
-
-// // ********************************************************************
-// // Function will determine if a user can reset their switch.
-// // ********************************************************************
-// function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
-//     // checkInByTime - now < interval ?
-//     let secondsFromEpochToCheckInByTime = new Date(checkInByTimestamp).getTime() / 1000;
-//     let secondsFromEpochToNow = new Date(Date.now()).getTime() / 1000;
-//     let isButtonOpen = (secondsFromEpochToCheckInByTime - secondsFromEpochToNow) < (checkInIntervalInHours * 60 * 60);
-//     return secondsBeforeSwitchExpires(checkInByTimestamp) <= 0 ?
-//         false :
-//         isButtonOpen;
-// };
 
 export { secondsBeforeSwitchExpires, getDeadmanSwitchesWithUserId }

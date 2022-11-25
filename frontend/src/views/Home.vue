@@ -1,14 +1,14 @@
 <template>
 
-<span v-if="!deadmanSwitches.length && !showCreateDeadmanSwitch">
+<span v-if="!deadmanSwitches.length && !showCreateDeadmanSwitchCreationView">
     <NoSwitches />
 </span>
 
-<span v-if="showCreateDeadmanSwitch">
+<span v-if="showCreateDeadmanSwitchCreationView">
     <CreateSwitch />
 </span>
 
-<span v-if="!showCreateDeadmanSwitch">
+<span v-if="!showCreateDeadmanSwitchCreationView">
     <AllSwitches />
 </span>
 
@@ -18,12 +18,18 @@
 
 <script setup>
 
-import { deadmanSwitches,
-        showCreateDeadmanSwitch
+import {
+    //  deadmanSwitches,
+        showCreateDeadmanSwitchCreationView
 } from '../javascript/stateManager';
 import NoSwitches from '../components/home/NoSwitches.vue';
 import CreateSwitch from '../components/home/CreateSwitch.vue';
 import AllSwitches from '../components/home/AllSwitches.vue';
+
+// Pinia store
+import { useDeadmanSwitchStore } from '../javascript/stateManager';
+let deadmanSwitchStore = useDeadmanSwitchStore();
+const { deadmanSwitches } = deadmanSwitchStore;
 
 </script>
 

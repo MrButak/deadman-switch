@@ -19,12 +19,11 @@
 
 <script setup>
 
-import { deadmanSwitches, showSwitchInfoModal, showFinalMessageModal, currentlyViewedSwitch } from '../../javascript/stateManager';
-import { secondsBeforeSwitchExpires } from '../../javascript/switchManager';
-import { extractTimeFromDateObject } from '../../javascript/utils';
-import DeadmanSwitchInfoModal from '../deadman-switch/DeadmanSwitchInfoModal.vue';
+// import { deadmanSwitches } from '../../javascript/stateManager';
 import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
-
+import {useDeadmanSwitchStore} from '../../javascript/stateManager';
+let deadmanSwitchStore = useDeadmanSwitchStore();
+const { deadmanSwitches } = deadmanSwitchStore;
 </script>
 
 

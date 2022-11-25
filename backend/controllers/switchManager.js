@@ -83,7 +83,7 @@ exports.createNewSwitch = async (req, res) => {
     
     // ****** From this point switch is good to put into db *******
 
-    // Encrypt
+    // Encrypt before inserting into DB
     newSwitchData.recipientFirstName = encryptString(newSwitchData.recipientFirstName);
     newSwitchData.recipientLastName = encryptString(newSwitchData.recipientLastName);
     newSwitchData.recipientEmail = encryptString(newSwitchData.recipientEmail);
@@ -94,6 +94,14 @@ exports.createNewSwitch = async (req, res) => {
     if(!switchData[0]) {
         return res.status(500).json({status: '500', message: 'An unknown database error occurred'}); 
     };
+
+    // Decrypt before sending back to the frontend
+    switchData[1].recipient_first_name = decryptString(switchData[1].recipient_first_name);
+    switchData[1].recipient_last_name = decryptString(switchData[1].recipient_last_name);
+    switchData[1].recipient_email = decryptString(switchData[1].recipient_email);
+    switchData[1].final_message = decryptString(switchData[1].final_message);
+    switchData[1].switch_name = decryptString(switchData[1].switch_name);
+
     return res.status(200).json({status: '200', message: 'Switch successfully created', switch: switchData[1]});
 };
 
@@ -126,5 +134,13 @@ exports.checkIn = async (req, res) => {
     if(!updatedSwitch[0]) {
         return res.status(500).json({status: '500', message: 'Unknown database error'});
     };
-    return res.status(200).json({status: '200', message: 'Switch was successfully reset', switch: updatedSwitch[1]});
+
+    // Decrypt
+    return res.status(200).json({status: '200', message: 'Check in successful', 
+        switch: {
+            id: updatedSwitch[1].id,
+            check_in_by_time: updatedSwitch[1].check_in_by_time,
+            last_checked_in_at: updatedSwitch[1].last_checked_in_at
+        }
+    });
 };

@@ -33,7 +33,7 @@ import { onMounted } from 'vue';
 import { getDeadmanSwitchesWithUserId } from './javascript/switchManager';
 import { checkForValidCookieAndGetUserId } from './javascript/userManager';
 import { userLoggedIn, showLogin, showSignup, hasRegistered,
-        deadmanSwitches,
+        // deadmanSwitches,
         showUserAccount
 } from './javascript/stateManager';
 import Header from './components/header/Header.vue';
@@ -42,9 +42,20 @@ import Signup from './views/Signup.vue';
 import Home from './views/Home.vue';
 import UserAccount from './views/UserAccount.vue';
 
+// Pinia stores
+import { storeToRefs } from 'pinia';
+import {useDeadmanSwitchStore} from './javascript/stateManager';
+let deadmanSwitchStore = useDeadmanSwitchStore();
+const { deadmanSwitches } = deadmanSwitchStore;
+// //  Init Pinia store
+// let someStore = useCounterStore();
+// console.log(someStore.count)
+
+
 // On app mount check if the user is logged in and determine what Components to show or not
 onMounted(() => {
-
+    
+    
     (async() => {
         let isUserLoggedIn = await checkIfUserIsLoggedIn();
         
@@ -52,13 +63,14 @@ onMounted(() => {
         if (isUserLoggedIn[0]) {
 
             let switches = await getDeadmanSwitchesWithUserId(isUserLoggedIn[1]);
-            
+            console.log({switches})
             if(switches) {
                 deadmanSwitches.length = 0;
                 switches.forEach(dmSwitch => {
 
                     deadmanSwitches.push(dmSwitch);
                 });
+                console.log({deadmanSwitches})
             };
         };
     })();

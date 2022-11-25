@@ -1,24 +1,16 @@
 <template>
 
 <CreateSwitchReview />
-<Spacer 
-    padding-prop=".5rem 0"
-/>
+
 <CountdownTimer 
     :seconds-before-switch-flipped-prop="secondsBeforeNewSwitchFlipped"
     timer-sub-text="Before you must checkin"
 />
-<Spacer 
-    padding-prop=".5rem 0"
-/>
+
 <CreateSwitchReviewErrorMessages />
-<Spacer 
-    padding-prop=".5rem 0"
-/>
+
 <AcknowledgeFirstCheckIn />
-<Spacer 
-    padding-prop=".5rem 0"
-/>
+
 <CreateSwitchButton />
 
 
@@ -39,7 +31,6 @@ import CreateSwitchButton from './CreateSwitchButton.vue';
 import CreateSwitchReview from './CreateSwitchReview.vue';
 import CountdownTimer from '../../shared/CountdownTimer.vue';
 import CreateSwitchReviewErrorMessages from './CreateSwitchReviewErrorMessages.vue';
-import Spacer from '../../shared/Spacer.vue';
 
 
 onMounted(() => {

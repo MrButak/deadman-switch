@@ -3,7 +3,7 @@
 <div class="no-switches-wrapper">
 
 <h6 class="va-h6">Create a deadman switch</h6>
-<va-icon @click="showCreateDeadmanSwitch = true"
+<va-icon @click="showCreateDeadmanSwitchCreationView = true"
     class="mr-2"
     name="add_circle"
     size="4rem"
@@ -20,7 +20,7 @@
 <script setup>
 
 
-import { showCreateDeadmanSwitch } from '../../javascript/stateManager';
+import { showCreateDeadmanSwitchCreationView } from '../../javascript/stateManager';
 
 </script>
 

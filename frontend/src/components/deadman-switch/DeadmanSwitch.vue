@@ -13,7 +13,7 @@
                 <span>
                     
                     <va-icon
-                        @click="handleShowSwitchInfoModal(dmSwitch)"    
+                        @click="assignCurrentlyViewedSwitch(dmSwitch), handleShowSwitchInfoModal()"    
                         class="mr-2"
                         name="info"
                         size="medium"
@@ -38,7 +38,6 @@
                     >
                     <h6>{{ switchButtonText }}</h6>
                         <span>
-                            
                             <va-icon
                                 class="mr-2"
                                 :name="switchButtonIcon"    
@@ -70,9 +69,16 @@
 import { computed } from 'vue';
 import DeadmanSwitchInfoModal from './DeadmanSwitchInfoModal.vue';
 import CountdownTimer from '../shared/CountdownTimer.vue';
-import { deadmanSwitches, currentlyViewedSwitch, showSwitchInfoModal } from '../../javascript/stateManager';
+
+
 import { secondsBeforeSwitchExpires } from '../../javascript/switchManager';
 import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';
+
+// Pinia stores
+import { storeToRefs } from 'pinia'
+import {useDeadmanSwitchStore} from '../../javascript/stateManager';
+let deadmanSwitchStore = useDeadmanSwitchStore();
+const { deadmanSwitches, assignCurrentlyViewedSwitch, handleShowSwitchInfoModal, afterSuccessfulCheckInAssignNewVariablesToSwitch } = deadmanSwitchStore;
 
 // Assign the props to a variable so I will have access to it here in <script>
 const props = defineProps({
@@ -112,8 +118,8 @@ async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHour
     let response = await request.json();
         switch(response.status) {
             case '200':
-                // Replace the old switch with the newly updated check_in_by_time switch
-                deadmanSwitches[deadmanSwitches.findIndex(dmSwitch => dmSwitch.id == response.switch.id)] = response.switch;
+                // Replace switch variables in State
+                afterSuccessfulCheckInAssignNewVariablesToSwitch(deadmanSwitches.findIndex(dmSwitch => dmSwitch.id == response.switch.id), response.switch.check_in_by_time, response.switch.last_checked_in_at)
                 break;
             case '500':
                 break;
@@ -132,16 +138,6 @@ function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
     return secondsBeforeSwitchExpires(checkInByTimestamp) <= 0 ?
         false :
         isButtonOpen;
-};
-
-// ********************************************************************
-// Function will show a pop up modal displaying all switch details and assign Component State
-// ********************************************************************
-function handleShowSwitchInfoModal(dmSwitch) {
-    // Assign the currently viewed switch to the Component State
-    Object.assign(currentlyViewedSwitch, dmSwitch);
-    // Show pop up modal
-    showSwitchInfoModal.value = !showSwitchInfoModal.value;
 };
 
 // ********************************************************************

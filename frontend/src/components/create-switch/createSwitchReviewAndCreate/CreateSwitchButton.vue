@@ -17,9 +17,15 @@
 import { checkForValidCookieAndGetUserId } from '../../../javascript/userManager';
 import { newSwitchData, secondsBeforeNewSwitchFlipped,
         regexName, regexEmail,
-        deadmanSwitches, showCreateDeadmanSwitch
+        // deadmanSwitches, 
+        showCreateDeadmanSwitchCreationView
 } from '../../../javascript/stateManager';
 import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
+
+import { storeToRefs } from 'pinia';
+import {useDeadmanSwitchStore} from '../../../javascript/stateManager';
+let deadmanSwitchStore = useDeadmanSwitchStore();
+const { deadmanSwitches } = deadmanSwitchStore;
 
 function areSwitchFieldsValid() {
 
@@ -91,7 +97,7 @@ async function handleCreateSwitch() {
             // Push newly created switch into the State
             deadmanSwitches.push(response.switch);
             // Hide the create switch view
-            showCreateDeadmanSwitch.value = false;
+            showCreateDeadmanSwitchCreationView.value = false;
             // Reset form data
             newSwitchData.recipientFirstName = '';
             newSwitchData.recipientLastName = '';
