@@ -5,7 +5,7 @@
     color="secondary"
     > 
     Cancel </va-button>
-    <va-button @emit="('')" @click="handleCreateSwitch"> Create </va-button>
+    <va-button @click="handleCreateSwitch"> Create </va-button>
 </div>
 
 </template>
@@ -16,21 +16,19 @@
 
 import { checkForValidCookieAndGetUserId } from '../../../javascript/userManager';
 import { 
-    // newSwitchData, 
         secondsBeforeNewSwitchFlipped,
         regexName, regexEmail,
-        // deadmanSwitches, 
-        // showCreateDeadmanSwitchCreationView
+        useDeadmanSwitchStore, useCreateSwitchStore, useErrorMessageStore
 } from '../../../javascript/stateManager';
-// import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
 
 // Pinia store
 import { storeToRefs } from 'pinia';
-import { useDeadmanSwitchStore, useCreateSwitchStore } from '../../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
-let { deadmanSwitches } = deadmanSwitchStore;
-
+let errorMessageStore = useErrorMessageStore();
 let { newSwitchData } = useCreateSwitchStore();
+let createSwitchStore = useCreateSwitchStore();
+
+let { deadmanSwitches } = deadmanSwitchStore;
 let { showCreateDeadmanSwitchCreationView } = storeToRefs(useCreateSwitchStore());
 
 
@@ -41,9 +39,8 @@ function areSwitchFieldsValid() {
         secondsBeforeNewSwitchFlipped.value =
             ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;   
     };
-    
-    // Look again for error messages / clear any old messages out
-    // handleCreateSwitchFormErrorMessages();
+    // secondsBeforeNewSwitchFlipped.value =
+    //         ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000 || 0;
 
     if( !newSwitchData.acknowledgeTimeUntilFirstCheckIn ||
         !regexEmail.test(newSwitchData.recipientEmail) ||
@@ -53,7 +50,7 @@ function areSwitchFieldsValid() {
         newSwitchData.checkInIntervalInDays > 4 ||
         new Date(newSwitchData.checkInByTime).getTime() < 0 || // date validation
         !newSwitchData.finalMessage ||
-        secondsBeforeNewSwitchFlipped.value < 180) // no switches can be set if they go off within 5 minutes 
+        secondsBeforeNewSwitchFlipped.value < 180) // switch must have > 3 minutes before expiration 
             { return false }
     return true;
 };
@@ -64,6 +61,13 @@ async function handleCreateSwitch() {
     if(!newSwitchData.finalMessage) {
         newSwitchData.finalMessage = 'Hi ma, I won\'t be making it home for supper tonight. You know what to do.'
     };
+
+    errorMessageStore.checkForErrors([
+        // Edge case: If the user arrives at this view with > 3 minutes left, there will be now error, but if they wait until there is < 3 minutes left before the switch expires, no error will show. So this will display that error message again if needed.
+        { type: 'mustCreateSwitchWithTimeBuffer', data: secondsBeforeNewSwitchFlipped.value },
+        // Make sure the user checked the acknowledge box
+        { type: 'acknowledgeTimeUntilFirstCheckIn', data: newSwitchData.acknowledgeTimeUntilFirstCheckIn }
+    ]);
 
     // Form validation
     if(!areSwitchFieldsValid()) { return };
@@ -103,13 +107,15 @@ async function handleCreateSwitch() {
             // Push newly created switch into the State
             deadmanSwitches.push(response.switch);
             // Hide the create switch view
-            showCreateDeadmanSwitchCreationView.value = false;
+            // showCreateDeadmanSwitchCreationView.value = false;
             // Reset form data
-            newSwitchData.recipientFirstName = '';
-            newSwitchData.recipientLastName = '';
-            newSwitchData.recipientEmail = '';
-            newSwitchData.finalMessage = '';
-            newSwitchData.firstCheckedInAt = null;
+            // newSwitchData.recipientFirstName = '';
+            // newSwitchData.recipientLastName = '';
+            // newSwitchData.recipientEmail = '';
+            // newSwitchData.finalMessage = '';
+            // newSwitchData.firstCheckedInAt = null;
+            createSwitchStore.$reset()
+            // TODO: should clear store here
             console.log('switch successfully created');
             break;
         case '500':

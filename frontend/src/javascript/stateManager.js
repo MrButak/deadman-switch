@@ -159,6 +159,12 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
                 'text': 'Please verify your email address. Check your email and click on the verification link sent to you',
                 'icon': 'info',
                 'color': 'warning'
+            },
+            'acknowledgeTimeUntilFirstCheckIn': {
+                'id': 7,
+                'text': 'Please acknowledge that you must checkin before the above time, or your switch will be triggered',
+                'icon': 'info',
+                'color': 'warning'
             }
         },
         errorMessageArray: []
@@ -216,6 +222,16 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
                         };
                         break;
                     }
+                    case 'acknowledgeTimeUntilFirstCheckIn': {
+                        if( !error.data && !this.errorMessageShown(this.errorMessages.acknowledgeTimeUntilFirstCheckIn.id) ) {
+                            this.errorMessageArray.push(this.errorMessages.acknowledgeTimeUntilFirstCheckIn);
+                        }
+                        else if(error.data > 180 && this.errorMessageShown(this.errorMessages.acknowledgeTimeUntilFirstCheckIn.id)) {
+                            this.removeErrorMessage(this.errorMessages.acknowledgeTimeUntilFirstCheckIn.id);
+                        };
+                        break;
+                    }
+                    
                     default:
                         console.log('unhandled error message to display', error)
                     

@@ -35,7 +35,7 @@ import { storeToRefs } from 'pinia'
 // import { useCreateSwitchStore } from '../../../javascript/stateManager';
 const createSwitchStore = useCreateSwitchStore();
 const errorMessageStore = useErrorMessageStore();
-const { newSwitchData, createSwitchReviewErrorMessages } = createSwitchStore;
+const { newSwitchData } = createSwitchStore;
 
 onMounted(() => {
     calculateSecondsBeforeSwitchFlipped();
@@ -64,7 +64,6 @@ function handleCreateSwitchFormErrorMessages() {
         { type: 'email', data: newSwitchData.recipientEmail },
         { type: 'mustCreateSwitchWithTimeBuffer', data: secondsBeforeNewSwitchFlipped.value }
     ];
-
     errorMessageStore.checkForErrors(errorsToCheckFor);
 };
 
