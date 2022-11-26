@@ -89,7 +89,7 @@ export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
             this.showSwitchInfoModal = !this.showSwitchInfoModal;
         },
         afterSuccessfulCheckInAssignNewVariablesToSwitch(switchIndex, newCheckInByTime, newLastCheckedInAt) {
-            this.deadmanSwitches[switchIndex].check_in_by_time = newCheckInByTime;
+            this.deadmanSwitches[switchIndex].check_in_by_timestamp = newCheckInByTime;
             this.deadmanSwitches[switchIndex].last_checked_in_at = newLastCheckedInAt;
         }
     }
@@ -121,7 +121,7 @@ export const useViewStore = defineStore('viewStore', {
             // user must be logged in
             // user must not be @ /user-account
             const createLoginSignupStore = useLoginSignupStore();
-            return createLoginSignupStore.userLoggedIn && !this.showUserAccount;
+            return createLoginSignupStore.userLoggedIn;
         }
     }
 });
@@ -164,5 +164,4 @@ export {
     regexName, regexPassword, regexEmail,
     secondsBeforeNewSwitchFlipped,
     formErrorMessages,
-
 }

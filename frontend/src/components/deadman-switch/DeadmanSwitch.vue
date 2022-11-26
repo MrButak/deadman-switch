@@ -22,7 +22,7 @@
             </va-card-title>
         </div>
 
-        <span v-if="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time) <= 0" class="expired-message-wrapper">
+        <span v-if="secondsBeforeSwitchExpires(dmSwitch.check_in_by_timestamp) <= 0" class="expired-message-wrapper">
             <p class="va-text-danger">
                 Your switch has expired.
             </p>
@@ -31,7 +31,7 @@
         <va-card-content>
             <div class="check-in-button-wrapper">
                 <va-button
-                    @click="handleCheckIn(dmSwitch.id, dmSwitch.check_in_by_time, dmSwitch.check_in_interval_in_hours)"    
+                    @click="handleCheckIn(dmSwitch.id, dmSwitch.check_in_by_timestamp, dmSwitch.check_in_interval_in_hours)"    
                     border-color="primary"
                     class="mr-4 mb-2 check-in-button"
                     :color="determineSwitchColorTheme"
@@ -49,7 +49,7 @@
                 <p>{{ lastCheckedInTimeDate }}</p>
             </div>
             <CountdownTimer 
-                :seconds-before-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_time)"
+                :seconds-before-switch-flipped-prop="secondsBeforeSwitchExpires(dmSwitch.check_in_by_timestamp)"
                 timer-sub-text="Before you must checkin"
             />
         </va-card-content>
@@ -119,7 +119,7 @@ async function handleCheckIn(switchId, checkInByTimestamp, checkInIntervalInHour
         switch(response.status) {
             case '200':
                 // Replace switch variables in State
-                afterSuccessfulCheckInAssignNewVariablesToSwitch(deadmanSwitches.findIndex(dmSwitch => dmSwitch.id == response.switch.id), response.switch.check_in_by_time, response.switch.last_checked_in_at)
+                afterSuccessfulCheckInAssignNewVariablesToSwitch(deadmanSwitches.findIndex(dmSwitch => dmSwitch.id == response.switch.id), response.switch.check_in_by_timestamp, response.switch.last_checked_in_at)
                 break;
             case '500':
                 break;
@@ -144,30 +144,30 @@ function isButtonLatchOpen(checkInByTimestamp, checkInIntervalInHours) {
 // Switch UI computed properties
 // ********************************************************************
 let switchButtonIcon = computed(() => {
-    return !isButtonLatchOpen(props.dmSwitch.check_in_by_time, props.dmSwitch.check_in_interval_in_hours) && secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_time) > 0 ?
+    return !isButtonLatchOpen(props.dmSwitch.check_in_by_timestamp, props.dmSwitch.check_in_interval_in_hours) && secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_timestamp) > 0 ?
         'done' : // check mark
         '';
 });
 
 let switchButtonText = computed(() => {
 
-    if(secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_time) <= 0) {
+    if(secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_timestamp) <= 0) {
         return 'Dead'
     }
-    else if(isButtonLatchOpen(props.dmSwitch.check_in_by_time, props.dmSwitch.check_in_interval_in_hours) && secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_time) > 0) {
+    else if(isButtonLatchOpen(props.dmSwitch.check_in_by_timestamp, props.dmSwitch.check_in_interval_in_hours) && secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_timestamp) > 0) {
         return 'Check In';
     };
 });
 
 let determineSwitchColorTheme = computed(() => {
-    let timeLeftInSeconds = secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_time)
+    let timeLeftInSeconds = secondsBeforeSwitchExpires(props.dmSwitch.check_in_by_timestamp)
     if(timeLeftInSeconds < 3600) { // 1 hour
         return 'danger'; // red
     }
     else if(timeLeftInSeconds < 7200) {
         return 'warning'; // yellow
     }
-    else if(!isButtonLatchOpen(props.dmSwitch.check_in_by_time, props.dmSwitch.check_in_interval_in_hours) && timeLeftInSeconds > 0) {
+    else if(!isButtonLatchOpen(props.dmSwitch.check_in_by_timestamp, props.dmSwitch.check_in_interval_in_hours) && timeLeftInSeconds > 0) {
         return 'success'; // green
     };
     return 'info'; // blue

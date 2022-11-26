@@ -7,7 +7,7 @@ CREATE TABLE app_users (
     account_created_at TIMESTAMP NOT NULL,
     provider VARCHAR(255) NOT NULL,
     email_verification_string TEXT,
-    email_verified BOOLEAN NOT NULL`
+    email_verified BOOLEAN NOT NULL
 );
 
 CREATE TABLE deadman_switches (
@@ -16,7 +16,7 @@ CREATE TABLE deadman_switches (
     switch_name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
     check_in_interval_in_hours INTEGER CHECK (check_in_interval_in_hours > 0) NOT NULL,
-    check_in_by_time TIMESTAMP NOT NULL, // TODO: change this name to check_in_by_timestamp
+    check_in_by_timestamp TIMESTAMP NOT NULL,
     last_checked_in_at TIMESTAMP NOT NULL,
     recipient_email TEXT NOT NULL,
     recipient_first_name VARCHAR(255) NOT NULL,
@@ -24,7 +24,9 @@ CREATE TABLE deadman_switches (
     final_message TEXT NOT NULL,
     triggered BOOLEAN NOT NULL
 );
-SELECT * FROM deadman_switches WHERE '2022-11-17 08:08:00' > check_in_by_time;
+
+** Below is not in use ***
+
 CREATE TABLE check_ins (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES app_users(id) NOT NULL,
@@ -32,9 +34,6 @@ CREATE TABLE check_ins (
     check_in_time TIMESTAMP NOT NULL
 );
 
-
-
-** Below is not in use ***
 CREATE TABLE user_contacts (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES app_users(id) NOT NULL,

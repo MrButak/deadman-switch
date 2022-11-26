@@ -102,7 +102,7 @@ exports.getDeadmanSwitches = async (userId) => {
 // ***********************************************************************************
 exports.insertNewDeadmanSwitch = async (userId, newSwitchData) => {
     
-    let dbStmt = 'INSERT INTO deadman_switches (user_id, switch_name, created_at, check_in_interval_in_hours, check_in_by_time, last_checked_in_at, recipient_email, recipient_first_name, recipient_last_name, final_message, triggered) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *;';
+    let dbStmt = 'INSERT INTO deadman_switches (user_id, switch_name, created_at, check_in_interval_in_hours, check_in_by_timestamp, last_checked_in_at, recipient_email, recipient_first_name, recipient_last_name, final_message, triggered) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *;';
     let dbValues = [userId, newSwitchData.switchName, new Date(Date.now()), newSwitchData.checkInIntervalInDays * 24, new Date(newSwitchData.checkInByTime), new Date(newSwitchData.firstCheckedInAt), newSwitchData.recipientEmail, newSwitchData.recipientFirstName, newSwitchData.recipientLastName, newSwitchData.finalMessage, false];
 
     try {
@@ -134,10 +134,10 @@ exports.getUserAccountData = async (userId) => {
 };
 
 // ******************************************************************************
-// Function is called when a user check's in. Extends the check_in_by_time by the interval
+// Function is called when a user check's in. Extends the check_in_by_timestamp by the interval
 // ******************************************************************************
 exports.checkInDeadmanSwitch = async (newCheckInByTime, switchId, userId) => {
-    let dbStmt = 'UPDATE deadman_switches SET check_in_by_time = ($1), last_checked_in_at = ($2) WHERE id = ($3) AND user_id = ($4) RETURNING *;'
+    let dbStmt = 'UPDATE deadman_switches SET check_in_by_timestamp = ($1), last_checked_in_at = ($2) WHERE id = ($3) AND user_id = ($4) RETURNING *;'
     let dbValues = [new Date(newCheckInByTime), new Date(Date.now()), switchId, userId];
     try {
         let updatedData = await pool.query(dbStmt, dbValues);
@@ -153,8 +153,8 @@ exports.checkInDeadmanSwitch = async (newCheckInByTime, switchId, userId) => {
 // ******************************************************************************
 exports.checkForExpiredSwitches = async () => {
 
-    let dbStmt = 'SELECT * FROM deadman_switches WHERE triggered = false AND ($1) > check_in_by_time;';
-    // let dbStmt = 'SELECT check_in_by_time FROM deadman_switches';
+    let dbStmt = 'SELECT * FROM deadman_switches WHERE triggered = false AND ($1) > check_in_by_timestamp;';
+    // let dbStmt = 'SELECT check_in_by_timestamp FROM deadman_switches';
     
     let dbValues = [new Date(Date.now())];
     
