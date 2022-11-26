@@ -16,10 +16,10 @@
 <script setup>
 
 import { onMounted } from 'vue';
-import { 
-    // newSwitchData, 
+import {
     secondsBeforeNewSwitchFlipped,
-    regexEmail, regexName, formErrorMessages
+    regexEmail, regexName, 
+    useErrorMessageStore, useCreateSwitchStore
 } from '../../../javascript/stateManager';
 
 // import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
@@ -32,8 +32,9 @@ import CreateSwitchReviewErrorMessages from './CreateSwitchReviewErrorMessages.v
 
 // Pinia stores
 import { storeToRefs } from 'pinia'
-import { useCreateSwitchStore } from '../../../javascript/stateManager';
-let createSwitchStore = useCreateSwitchStore();
+// import { useCreateSwitchStore } from '../../../javascript/stateManager';
+const createSwitchStore = useCreateSwitchStore();
+const errorMessageStore = useErrorMessageStore();
 const { newSwitchData, createSwitchReviewErrorMessages } = createSwitchStore;
 
 onMounted(() => {
@@ -55,76 +56,16 @@ function calculateSecondsBeforeSwitchFlipped(mustCheckInByDateObject, checkInInt
     };
 };
 
-// ****************************************************************************
-// Function will check is an error message is already displayed on the DOM
-// ****************************************************************************
-function errorMessageShown(errorId, errorMessagesArray) {
-
-    return errorMessagesArray.findIndex(error => error.id == errorId) != -1;
-};
-
-// ****************************************************************************
-// Function will remove an error message from the DOM
-// ****************************************************************************
-function removeErrorMessage(errorId, errorMessagesArray) {
-
-    let errorIndex = errorMessagesArray.findIndex(error => error.id == errorId);
-    if(errorIndex == -1) { return };
-    errorMessagesArray.splice(errorIndex, 1);
-};
-
-// ****************************************************************************
-// Function will check for valid form fields and options and display any errors
-// ****************************************************************************
 function handleCreateSwitchFormErrorMessages() {
 
-    // First name
-    if( !regexName.test(newSwitchData.recipientFirstName) &&
-        !errorMessageShown(formErrorMessages.firstName.id, createSwitchReviewErrorMessages) ) {
-        
-            createSwitchReviewErrorMessages.push(formErrorMessages.firstName);
-    }
-    else if(regexName.test(newSwitchData.recipientFirstName) && 
-        errorMessageShown(formErrorMessages.firstName.id, createSwitchReviewErrorMessages)) {
-        
-            removeErrorMessage(formErrorMessages.firstName.id, createSwitchReviewErrorMessages);
-    };
+    let errorsToCheckFor = [
+        { type: 'firstName', data: newSwitchData.recipientFirstName },
+        { type: 'lastName', data: newSwitchData.recipientLastName },
+        { type: 'email', data: newSwitchData.recipientEmail },
+        { type: 'mustCreateSwitchWithTimeBuffer', data: secondsBeforeNewSwitchFlipped.value }
+    ];
 
-    // Last name
-    if( !regexName.test(newSwitchData.recipientLastName) &&
-        !errorMessageShown(formErrorMessages.lastName.id, createSwitchReviewErrorMessages) ) {
-
-            createSwitchReviewErrorMessages.push(formErrorMessages.lastName);
-    }
-    else if(regexName.test(newSwitchData.recipientLastName) &&
-        errorMessageShown(formErrorMessages.lastName.id, createSwitchReviewErrorMessages)) {
-        
-            removeErrorMessage(formErrorMessages.lastName.id, createSwitchReviewErrorMessages);
-    };
-
-    // Email
-    if( !regexEmail.test(newSwitchData.recipientEmail) &&
-        !errorMessageShown(formErrorMessages.email.id, createSwitchReviewErrorMessages) ) {
-
-            createSwitchReviewErrorMessages.push(formErrorMessages.email);
-    }
-    else if(regexEmail.test(newSwitchData.recipientEmail) &&
-        errorMessageShown(formErrorMessages.email.id, createSwitchReviewErrorMessages)) {
-        
-            removeErrorMessage(formErrorMessages.email.id, createSwitchReviewErrorMessages);
-    };
-
-    // Switch creation invalid checkin time (must be > 3 minutes left before user has to checkin)
-    if( secondsBeforeNewSwitchFlipped.value < 180 &&
-        !errorMessageShown(formErrorMessages.mustCreateSwitchWithTimeBuffer.id, createSwitchReviewErrorMessages) ) {
-
-            createSwitchReviewErrorMessages.push(formErrorMessages.mustCreateSwitchWithTimeBuffer);
-    }
-    else if(secondsBeforeNewSwitchFlipped.value > 180 &&
-        errorMessageShown(formErrorMessages.mustCreateSwitchWithTimeBuffer.id, createSwitchReviewErrorMessages)) {
-        
-            removeErrorMessage(formErrorMessages.mustCreateSwitchWithTimeBuffer.id, createSwitchReviewErrorMessages);
-    };
+    errorMessageStore.checkForErrors(errorsToCheckFor);
 };
 
 </script>

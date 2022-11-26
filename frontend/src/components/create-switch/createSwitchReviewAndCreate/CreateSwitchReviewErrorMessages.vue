@@ -1,6 +1,6 @@
 <template>
 
-<va-alert v-for="error in createSwitchReviewErrorMessages"
+<va-alert v-for="error in errorMessageStore.errorMessageArray"
     class="mb-4" 
     style="width: 80%"
     :color="error.color" 
@@ -15,13 +15,12 @@
 
 <script setup>
 
-// import { createSwitchReviewErrorMessages } from '../../../javascript/stateManager';
-
 // Pinia stores
 import { storeToRefs } from 'pinia'
-import { useCreateSwitchStore } from '../../../javascript/stateManager';
-let createSwitchStore = useCreateSwitchStore();
-const { createSwitchReviewErrorMessages } = storeToRefs(createSwitchStore);
+import { useCreateSwitchStore, useErrorMessageStore } from '../../../javascript/stateManager';
+const createSwitchStore = useCreateSwitchStore();
+const errorMessageStore = useErrorMessageStore()
+// const { createSwitchReviewErrorMessages } = storeToRefs(createSwitchStore);
 
 </script>
 

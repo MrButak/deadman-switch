@@ -106,7 +106,7 @@ exports.createNewSwitch = async (req, res) => {
 };
 
 // ******************************************************************************
-// Function is called when a user checks in. Extend the switches check_in_by_time by the interval
+// Function is called when a user checks in. Extend the switches check_in_by_timestamp by the interval
 // ******************************************************************************
 exports.checkIn = async (req, res) => {
     let switchId = '';
@@ -139,7 +139,7 @@ exports.checkIn = async (req, res) => {
     return res.status(200).json({status: '200', message: 'Check in successful', 
         switch: {
             id: updatedSwitch[1].id,
-            check_in_by_time: updatedSwitch[1].check_in_by_time,
+            check_in_by_timestamp: updatedSwitch[1].check_in_by_timestamp,
             last_checked_in_at: updatedSwitch[1].last_checked_in_at
         }
     });

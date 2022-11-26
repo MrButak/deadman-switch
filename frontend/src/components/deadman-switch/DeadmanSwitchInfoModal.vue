@@ -47,7 +47,7 @@
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Active</p>
-        <p style="padding: 0 0 0 2rem" :class="secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0 ? 'va-text-success' : 'va-text-danger'">{{ secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_time) > 0 }}</p>
+        <p style="padding: 0 0 0 2rem" :class="secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_timestamp) > 0 ? 'va-text-success' : 'va-text-danger'">{{ secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_timestamp) > 0 }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
@@ -67,7 +67,7 @@
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">No later than</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(currentlyViewedSwitch.check_in_by_time).toLocaleTimeString() }}</p>
+        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ new Date(currentlyViewedSwitch.check_in_by_timestamp).toLocaleTimeString() }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">

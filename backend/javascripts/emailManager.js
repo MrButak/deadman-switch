@@ -78,7 +78,7 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
             'finalMessage': decryptString(dmSwitch.final_message),
             'switchCreationDate': dmSwitch.created_at,
             'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
-            'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_time),
+            'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_timestamp),
             'lastCheckedInAt': dmSwitch.last_checked_in_at
         },
     

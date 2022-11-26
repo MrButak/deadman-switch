@@ -59,8 +59,6 @@
 import { ref, watchEffect } from 'vue';
 import { useColors } from 'vuestic-ui';
 
-
-
 // Pinia store
 import { storeToRefs } from 'pinia';
 import { useCreateSwitchStore, useLoginSignupStore } from '../../javascript/stateManager';

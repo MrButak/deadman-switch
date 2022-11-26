@@ -49,11 +49,7 @@
 import { onMounted } from 'vue';
 import { getDeadmanSwitchesWithUserId } from './javascript/switchManager';
 import { checkForValidCookieAndGetUserId } from './javascript/userManager';
-import { 
-        // userLoggedIn, showLogin, showSignup, hasRegistered,
-        // deadmanSwitches,
-        // showUserAccount
-} from './javascript/stateManager';
+
 import Header from './components/header/Header.vue';
 import Login from './views/Login.vue';
 import Signup from './views/Signup.vue';
@@ -69,7 +65,7 @@ const loginSignupStore = useLoginSignupStore();
 const viewStore = useViewStore();
 
 const { deadmanSwitches } = deadmanSwitchStore;
-const { userLoggedIn, showLogin, showSignup, showUserAccount, hasRegistered } = storeToRefs(loginSignupStore);
+// const { userLoggedIn, showLogin, showSignup, showUserAccount, hasRegistered } = storeToRefs(loginSignupStore);
 
   
 // On app mount check if the user is logged in and determine what Components to show or not
@@ -102,15 +98,15 @@ async function checkIfUserIsLoggedIn() {
     let userId = await checkForValidCookieAndGetUserId();
 
     if(!userId[0]) {
-        showLogin.value = true;
-        showSignup.value = false;
-        userLoggedIn.value = false;
+        loginSignupStore.showLogin = true;
+        loginSignupStore.showSignup = false;
+        loginSignupStore.userLoggedIn = false;
         return [false];
     }
     else {
-        showLogin.value = false;
-        showSignup.value = false;
-        userLoggedIn.value = true;
+        loginSignupStore.showLogin = false;
+        loginSignupStore.showSignup = false;
+        loginSignupStore.userLoggedIn = true;
         return [true, userId[1]];
     };
 };
@@ -122,7 +118,6 @@ async function checkIfUserIsLoggedIn() {
 <style lang="scss">
 
 #app {
-    
     overflow: hidden;
 }
 
