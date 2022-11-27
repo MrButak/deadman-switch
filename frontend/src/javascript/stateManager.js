@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 const regexName = /^([A-Za-z]){1,18}$/;
 const regexPassword = /^([A-Za-z0-9\-\_\!\@\#\$\%\^\&\*\+\=]){6,18}$/;
 const regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+let secondsBeforeNewSwitchFlipped = ref(0);
 
 export const useLoginSignupStore = defineStore('loginSignupStore', {
     state: () => ({
@@ -35,7 +36,6 @@ export const useLoginSignupStore = defineStore('loginSignupStore', {
             this.showSignup = true;
             this.showLogin = false;
         }
-        
     }
 })
 
@@ -68,8 +68,6 @@ export const useCreateSwitchStore = defineStore('createSwitchStore', {
     }
 });
 
-let secondsBeforeNewSwitchFlipped = ref(0); // Not in store yet
-
 export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
     state: () => ({
         deadmanSwitches: [],
@@ -87,6 +85,16 @@ export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
         afterSuccessfulCheckInAssignNewVariablesToSwitch(switchIndex, newCheckInByTime, newLastCheckedInAt) {
             this.deadmanSwitches[switchIndex].check_in_by_timestamp = newCheckInByTime;
             this.deadmanSwitches[switchIndex].last_checked_in_at = newLastCheckedInAt;
+        },
+        secondsBeforeSwitchExpires(checkInByTimestamp) {
+            // Calculate seconds until switch Expires
+            let secondsUntilSwitchFlipped =
+            ( (new Date(checkInByTimestamp).getTime() / 1000 ) - ( new Date(Date.now()) ) / 1000 );
+
+            // Countdown timer can't take a negative number as a Prop
+            if(secondsUntilSwitchFlipped < 0) { return 0 };
+
+            return secondsUntilSwitchFlipped;
         }
     }
 });
@@ -115,7 +123,7 @@ export const useViewStore = defineStore('viewStore', {
         },
         showHome() {
             const createLoginSignupStore = useLoginSignupStore();
-            return createLoginSignupStore.userLoggedIn;
+            return createLoginSignupStore.userLoggedIn && !this.showUserAccount;
         }
     }
 });
@@ -256,18 +264,10 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
                         };
                         break;
                     }
-                    
                     default:
                         console.log('unhandled error message to display', error);
-                    
                 };
             })
-
-
-            
-            
-
-            
         }
     },
     getters: {
@@ -275,41 +275,7 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
     }
 });
 
-// let formErrorMessages = {
-//     'firstName': {
-//         'id': 1,
-//         'text': 'Invalid first name',
-//         'icon': 'info',
-//         'color': 'warning'
-//     },
-//     'lastName': {
-//         'id': 2,
-//         'text': 'Invalid last name',
-//         'icon': 'info',
-//         'color': 'warning'
-//     },
-//     'email': {
-//         'id': 3,
-//         'text': 'Invalid email',
-//         'icon': 'info',
-//         'color': 'warning'
-//     },
-//     'checkInIntervalInDays': {
-//         'id': 4,
-//         'text': 'Invalid checkin interval. Must be between 1 - 3',
-//         'icon': 'info',
-//         'color': 'warning'
-//     },
-//     'mustCreateSwitchWithTimeBuffer': {
-//         'id': 5,
-//         'text': 'Leave yourself at least 3 minutes to checkin',
-//         'icon': 'info',
-//         'color': 'warning'
-//     }
-// };
-
 export {
     regexName, regexPassword, regexEmail,
-    secondsBeforeNewSwitchFlipped,
-    // formErrorMessages,
+    secondsBeforeNewSwitchFlipped
 }

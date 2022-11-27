@@ -70,15 +70,13 @@ import { computed } from 'vue';
 import DeadmanSwitchInfoModal from './DeadmanSwitchInfoModal.vue';
 import CountdownTimer from '../shared/CountdownTimer.vue';
 
-
-import { secondsBeforeSwitchExpires } from '../../javascript/switchManager';
 import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';
 
 // Pinia stores
 import { storeToRefs } from 'pinia'
 import {useDeadmanSwitchStore} from '../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
-const { deadmanSwitches, assignCurrentlyViewedSwitch, handleShowSwitchInfoModal, afterSuccessfulCheckInAssignNewVariablesToSwitch } = deadmanSwitchStore;
+const { deadmanSwitches, assignCurrentlyViewedSwitch, handleShowSwitchInfoModal, afterSuccessfulCheckInAssignNewVariablesToSwitch, secondsBeforeSwitchExpires } = deadmanSwitchStore;
 
 // Assign the props to a variable so I will have access to it here in <script>
 const props = defineProps({

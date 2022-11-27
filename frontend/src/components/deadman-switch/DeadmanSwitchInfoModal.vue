@@ -97,14 +97,12 @@
 
 <script setup>
 
-// import { showSwitchInfoModal, showFinalMessageModal, currentlyViewedSwitch } from '../../javascript/stateManager';
-import { secondsBeforeSwitchExpires } from '../../javascript/switchManager';
-
 // Pinia stores
 import { storeToRefs } from 'pinia'
 import {useDeadmanSwitchStore} from '../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
 const { currentlyViewedSwitch, showSwitchInfoModal, showFinalMessageModal } = storeToRefs(deadmanSwitchStore);
+const { secondsBeforeSwitchExpires } = useDeadmanSwitchStore();
 
 </script>
 

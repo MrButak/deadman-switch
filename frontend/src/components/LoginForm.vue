@@ -31,9 +31,9 @@
             @click.prevent="handleLogin"
             :disabled="!areFormFieldsValid()"
         > Login </va-button>
-        <p v-if="!hasRegistered">
+        <p v-if="!loginSignupStore.hasRegistered">
             Not regestered yet? 
-            <span @click="handleSignupView()" class="va-link">
+            <span @click="loginSignupStore.handleSignupView()" class="va-link">
                 Register
             </span>
         </p>
@@ -56,7 +56,6 @@ import { useLoginSignupStore, useErrorMessageStore,
 import { storeToRefs } from 'pinia';
 const loginSignupStore = useLoginSignupStore();
 const errorMessageStore = useErrorMessageStore();
-const { hasRegistered, userLoggedIn, showLogin, showSignup, handleSignupView } = loginSignupStore;
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);
@@ -67,10 +66,11 @@ let userLoginData = reactive({
 
 function areFormFieldsValid() {
     
-    if( regexEmail.test(userLoginData.emailAddress) &&
-        regexPassword.test(userLoginData.password)) 
-            { return true }
-
+    if(
+        regexEmail.test(userLoginData.emailAddress) &&
+        regexPassword.test(userLoginData.password)
+    ) 
+        { return true }
     return false;
 };
 
@@ -107,6 +107,8 @@ async function handleLogin() {
             loginSignupStore.showSignup = false;
             loginSignupStore.loginFailedEmailNotVerified = false;
             loginSignupStore.userLoggedIn = true;
+            // Reset the State (clear out any error messages)
+            errorMessageStore.$reset();
             break;
         case '500':
             errorMessage.value = response.message;

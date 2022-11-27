@@ -22,15 +22,10 @@ import {
 } from '../../../javascript/stateManager';
 
 // Pinia store
-import { storeToRefs } from 'pinia';
 let deadmanSwitchStore = useDeadmanSwitchStore();
 let errorMessageStore = useErrorMessageStore();
-let { newSwitchData } = useCreateSwitchStore();
 let createSwitchStore = useCreateSwitchStore();
-
-let { deadmanSwitches } = deadmanSwitchStore;
-let { showCreateDeadmanSwitchCreationView } = storeToRefs(useCreateSwitchStore());
-
+let { newSwitchData } = useCreateSwitchStore();
 
 function areSwitchFieldsValid() {
 
@@ -83,7 +78,6 @@ async function handleCreateSwitch() {
     }
     else {
         newSwitchData.firstCheckedInAt = newSwitchData.checkInByTime;
-        // NextCheckinByTime += interval
         newSwitchData.checkInByTime.setHours(newSwitchData.checkInByTime.getHours() + (newSwitchData.checkInIntervalInDays * 24));
     };
    
@@ -105,24 +99,14 @@ async function handleCreateSwitch() {
     switch(response.status) {
         case '200':
             // Push newly created switch into the State
-            deadmanSwitches.push(response.switch);
-            // Hide the create switch view
-            // showCreateDeadmanSwitchCreationView.value = false;
-            // Reset form data
-            // newSwitchData.recipientFirstName = '';
-            // newSwitchData.recipientLastName = '';
-            // newSwitchData.recipientEmail = '';
-            // newSwitchData.finalMessage = '';
-            // newSwitchData.firstCheckedInAt = null;
+            deadmanSwitchStore.deadmanSwitches.push(response.switch);
+            // Reset the State
             createSwitchStore.$reset();
-            // TODO: should clear store here
-            console.log('switch successfully created');
+            errorMessageStore.$reset();
             break;
         case '500':
-            
             break;
         case '400':
-
             break;
         default:
             
