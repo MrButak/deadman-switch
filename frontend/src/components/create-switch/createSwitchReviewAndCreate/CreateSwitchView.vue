@@ -5,7 +5,7 @@
     :seconds-before-switch-flipped-prop="secondsBeforeNewSwitchFlipped"
     timer-sub-text="Before you must checkin"
 />
-<CreateSwitchReviewErrorMessages />
+<ErrorMessages />
 <AcknowledgeFirstCheckIn />
 <CreateSwitchButton />
 
@@ -18,11 +18,8 @@
 import { onMounted } from 'vue';
 import {
     secondsBeforeNewSwitchFlipped,
-    regexEmail, regexName, 
     useErrorMessageStore, useCreateSwitchStore
 } from '../../../javascript/stateManager';
-
-// import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
 
 import AcknowledgeFirstCheckIn from './AcknowledgeFirstCheckIn.vue';
 import CreateSwitchButton from './CreateSwitchButton.vue';
