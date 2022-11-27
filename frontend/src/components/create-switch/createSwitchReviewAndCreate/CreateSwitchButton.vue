@@ -35,23 +35,23 @@ let { showCreateDeadmanSwitchCreationView } = storeToRefs(useCreateSwitchStore()
 function areSwitchFieldsValid() {
 
     // Recalculate the secondsBeforeNewSwitchFlipped if still above 0 (below 0 will throw an error)
-    if(( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000 > 0) {
-        secondsBeforeNewSwitchFlipped.value =
+    if((newSwitchData.checkInByTime - new Date(Date.now())) / 1000 > 0) {
+        secondsBeforeNewSwitchFlipped.value = 
             ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;   
     };
-    // secondsBeforeNewSwitchFlipped.value =
-    //         ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000 || 0;
 
-    if( !newSwitchData.acknowledgeTimeUntilFirstCheckIn ||
+    if( 
+        !newSwitchData.acknowledgeTimeUntilFirstCheckIn ||
         !regexEmail.test(newSwitchData.recipientEmail) ||
         !regexName.test(newSwitchData.recipientFirstName) ||
         !regexName.test(newSwitchData.recipientLastName) ||
         newSwitchData.checkInIntervalInDays < 0 ||
         newSwitchData.checkInIntervalInDays > 4 ||
-        new Date(newSwitchData.checkInByTime).getTime() < 0 || // date validation
+        new Date(newSwitchData.checkInByTime).getTime() < 0 ||
         !newSwitchData.finalMessage ||
-        secondsBeforeNewSwitchFlipped.value < 180) // switch must have > 3 minutes before expiration 
-            { return false }
+        secondsBeforeNewSwitchFlipped.value < 180
+    )   { return false };
+
     return true;
 };
 
@@ -114,7 +114,7 @@ async function handleCreateSwitch() {
             // newSwitchData.recipientEmail = '';
             // newSwitchData.finalMessage = '';
             // newSwitchData.firstCheckedInAt = null;
-            createSwitchStore.$reset()
+            createSwitchStore.$reset();
             // TODO: should clear store here
             console.log('switch successfully created');
             break;

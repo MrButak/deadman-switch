@@ -16,11 +16,9 @@
 <script setup>
 
 // Pinia stores
-import { storeToRefs } from 'pinia'
-import { useCreateSwitchStore, useErrorMessageStore } from '../../../javascript/stateManager';
-const createSwitchStore = useCreateSwitchStore();
+import { useErrorMessageStore } from '../../javascript/stateManager';
 const errorMessageStore = useErrorMessageStore()
-// const { createSwitchReviewErrorMessages } = storeToRefs(createSwitchStore);
+
 
 </script>
 

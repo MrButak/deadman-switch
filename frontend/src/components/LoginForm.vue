@@ -48,20 +48,15 @@
 <script setup>
 
 import { ref, reactive } from 'vue';
-// import { handleSignupView } from '../javascript/viewManager'
-import { 
-    // hasRegistered, userLoggedIn,
-    // showLogin, showSignup,
-    // loginFailedEmailNotVerified,
-    regexPassword, regexEmail,
+import { useLoginSignupStore, useErrorMessageStore,
+    regexPassword, regexEmail
 } from '../javascript/stateManager';
 
 // Pinia store
 import { storeToRefs } from 'pinia';
-import { useLoginSignupStore } from '../javascript/stateManager';
 const loginSignupStore = useLoginSignupStore();
+const errorMessageStore = useErrorMessageStore();
 const { hasRegistered, userLoggedIn, showLogin, showSignup, handleSignupView } = loginSignupStore;
-
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);
@@ -69,7 +64,6 @@ let userLoginData = reactive({
     emailAddress: '',
     password: ''
 });
-
 
 function areFormFieldsValid() {
     
@@ -105,26 +99,30 @@ async function handleLogin() {
     let response = await request.json();
 
     switch(response.status) {
-        case '400':
-            errorMessage.value = response.message;
+        case '200':
+            // Handle views
+            loginSignupStore.errorMessage = '';
+            loginSignupStore.hasRegistered = false;
+            loginSignupStore.showLogin = false;
+            loginSignupStore.showSignup = false;
+            loginSignupStore.loginFailedEmailNotVerified = false;
+            loginSignupStore.userLoggedIn = true;
             break;
         case '500':
             errorMessage.value = response.message;
             break;
         case '401': // Email not verified
             errorMessage.value = response.message;
-            loginFailedEmailNotVerified.value = true;
+            errorMessageStore.checkForErrors({type: 'mustVerifyEmail', data: false})
+            loginSignupStore.loginFailedEmailNotVerified = true;
+            
             // TODO: show an option to resend email
             break;
-        default: // 200 success
-            // Handle views
-            errorMessage.value = '';
-            hasRegistered.value = false;
-            showLogin.value = false;
-            showSignup.value = false;
-            loginFailedEmailNotVerified.value = false;
-
-            userLoggedIn.value = true;
+        case '400':
+            errorMessage.value = response.message;
+            break;
+        default:
+            console.log('unhandled response case', response);
     };
 };
 

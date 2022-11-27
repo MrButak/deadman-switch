@@ -20,7 +20,7 @@ export const useLoginSignupStore = defineStore('loginSignupStore', {
     actions: {
         handleLoginView() {
             // Shouldn't be showing if logged in OR the login view is already showing
-            if(this.userLoggedIn || this.showLogin) { return };
+            if(this.userLoggedIn) { return };
              // Change views
             this.showLogin = true;
             this.showSignup = false;
@@ -30,7 +30,7 @@ export const useLoginSignupStore = defineStore('loginSignupStore', {
             if(this.hasRegistered) { return }
 
             // Shouldn't be showing if logged in OR the signup view is already showing
-            if(this.userLoggedIn || this.showSignup) { return };
+            if(this.userLoggedIn) { return };
             // Change views
             this.showSignup = true;
             this.showLogin = false;
@@ -111,7 +111,7 @@ export const useViewStore = defineStore('viewStore', {
         },
         showSignup() {
             const createLoginSignupStore = useLoginSignupStore();
-            return !createLoginSignupStore.userLoggedIn && !createLoginSignupStore.showLogin && !!createLoginSignupStore.hasRegistered;
+            return !createLoginSignupStore.userLoggedIn && !createLoginSignupStore.showLogin && !createLoginSignupStore.hasRegistered;
         },
         showHome() {
             const createLoginSignupStore = useLoginSignupStore();
@@ -156,7 +156,7 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
             },
             'mustVerifyEmail': {
                 'id': 6,
-                'text': 'Please verify your email address. Check your email and click on the verification link sent to you',
+                'text': 'Verify your email address before you login. Check your email and click on the verification link sent to you',
                 'icon': 'info',
                 'color': 'warning'
             },
@@ -165,6 +165,12 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
                 'text': 'Please acknowledge that you must checkin before the above time, or your switch will be triggered',
                 'icon': 'info',
                 'color': 'warning'
+            },
+            'signupSuccess': {
+                'id': 8,
+                'text': 'Registration success',
+                'icon': 'check_circle',
+                'color': 'success'
             }
         },
         errorMessageArray: []
@@ -207,7 +213,6 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
                         }
                         else if(regexEmail.test(error.data) &&
                             this.errorMessageShown(this.errorMessages.email.id)) {
-                            
                                 this.removeErrorMessage(this.errorMessages.email.id);
                         };
                         break;
@@ -222,6 +227,17 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
                         };
                         break;
                     }
+                    case 'mustVerifyEmail': {
+                        // error.data == isEmailVerified:Boolean
+                        if(!error.data && !this.errorMessageShown(this.errorMessages.mustVerifyEmail.id) ) {
+                            this.errorMessageArray.push(this.errorMessages.mustVerifyEmail);
+                        }
+                        else if(regexEmail.test(error.data) &&
+                            this.errorMessageShown(this.errorMessages.mustVerifyEmail.id)) {
+                                this.removeErrorMessage(this.errorMessages.mustVerifyEmail.id);
+                        };
+                        break;
+                    }
                     case 'acknowledgeTimeUntilFirstCheckIn': {
                         if( !error.data && !this.errorMessageShown(this.errorMessages.acknowledgeTimeUntilFirstCheckIn.id) ) {
                             this.errorMessageArray.push(this.errorMessages.acknowledgeTimeUntilFirstCheckIn);
@@ -231,9 +247,18 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
                         };
                         break;
                     }
+                    case 'signupSuccess': {
+                        if( error.data && !this.errorMessageShown(this.errorMessages.signupSuccess.id) ) {
+                            this.errorMessageArray.push(this.errorMessages.signupSuccess);
+                        }
+                        else if(error.data > 180 && this.errorMessageShown(this.errorMessages.signupSuccess.id)) {
+                            this.removeErrorMessage(this.errorMessages.signupSuccess.id);
+                        };
+                        break;
+                    }
                     
                     default:
-                        console.log('unhandled error message to display', error)
+                        console.log('unhandled error message to display', error);
                     
                 };
             })

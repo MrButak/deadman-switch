@@ -40,6 +40,7 @@
         />
     </template>
     </va-input>
+
     <va-input
         v-model="userSignupData.retypePassword"
         :type="isPasswordVisible ? 'text' : 'password'"
@@ -56,7 +57,7 @@
     > Register </va-button>
     <p>
         Already have an account? 
-        <span @click="handleLoginView()" class="va-link">
+        <span @click="loginSignupStore.handleLoginView()" class="va-link">
             Login
         </span>
     </p>
@@ -69,17 +70,14 @@
 <script setup>
 
 import { ref, reactive, computed } from 'vue';
-import { 
-        // hasRegistered, showLogin, showSignup,
-        regexName, regexPassword, regexEmail
+import { regexName, regexPassword, regexEmail
 } from '../javascript/stateManager';
-// import { handleLoginView } from '../javascript/viewManager';
 
 // Pinia store
 import { storeToRefs } from 'pinia';
-import { useLoginSignupStore } from '../javascript/stateManager';
+import { useLoginSignupStore, useErrorMessageStore } from '../javascript/stateManager';
 const loginSignupStore = useLoginSignupStore();
-const { hasRegistered, showLogin, showSignup, handleLoginView } = loginSignupStore;
+const errorMessageStore = useErrorMessageStore();
 
 let errorMessage = ref('');
 let isPasswordVisible = ref(false);
@@ -134,17 +132,23 @@ async function handleFormSubmission() {
     let response = await request.json();
 
     switch(response.status) {
-        case '400':
-            errorMessage.value = response.message;
+        case '200':
+            errorMessageStore.checkForErrors([
+                { type: 'mustVerifyEmail', data: false },
+                { type: 'signupSuccess', data: loginSignupStore.hasRegistered }
+            ]);
+            loginSignupStore.showSignup = false;
+            loginSignupStore.showLogin = true;
+            loginSignupStore.hasRegistered = true;
             break;
-        case '500':
-            errorMessage.value = response.message;
-            break;
-        // 200 success
+        // case '500':
+        //     errorMessage.value = response.message;
+        //     break;
+
+        // case '400':
+        //     errorMessage.value = response.message;
         default:
-            showSignup.value = false;
-            showLogin.value = true;
-            hasRegistered.value = true;
+            errorMessage.value = response.message;
     };
 };
 

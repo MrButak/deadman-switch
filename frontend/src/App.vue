@@ -18,29 +18,6 @@
     <Signup />
 </span>
 
-
-<!-- <span v-if="userLoggedIn">
-
-    <span v-if="showUserAccount">
-        <UserAccount />
-    </span>
-
-    <span v-else>
-        <Home />
-    </span>
-</span>
-
-<span v-else>
-    <span v-if="showLogin">
-        <Login />
-    </span>
-
-    <span v-else-if="!hasRegistered && showSignup">
-        <Signup />
-    </span>
-</span> -->
-
-
 </template>
 
 
@@ -75,11 +52,10 @@ onMounted(() => {
     (async() => {
         let isUserLoggedIn = await checkIfUserIsLoggedIn();
         
-        // Get any switches the user may have
+        // If logged in, get any switches the user may have
         if (isUserLoggedIn[0]) {
 
             let switches = await getDeadmanSwitchesWithUserId(isUserLoggedIn[1]);
-            console.log({switches})
             if(switches) {
                 deadmanSwitches.length = 0;
                 switches.forEach(dmSwitch => {

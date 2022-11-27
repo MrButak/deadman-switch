@@ -24,6 +24,7 @@ async function checkForValidCookieAndGetUserId() {
     }
     // DEVELOPMENT
     else {
+        return [false]
         return [true, 1];
     };
 };

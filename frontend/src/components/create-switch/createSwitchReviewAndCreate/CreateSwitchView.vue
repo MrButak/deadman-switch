@@ -28,7 +28,7 @@ import AcknowledgeFirstCheckIn from './AcknowledgeFirstCheckIn.vue';
 import CreateSwitchButton from './CreateSwitchButton.vue';
 import CreateSwitchReview from './CreateSwitchReview.vue';
 import CountdownTimer from '../../shared/CountdownTimer.vue';
-import CreateSwitchReviewErrorMessages from './CreateSwitchReviewErrorMessages.vue';
+import ErrorMessages from '../../shared/ErrorMessages.vue';
 
 // Pinia stores
 import { storeToRefs } from 'pinia'

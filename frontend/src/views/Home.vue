@@ -18,11 +18,6 @@
 
 <script setup>
 
-import {
-    //  deadmanSwitches,
-        // showCreateDeadmanSwitchCreationView
-} from '../javascript/stateManager';
-
 import NoSwitches from '../components/home/NoSwitches.vue';
 import CreateSwitch from '../components/home/CreateSwitch.vue';
 import AllSwitches from '../components/home/AllSwitches.vue';
