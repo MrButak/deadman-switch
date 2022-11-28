@@ -1,7 +1,6 @@
 <template>
 
 <SwitchIntervalSelect />
-
 <TimePicker />
 
 </template>

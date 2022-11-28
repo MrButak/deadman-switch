@@ -27,7 +27,6 @@ import CountdownTimer from '../../shared/CountdownTimer.vue';
 import ErrorMessages from '../../shared/ErrorMessages.vue';
 
 // Pinia stores
-import { storeToRefs } from 'pinia'
 const createSwitchStore = useCreateSwitchStore();
 const errorMessageStore = useErrorMessageStore();
 const deadmanSwitchStore = useDeadmanSwitchStore();

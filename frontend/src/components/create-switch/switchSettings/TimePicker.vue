@@ -14,9 +14,7 @@
 
 <script setup>
 
-import { ref, computed } from 'vue';
 // Pinia store
-import { storeToRefs } from 'pinia';
 import { useCreateSwitchStore } from '../../../javascript/stateManager';
 const createSwitchStore = useCreateSwitchStore();
 

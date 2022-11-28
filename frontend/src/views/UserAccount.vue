@@ -1,4 +1,5 @@
 <template>
+
 <h2 class="va-h2" style="text-align: center;">Your Account</h2>
 <div class="user-account-wrapper row row">
     <div class="flex md6 lg4">
@@ -41,7 +42,6 @@
 <script setup>
 
 import { reactive, onMounted } from 'vue';
-// import { deadmanSwitches } from '../javascript/stateManager';
 import { checkForValidCookieAndGetUserId } from '../javascript/userManager';
 
 // Pinia store
@@ -57,7 +57,6 @@ let userAccountData = reactive({
 });
 
 onMounted(() => {
-
     (async() => {
         let userId = await checkForValidCookieAndGetUserId();
         if(userId[0]) {

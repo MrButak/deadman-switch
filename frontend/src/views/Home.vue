@@ -1,16 +1,8 @@
 <template>
-
-<span v-if="!deadmanSwitches.length && !showCreateDeadmanSwitchCreationView">
-    <NoSwitches />
-</span>
-
-<span v-if="showCreateDeadmanSwitchCreationView">
-    <CreateSwitch />
-</span>
-
-<span v-if="!showCreateDeadmanSwitchCreationView">
-    <AllSwitches />
-</span>
+    
+<NoSwitches v-if="!deadmanSwitches.length && !showCreateDeadmanSwitchCreationView" />
+<CreateSwitch v-if="showCreateDeadmanSwitchCreationView" />
+<AllSwitches v-if="!showCreateDeadmanSwitchCreationView" />
 
 </template>
 

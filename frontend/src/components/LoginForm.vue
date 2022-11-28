@@ -53,7 +53,6 @@ import { useLoginSignupStore, useErrorMessageStore,
 } from '../javascript/stateManager';
 
 // Pinia store
-import { storeToRefs } from 'pinia';
 const loginSignupStore = useLoginSignupStore();
 const errorMessageStore = useErrorMessageStore();
 
@@ -65,7 +64,6 @@ let userLoginData = reactive({
 });
 
 function areFormFieldsValid() {
-    
     if(
         regexEmail.test(userLoginData.emailAddress) &&
         regexPassword.test(userLoginData.password)
@@ -117,7 +115,6 @@ async function handleLogin() {
             errorMessage.value = response.message;
             errorMessageStore.checkForErrors({type: 'mustVerifyEmail', data: false})
             loginSignupStore.loginFailedEmailNotVerified = true;
-            
             // TODO: show an option to resend email
             break;
         case '400':

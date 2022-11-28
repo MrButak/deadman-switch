@@ -21,10 +21,7 @@
 
 <script setup>
 
-import { onMounted, ref } from 'vue';
-// import { createSwitchNavigationViews,
-//         creatSwitchCurrentView
-// } from '../../javascript/stateManager';
+import { ref } from 'vue';
 
 // Pinia stores
 import { storeToRefs } from 'pinia'
@@ -33,10 +30,6 @@ let createSwitchStore = useCreateSwitchStore();
 const { createSwitchNavigationViews, creatSwitchCurrentView } = storeToRefs(createSwitchStore);
 
 let defaultTabPosition = ref(0);
-// Default view
-// onMounted(() => {
-//     creatSwitchCurrentView = 'Settings';
-// });
 
 </script>
 

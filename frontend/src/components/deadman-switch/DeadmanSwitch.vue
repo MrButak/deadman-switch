@@ -73,7 +73,6 @@ import CountdownTimer from '../shared/CountdownTimer.vue';
 import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';
 
 // Pinia stores
-import { storeToRefs } from 'pinia'
 import {useDeadmanSwitchStore} from '../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
 const { deadmanSwitches, assignCurrentlyViewedSwitch, handleShowSwitchInfoModal, afterSuccessfulCheckInAssignNewVariablesToSwitch, secondsBeforeSwitchExpires } = deadmanSwitchStore;

@@ -101,8 +101,7 @@
 import { storeToRefs } from 'pinia'
 import {useDeadmanSwitchStore} from '../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
-const { currentlyViewedSwitch, showSwitchInfoModal, showFinalMessageModal } = storeToRefs(deadmanSwitchStore);
-const { secondsBeforeSwitchExpires } = useDeadmanSwitchStore();
+const { secondsBeforeSwitchExpires, currentlyViewedSwitch, showSwitchInfoModal, showFinalMessageModal } = storeToRefs(deadmanSwitchStore);
 
 </script>
 

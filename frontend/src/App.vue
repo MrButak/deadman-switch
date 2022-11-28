@@ -1,22 +1,10 @@
 <template>
 
 <Header />
-
-<span v-if="viewStore.showUserAccount">
-    <UserAccount />
-</span>
-
-<span v-if="viewStore.showHome">
-    <Home />
-</span>
-
-<span v-if="viewStore.showLogin">
-    <Login />
-</span>
-
-<span v-if="viewStore.showSignup">
-    <Signup />
-</span>
+<UserAccount v-if="viewStore.showUserAccount" />
+<Home v-if="viewStore.showHome" />
+<Login v-if="viewStore.showLogin" />
+<Signup v-if="viewStore.showSignup" />
 
 </template>
 

@@ -74,7 +74,6 @@ import { regexName, regexPassword, regexEmail
 } from '../javascript/stateManager';
 
 // Pinia store
-import { storeToRefs } from 'pinia';
 import { useLoginSignupStore, useErrorMessageStore } from '../javascript/stateManager';
 const loginSignupStore = useLoginSignupStore();
 const errorMessageStore = useErrorMessageStore();
@@ -95,11 +94,13 @@ let passwordsMatch = computed(() => {
 
 function areFormFieldsValid() {
     
-    if( regexName.test(userSignupData.firstName) &&
+    if( 
+        regexName.test(userSignupData.firstName) &&
         regexName.test(userSignupData.lastName) &&
         regexEmail.test(userSignupData.emailAddress) &&
         regexPassword.test(userSignupData.password) &&
-        passwordsMatch.value) 
+        passwordsMatch.value
+    ) 
             { return true }
 
     return false;
@@ -141,14 +142,15 @@ async function handleFormSubmission() {
             loginSignupStore.showLogin = true;
             loginSignupStore.hasRegistered = true;
             break;
-        // case '500':
-        //     errorMessage.value = response.message;
-        //     break;
-
-        // case '400':
-        //     errorMessage.value = response.message;
-        default:
+        case '500':
             errorMessage.value = response.message;
+            break;
+
+        case '400':
+            errorMessage.value = response.message;
+            break;
+        default:
+            console.log('Unhandeled response when signing up', response);
     };
 };
 
