@@ -4,7 +4,6 @@ import { defineStore } from 'pinia';
 const regexName = /^([A-Za-z]){1,18}$/;
 const regexPassword = /^([A-Za-z0-9\-\_\!\@\#\$\%\^\&\*\+\=]){6,18}$/;
 const regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-let secondsBeforeNewSwitchFlipped = ref(0);
 
 export const useLoginSignupStore = defineStore('loginSignupStore', {
     state: () => ({
@@ -53,7 +52,7 @@ export const useCreateSwitchStore = defineStore('createSwitchStore', {
             recipientLastName: '',
             recipientEmail: '',
             checkInIntervalInDays: 1,
-            checkInByTime: new Date(),
+            checkInByTime: new Date(), // need to reference the time the user chooses here
             finalMessage: '',
             firstCheckedInAt: null,
             switchName: 'switch name',
@@ -63,8 +62,34 @@ export const useCreateSwitchStore = defineStore('createSwitchStore', {
         createSwitchReviewErrorMessages: []
         
     }),
+    getters: {
+        // For the TimePicker.vue Component. Returns a human readable time
+        doubleDigitHours() {
+            return this.newSwitchData.checkInByTime.getHours() < 10 ?
+                '0' + this.newSwitchData.checkInByTime.getHours() :
+                this.newSwitchData.checkInByTime.getHours();
+        },
+        doubleDigitMinutes() {
+            return this.newSwitchData.checkInByTime.getMinutes() < 10 ?
+                '0' + this.newSwitchData.checkInByTime.getMinutes() :
+                this.newSwitchData.checkInByTime.getMinutes();
+        }
+    },
     actions: {
+        // This is an action instead of a getter (computed) because I do not need the current value of new Date(Date.now()) (this.newSwitchData.checkInByTime). I need the user selected Date. If using a getter, the Date will always be current.
+        secondsBeforeNewSwitchExpires() {
+            const deadmanSwitchStore = useDeadmanSwitchStore();
 
+            let secondsBeforeNewSwitchFlipped =
+                ( this.newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;
+
+            // Add the check in interval if the time to check in has already passed
+            if(secondsBeforeNewSwitchFlipped < 0) {
+                secondsBeforeNewSwitchFlipped += (this.newSwitchData.checkInIntervalInDays * 24 * 60 * 60);
+            };
+
+            return secondsBeforeNewSwitchFlipped;
+        }
     }
 });
 
@@ -93,7 +118,6 @@ export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
 
             // Countdown timer can't take a negative number as a Prop
             if(secondsUntilSwitchFlipped < 0) { return 0 };
-
             return secondsUntilSwitchFlipped;
         }
     }
@@ -276,6 +300,5 @@ export const useErrorMessageStore = defineStore('errorMessageStore', {
 });
 
 export {
-    regexName, regexPassword, regexEmail,
-    secondsBeforeNewSwitchFlipped
+    regexName, regexPassword, regexEmail
 }

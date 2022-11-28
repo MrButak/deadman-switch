@@ -16,7 +16,7 @@
 
 import { checkForValidCookieAndGetUserId } from '../../../javascript/userManager';
 import { 
-        secondsBeforeNewSwitchFlipped,
+        // secondsBeforeNewSwitchFlipped,
         regexName, regexEmail,
         useDeadmanSwitchStore, useCreateSwitchStore, useErrorMessageStore
 } from '../../../javascript/stateManager';
@@ -31,7 +31,7 @@ function areSwitchFieldsValid() {
 
     // Recalculate the secondsBeforeNewSwitchFlipped if still above 0 (below 0 will throw an error)
     if((newSwitchData.checkInByTime - new Date(Date.now())) / 1000 > 0) {
-        secondsBeforeNewSwitchFlipped.value = 
+        deadmanSwitchStore.secondsBeforeSwitchExpires = 
             ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;   
     };
 
@@ -44,7 +44,7 @@ function areSwitchFieldsValid() {
         newSwitchData.checkInIntervalInDays > 4 ||
         new Date(newSwitchData.checkInByTime).getTime() < 0 ||
         !newSwitchData.finalMessage ||
-        secondsBeforeNewSwitchFlipped.value < 180
+        deadmanSwitchStore.secondsBeforeSwitchExpires < 180
     )   { return false };
 
     return true;
@@ -59,7 +59,7 @@ async function handleCreateSwitch() {
 
     errorMessageStore.checkForErrors([
         // Edge case: If the user arrives at this view with > 3 minutes left, there will be now error, but if they wait until there is < 3 minutes left before the switch expires, no error will show. So this will display that error message again if needed.
-        { type: 'mustCreateSwitchWithTimeBuffer', data: secondsBeforeNewSwitchFlipped.value },
+        { type: 'mustCreateSwitchWithTimeBuffer', data: deadmanSwitchStore.secondsBeforeSwitchExpires },
         // Make sure the user checked the acknowledge box
         { type: 'acknowledgeTimeUntilFirstCheckIn', data: newSwitchData.acknowledgeTimeUntilFirstCheckIn }
     ]);

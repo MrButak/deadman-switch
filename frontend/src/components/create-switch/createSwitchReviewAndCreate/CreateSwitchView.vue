@@ -2,7 +2,7 @@
 
 <CreateSwitchReview />
 <CountdownTimer 
-    :seconds-before-switch-flipped-prop="secondsBeforeNewSwitchFlipped"
+    :seconds-before-switch-flipped-prop="createSwitchStore.secondsBeforeNewSwitchExpires()"
     timer-sub-text="Before you must checkin"
 />
 <ErrorMessages />
@@ -17,8 +17,7 @@
 
 import { onMounted } from 'vue';
 import {
-    secondsBeforeNewSwitchFlipped,
-    useErrorMessageStore, useCreateSwitchStore
+    useErrorMessageStore, useCreateSwitchStore, useDeadmanSwitchStore
 } from '../../../javascript/stateManager';
 
 import AcknowledgeFirstCheckIn from './AcknowledgeFirstCheckIn.vue';
@@ -29,37 +28,21 @@ import ErrorMessages from '../../shared/ErrorMessages.vue';
 
 // Pinia stores
 import { storeToRefs } from 'pinia'
-// import { useCreateSwitchStore } from '../../../javascript/stateManager';
 const createSwitchStore = useCreateSwitchStore();
 const errorMessageStore = useErrorMessageStore();
-const { newSwitchData } = createSwitchStore;
+const deadmanSwitchStore = useDeadmanSwitchStore();
 
 onMounted(() => {
-    calculateSecondsBeforeSwitchFlipped();
     handleCreateSwitchFormErrorMessages();
 });
-
-// ****************************************************************************
-// Function calculates the seconds before the user needs to checkin for the first time
-// ****************************************************************************
-function calculateSecondsBeforeSwitchFlipped(mustCheckInByDateObject, checkInIntervalInDays) {
-
-    secondsBeforeNewSwitchFlipped.value =
-        ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;
-
-    // Add the check in interval if the time to check in has already passed
-    if(secondsBeforeNewSwitchFlipped.value < 0) {
-        secondsBeforeNewSwitchFlipped.value += (newSwitchData.checkInIntervalInDays * 24 * 60 * 60);
-    };
-};
-
+ 
 function handleCreateSwitchFormErrorMessages() {
 
     let errorsToCheckFor = [
-        { type: 'firstName', data: newSwitchData.recipientFirstName },
-        { type: 'lastName', data: newSwitchData.recipientLastName },
-        { type: 'email', data: newSwitchData.recipientEmail },
-        { type: 'mustCreateSwitchWithTimeBuffer', data: secondsBeforeNewSwitchFlipped.value }
+        { type: 'firstName', data: createSwitchStore.newSwitchData.recipientFirstName },
+        { type: 'lastName', data: createSwitchStore.newSwitchData.recipientLastName },
+        { type: 'email', data: createSwitchStore.newSwitchData.recipientEmail },
+        { type: 'mustCreateSwitchWithTimeBuffer', data: deadmanSwitchStore.secondsBeforeSwitchExpires(createSwitchStore.newSwitchData.checkInByTime) }
     ];
     errorMessageStore.checkForErrors(errorsToCheckFor);
 };

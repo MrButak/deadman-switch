@@ -35,8 +35,9 @@ import UserAccount from './views/UserAccount.vue';
 
 // Pinia stores
 import { storeToRefs } from 'pinia';
-import { useDeadmanSwitchStore, useLoginSignupStore, useViewStore } from './javascript/stateManager';
-
+import { useDeadmanSwitchStore, useLoginSignupStore, useViewStore, useCreateSwitchStore } from './javascript/stateManager';
+let createSwitchStore = useCreateSwitchStore()
+// console.log(createSwitchStore.checkInByTime)
 const deadmanSwitchStore = useDeadmanSwitchStore();
 const loginSignupStore = useLoginSignupStore();
 const viewStore = useViewStore();
