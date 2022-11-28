@@ -147,7 +147,7 @@ export const useViewStore = defineStore('viewStore', {
         },
         showHome() {
             const createLoginSignupStore = useLoginSignupStore();
-            return createLoginSignupStore.userLoggedIn && !this.showUserAccount;
+            return createLoginSignupStore.userLoggedIn;
         }
     }
 });
