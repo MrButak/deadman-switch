@@ -19,7 +19,7 @@
     </va-card-actions>
 
     <va-card-content>
-        <h6>Recipient details</h6>
+        <h6 class="bg-orange-300">Recipient details</h6>
     </va-card-content>
     
     <va-card-actions align="between">

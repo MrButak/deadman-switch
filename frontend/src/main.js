@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-
+import '../index.css';
 // Pinia stores
 import { createPinia } from 'pinia';
 import { useCreateSwitchStore, useDeadmanSwitchStore, useLoginSignupStore } from './javascript/stateManager';
