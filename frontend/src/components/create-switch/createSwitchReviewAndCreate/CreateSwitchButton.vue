@@ -30,10 +30,10 @@ let { newSwitchData } = useCreateSwitchStore();
 function areSwitchFieldsValid() {
 
     // Recalculate the secondsBeforeNewSwitchFlipped if still above 0 (below 0 will throw an error)
-    if((newSwitchData.checkInByTime - new Date(Date.now())) / 1000 > 0) {
-        deadmanSwitchStore.secondsBeforeSwitchExpires = 
-            ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;   
-    };
+    // if((newSwitchData.checkInByTime - new Date(Date.now())) / 1000 > 0) {
+    //     deadmanSwitchStore.secondsBeforeSwitchExpires = 
+    //         ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;   
+    // };
 
     if( 
         !newSwitchData.acknowledgeTimeUntilFirstCheckIn ||
@@ -44,7 +44,7 @@ function areSwitchFieldsValid() {
         newSwitchData.checkInIntervalInDays > 4 ||
         new Date(newSwitchData.checkInByTime).getTime() < 0 ||
         !newSwitchData.finalMessage ||
-        deadmanSwitchStore.secondsBeforeSwitchExpires < 180
+        createSwitchStore.secondsBeforeNewSwitchExpires() < 180
     )   { return false };
 
     return true;

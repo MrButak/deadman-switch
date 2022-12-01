@@ -36,12 +36,12 @@ onMounted(() => {
 });
  
 function handleCreateSwitchFormErrorMessages() {
-
+    console.log(createSwitchStore.secondsBeforeNewSwitchExpires())
     let errorsToCheckFor = [
         { type: 'firstName', data: createSwitchStore.newSwitchData.recipientFirstName },
         { type: 'lastName', data: createSwitchStore.newSwitchData.recipientLastName },
         { type: 'email', data: createSwitchStore.newSwitchData.recipientEmail },
-        { type: 'mustCreateSwitchWithTimeBuffer', data: deadmanSwitchStore.secondsBeforeSwitchExpires(createSwitchStore.newSwitchData.checkInByTime) }
+        { type: 'mustCreateSwitchWithTimeBuffer', data: createSwitchStore.secondsBeforeNewSwitchExpires() }
     ];
     errorMessageStore.checkForErrors(errorsToCheckFor);
 };
