@@ -1,27 +1,14 @@
 <template>
-
-<span v-if="!deadmanSwitches.length && !showCreateDeadmanSwitchCreationView">
-    <NoSwitches />
-</span>
-
-<span v-if="showCreateDeadmanSwitchCreationView">
-    <CreateSwitch />
-</span>
-
-<span v-if="!showCreateDeadmanSwitchCreationView">
-    <AllSwitches />
-</span>
+    
+<NoSwitches v-if="!deadmanSwitches.length && !showCreateDeadmanSwitchCreationView" />
+<CreateSwitch v-if="showCreateDeadmanSwitchCreationView" />
+<AllSwitches v-if="!showCreateDeadmanSwitchCreationView" />
 
 </template>
 
 
 
 <script setup>
-
-import {
-    //  deadmanSwitches,
-        // showCreateDeadmanSwitchCreationView
-} from '../javascript/stateManager';
 
 import NoSwitches from '../components/home/NoSwitches.vue';
 import CreateSwitch from '../components/home/CreateSwitch.vue';

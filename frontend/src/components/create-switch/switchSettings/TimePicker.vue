@@ -3,12 +3,10 @@
 <div class="time-picker-wrapper">
     <div class="display-time-wrapper">
         <p>No later than</p>
-        <h6 class="va-h6">{{ doubleDigitHours }}:{{ doubleDigitMinutes }}</h6>
-        <va-time-input v-model="newSwitchData.checkInByTime" />
+        <h6 class="va-h6">{{ createSwitchStore.doubleDigitHours }}:{{ createSwitchStore.doubleDigitMinutes }}</h6>
+        <va-time-input v-model="createSwitchStore.newSwitchData.checkInByTime" />
     </div>
-    
 </div>
-
 
 </template>
 
@@ -16,26 +14,9 @@
 
 <script setup>
 
-import { computed } from 'vue';
-// import { newSwitchData } from '../../../javascript/stateManager';
-
 // Pinia store
-import { storeToRefs } from 'pinia';
 import { useCreateSwitchStore } from '../../../javascript/stateManager';
 const createSwitchStore = useCreateSwitchStore();
-const { newSwitchData } = createSwitchStore;
-
-let doubleDigitHours = computed(() => {
-    return newSwitchData.checkInByTime.getHours() < 10 ?
-        '0' + newSwitchData.checkInByTime.getHours() :
-        newSwitchData.checkInByTime.getHours();
-});
-let doubleDigitMinutes = computed(() => {
-    return newSwitchData.checkInByTime.getMinutes() < 10 ?
-        '0' + newSwitchData.checkInByTime.getMinutes() :
-        newSwitchData.checkInByTime.getMinutes();
-});
-
 
 </script>
 

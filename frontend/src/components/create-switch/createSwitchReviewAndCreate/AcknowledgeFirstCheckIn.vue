@@ -3,9 +3,9 @@
 <div class="acknowledge-first-checkin-wrapper">
 <div class="checkbox-and-text-wrapper">
     <div class="checkbox-wrapper">
-        <va-checkbox 
+        <va-checkbox
             class="mb-4" 
-            v-model="newSwitchData.acknowledgeTimeUntilFirstCheckIn" 
+            v-model="createSwitchStore.newSwitchData.acknowledgeTimeUntilFirstCheckIn" 
             color="success"
         />
     </div>
@@ -22,14 +22,9 @@
 
 <script setup>
 
-import { onMounted } from 'vue';
-// import { newSwitchData } from '../../../javascript/stateManager';
-
 // Pinia stores
-import { storeToRefs } from 'pinia'
-import { useCreateSwitchStore } from '../../../javascript/stateManager';
-let createSwitchStore = useCreateSwitchStore();
-const { newSwitchData } = storeToRefs(createSwitchStore);
+import { useCreateSwitchStore, useErrorMessageStore } from '../../../javascript/stateManager';
+const createSwitchStore = useCreateSwitchStore();
 
 </script>
 

@@ -12,8 +12,6 @@
 
 <script setup>
 
-// import { newSwitchData } from '../../../javascript/stateManager';
-
 // Pinia store
 import { storeToRefs } from 'pinia';
 import { useCreateSwitchStore } from '../../../javascript/stateManager';

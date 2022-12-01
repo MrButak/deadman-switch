@@ -5,7 +5,7 @@
     color="secondary"
     > 
     Cancel </va-button>
-    <va-button @emit="('')" @click="handleCreateSwitch"> Create </va-button>
+    <va-button @click="handleCreateSwitch"> Create </va-button>
 </div>
 
 </template>
@@ -16,45 +16,37 @@
 
 import { checkForValidCookieAndGetUserId } from '../../../javascript/userManager';
 import { 
-    // newSwitchData, 
-        secondsBeforeNewSwitchFlipped,
+        // secondsBeforeNewSwitchFlipped,
         regexName, regexEmail,
-        // deadmanSwitches, 
-        // showCreateDeadmanSwitchCreationView
+        useDeadmanSwitchStore, useCreateSwitchStore, useErrorMessageStore
 } from '../../../javascript/stateManager';
-// import { handleCreateSwitchFormErrorMessages } from '../../../javascript/errorManager';
 
 // Pinia store
-import { storeToRefs } from 'pinia';
-import { useDeadmanSwitchStore, useCreateSwitchStore } from '../../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
-let { deadmanSwitches } = deadmanSwitchStore;
-
+let errorMessageStore = useErrorMessageStore();
+let createSwitchStore = useCreateSwitchStore();
 let { newSwitchData } = useCreateSwitchStore();
-let { showCreateDeadmanSwitchCreationView } = storeToRefs(useCreateSwitchStore());
-
 
 function areSwitchFieldsValid() {
 
     // Recalculate the secondsBeforeNewSwitchFlipped if still above 0 (below 0 will throw an error)
-    if(( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000 > 0) {
-        secondsBeforeNewSwitchFlipped.value =
-            ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;   
-    };
-    
-    // Look again for error messages / clear any old messages out
-    // handleCreateSwitchFormErrorMessages();
+    // if((newSwitchData.checkInByTime - new Date(Date.now())) / 1000 > 0) {
+    //     deadmanSwitchStore.secondsBeforeSwitchExpires = 
+    //         ( newSwitchData.checkInByTime - new Date(Date.now()) ) / 1000;   
+    // };
 
-    if( !newSwitchData.acknowledgeTimeUntilFirstCheckIn ||
+    if( 
+        !newSwitchData.acknowledgeTimeUntilFirstCheckIn ||
         !regexEmail.test(newSwitchData.recipientEmail) ||
         !regexName.test(newSwitchData.recipientFirstName) ||
         !regexName.test(newSwitchData.recipientLastName) ||
         newSwitchData.checkInIntervalInDays < 0 ||
         newSwitchData.checkInIntervalInDays > 4 ||
-        new Date(newSwitchData.checkInByTime).getTime() < 0 || // date validation
+        new Date(newSwitchData.checkInByTime).getTime() < 0 ||
         !newSwitchData.finalMessage ||
-        secondsBeforeNewSwitchFlipped.value < 180) // no switches can be set if they go off within 5 minutes 
-            { return false }
+        createSwitchStore.secondsBeforeNewSwitchExpires() < 180
+    )   { return false };
+
     return true;
 };
 
@@ -64,6 +56,13 @@ async function handleCreateSwitch() {
     if(!newSwitchData.finalMessage) {
         newSwitchData.finalMessage = 'Hi ma, I won\'t be making it home for supper tonight. You know what to do.'
     };
+
+    errorMessageStore.checkForErrors([
+        // Edge case: If the user arrives at this view with > 3 minutes left, there will be now error, but if they wait until there is < 3 minutes left before the switch expires, no error will show. So this will display that error message again if needed.
+        { type: 'mustCreateSwitchWithTimeBuffer', data: deadmanSwitchStore.secondsBeforeSwitchExpires },
+        // Make sure the user checked the acknowledge box
+        { type: 'acknowledgeTimeUntilFirstCheckIn', data: newSwitchData.acknowledgeTimeUntilFirstCheckIn }
+    ]);
 
     // Form validation
     if(!areSwitchFieldsValid()) { return };
@@ -79,7 +78,6 @@ async function handleCreateSwitch() {
     }
     else {
         newSwitchData.firstCheckedInAt = newSwitchData.checkInByTime;
-        // NextCheckinByTime += interval
         newSwitchData.checkInByTime.setHours(newSwitchData.checkInByTime.getHours() + (newSwitchData.checkInIntervalInDays * 24));
     };
    
@@ -101,22 +99,14 @@ async function handleCreateSwitch() {
     switch(response.status) {
         case '200':
             // Push newly created switch into the State
-            deadmanSwitches.push(response.switch);
-            // Hide the create switch view
-            showCreateDeadmanSwitchCreationView.value = false;
-            // Reset form data
-            newSwitchData.recipientFirstName = '';
-            newSwitchData.recipientLastName = '';
-            newSwitchData.recipientEmail = '';
-            newSwitchData.finalMessage = '';
-            newSwitchData.firstCheckedInAt = null;
-            console.log('switch successfully created');
+            deadmanSwitchStore.deadmanSwitches.push(response.switch);
+            // Reset the State
+            createSwitchStore.$reset();
+            errorMessageStore.$reset();
             break;
         case '500':
-            
             break;
         case '400':
-
             break;
         default:
             

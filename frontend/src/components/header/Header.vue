@@ -59,16 +59,10 @@
 import { ref, watchEffect } from 'vue';
 import { useColors } from 'vuestic-ui';
 
-
-
 // Pinia store
-import { storeToRefs } from 'pinia';
 import { useCreateSwitchStore, useLoginSignupStore } from '../../javascript/stateManager';
-
 const createSwitchStore = useCreateSwitchStore();
 const loginSignupStore = useLoginSignupStore();
-// const { showCreateDeadmanSwitchCreationView } = storeToRefs(createSwitchStore);
-
 
 // Vuestic Component library color theme and header switch
 const { presets, applyPreset } = useColors()
@@ -84,10 +78,4 @@ watchEffect(() => {
 let showModal = ref(false);
 let infoMessage = 'Deadman switch is an app to help people help those who care about them know they are ok.';
 
-function testy() {
-    console.log('firing');
-    
-    console.log(loginSignupStore.showUserAccount)
-// showCreateDeadmanSwitchCreationView
-}
 </script>

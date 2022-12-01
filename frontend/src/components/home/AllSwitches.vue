@@ -11,20 +11,17 @@
     /> 
 </span>
 
-
-
 </template>
 
 
 
 <script setup>
 
-// Component responsibility:
-// 1. Display all
 import DeadmanSwitch from '../deadman-switch/DeadmanSwitch.vue';
 import {useDeadmanSwitchStore} from '../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
 const { deadmanSwitches } = deadmanSwitchStore;
+
 </script>
 
 

@@ -1,21 +1,3 @@
-import { checkForValidCookieAndGetUserId } from './userManager';
-// import { deadmanSwitches } from './stateManager';
-
-// ********************************************************************
-// Function calculates the seconds before the user needs to check in
-// ********************************************************************
-function secondsBeforeSwitchExpires(checkInByTimestamp) {
-
-    // Calculate seconds until switch Expires
-    let secondsUntilSwitchFlipped =
-        ( (new Date(checkInByTimestamp).getTime() / 1000 ) - ( new Date(Date.now()) ) / 1000 );
-
-    // Countdown timer can't take a negative number
-    if(secondsUntilSwitchFlipped < 0) { return 0 };
-
-    return secondsUntilSwitchFlipped;    
-};
-
 // ********************************************************************
 // Function is called on App load after it is verified that the user is logged in
 // ********************************************************************
@@ -35,7 +17,6 @@ async function getDeadmanSwitchesWithUserId(userId) {
 
     switch(response.status) {
         case '500':
-            // TODO: return error message (db error on backend)
             return false;
         case '400':
             // No query parameter in the url
@@ -46,4 +27,4 @@ async function getDeadmanSwitchesWithUserId(userId) {
     };
 };
 
-export { secondsBeforeSwitchExpires, getDeadmanSwitchesWithUserId }
+export { getDeadmanSwitchesWithUserId }

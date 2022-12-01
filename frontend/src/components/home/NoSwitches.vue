@@ -12,14 +12,11 @@
 
 </div>
 
-
 </template>
 
 
 
 <script setup>
-
-// import { showCreateDeadmanSwitchCreationView } from '../../javascript/stateManager';
 
 // Pinia store
 import { storeToRefs } from 'pinia';
@@ -28,7 +25,6 @@ const createSwitchStore = useCreateSwitchStore();
 const { showCreateDeadmanSwitchCreationView } = storeToRefs(createSwitchStore);
 
 </script>
-
 
 
 
@@ -41,7 +37,6 @@ const { showCreateDeadmanSwitchCreationView } = storeToRefs(createSwitchStore);
     justify-content: center;
     width: 100%;
     padding: 10rem 0 0 0;
-    
 }
 
 </style>
