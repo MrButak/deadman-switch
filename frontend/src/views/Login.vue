@@ -14,11 +14,9 @@ import LoginForm from '../components/LoginForm.vue';
 import ErrorMessages from '../components/shared/ErrorMessages.vue';
 
 // Pinia store
-import { storeToRefs } from 'pinia';
 import { useLoginSignupStore, useErrorMessageStore } from '../javascript/stateManager';
 const errorMessageStore = useErrorMessageStore();
 const loginSignupStore = useLoginSignupStore();
-const {  hasRegistered } = loginSignupStore;
 
 
 errorMessageStore.checkForErrors([

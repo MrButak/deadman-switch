@@ -11,8 +11,7 @@ export const useLoginSignupStore = defineStore('loginSignupStore', {
         userLoggedIn: false,
         showLogin: false,
         showSignup: false,
-        hasRegistered: false,
-        loginFailedEmailNotVerified: false
+        hasRegistered: false
     }),
     getters: {
 
@@ -133,7 +132,6 @@ export const useViewStore = defineStore('viewStore', {
     },
     getters: {
         showUserAccount() {
-            const createSwitchStore = useCreateSwitchStore();
             const createLoginSignupStore = useLoginSignupStore();
             return createLoginSignupStore.userLoggedIn && createLoginSignupStore.showUserAccount;
         },

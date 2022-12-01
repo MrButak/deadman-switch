@@ -103,7 +103,6 @@ async function handleLogin() {
             loginSignupStore.hasRegistered = false;
             loginSignupStore.showLogin = false;
             loginSignupStore.showSignup = false;
-            loginSignupStore.loginFailedEmailNotVerified = false;
             loginSignupStore.userLoggedIn = true;
             // Reset the State (clear out any error messages)
             errorMessageStore.$reset();
@@ -114,7 +113,6 @@ async function handleLogin() {
         case '401': // Email not verified
             errorMessage.value = response.message;
             errorMessageStore.checkForErrors({type: 'mustVerifyEmail', data: false})
-            loginSignupStore.loginFailedEmailNotVerified = true;
             // TODO: show an option to resend email
             break;
         case '400':
