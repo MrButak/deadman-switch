@@ -112,7 +112,7 @@ async function handleLogin() {
             break;
         case '401': // Email not verified
             errorMessage.value = response.message;
-            errorMessageStore.checkForErrors({type: 'mustVerifyEmail', data: false})
+            errorMessageStore.checkForErrors([{type: 'mustVerifyEmail', data: false}]);
             // TODO: show an option to resend email
             break;
         case '400':
