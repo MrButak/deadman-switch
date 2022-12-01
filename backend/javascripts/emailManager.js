@@ -41,7 +41,9 @@ exports.sendVerificationEmail = async (firstName, lastName, email, verificationS
     });
 };
 
-// Extract just the checkInBytime from the Date Object
+// ***********************************************************************************
+// Function extracts just the HH:MM:SS:MS from the Date Object
+// ***********************************************************************************
 function extractTimeFromDateObject(dateObj) {
         
     let timeString = '';
@@ -52,12 +54,16 @@ function extractTimeFromDateObject(dateObj) {
     hoursString = hoursString < 10 ? '0' + hoursString : hoursString
     minutesString = minutesString < 10 ? '0' + minutesString : minutesString
     secondsString = secondsString < 10 ? '0' + secondsString : secondsString
-    timeString += hoursString + ':' + minutesString + ':' + secondsString + '.' + millisecondString;
+    timeString += hoursString + ':' + minutesString + ':' + secondsString;
     return timeString;
 };
 
+// ***********************************************************************************
+// Function is called when a users switch expires
+// ***********************************************************************************
 exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
-    console.log('Making it to sendFinalEmail')
+    console.log({deadmanAccountData})
+    console.log('Here in final message')
     // Send in blue API
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
     let apiKey = defaultClient.authentications['api-key'];
@@ -75,11 +81,13 @@ exports.sendFinalMessage = async (deadmanAccountData, dmSwitch) => {
             
             'recipientName': `${decryptString(dmSwitch.recipient_first_name)} ${decryptString(dmSwitch.recipient_last_name)}`,
             'deadmanEmail': deadmanAccountData.email,
+            'deadmanFirstName': deadmanAccountData.first_name,
+            'deadmanLastName': deadmanAccountData.last_name,
             'finalMessage': decryptString(dmSwitch.final_message),
-            'switchCreationDate': dmSwitch.created_at,
+            'switchCreationDate': new Date(dmSwitch.created_at).toLocaleString(),
             'checkInIntervalInHours': dmSwitch.check_in_interval_in_hours,
             'checkInByTime':  extractTimeFromDateObject(dmSwitch.check_in_by_timestamp),
-            'lastCheckedInAt': dmSwitch.last_checked_in_at
+            'lastCheckedInAt': new Date(dmSwitch.last_checked_in_at).toLocaleString()
         },
     
         headers: {

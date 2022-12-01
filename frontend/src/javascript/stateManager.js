@@ -51,7 +51,7 @@ export const useCreateSwitchStore = defineStore('createSwitchStore', {
             recipientLastName: '',
             recipientEmail: '',
             checkInIntervalInDays: 1,
-            checkInByTime: new Date(), // need to reference the time the user chooses here
+            checkInByTime: new Date(), // This is reset to new Date(Date.now()) when the CreateSwitchView.vue Component is mounted
             finalMessage: '',
             firstCheckedInAt: null,
             switchName: 'switch name',

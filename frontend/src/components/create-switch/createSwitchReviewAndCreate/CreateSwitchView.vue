@@ -29,14 +29,14 @@ import ErrorMessages from '../../shared/ErrorMessages.vue';
 // Pinia stores
 const createSwitchStore = useCreateSwitchStore();
 const errorMessageStore = useErrorMessageStore();
-const deadmanSwitchStore = useDeadmanSwitchStore();
 
 onMounted(() => {
     handleCreateSwitchFormErrorMessages();
 });
- 
+
+// Check for errors
 function handleCreateSwitchFormErrorMessages() {
-    console.log(createSwitchStore.secondsBeforeNewSwitchExpires())
+    
     let errorsToCheckFor = [
         { type: 'firstName', data: createSwitchStore.newSwitchData.recipientFirstName },
         { type: 'lastName', data: createSwitchStore.newSwitchData.recipientLastName },
