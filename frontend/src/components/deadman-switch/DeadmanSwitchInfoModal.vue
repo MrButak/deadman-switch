@@ -47,7 +47,9 @@
 
     <va-card-actions align="between">
         <p style="padding: 0 2rem 0 0">Active</p>
-        <p style="padding: 0 0 0 2rem" :class="secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_timestamp) > 0 ? 'va-text-success' : 'va-text-danger'">{{ secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_timestamp) > 0 }}</p>
+        <p style="padding: 0 0 0 2rem" 
+            :class="deadmanSwitchStore.secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_timestamp) > 0 ? 'va-text-success' : 'va-text-danger'">{{ deadmanSwitchStore.secondsBeforeSwitchExpires(currentlyViewedSwitch.check_in_by_timestamp) > 0 }}
+        </p>
     </va-card-actions>
 
     <va-card-actions align="between">
@@ -101,7 +103,8 @@
 import { storeToRefs } from 'pinia'
 import {useDeadmanSwitchStore} from '../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
-const { secondsBeforeSwitchExpires, currentlyViewedSwitch, showSwitchInfoModal, showFinalMessageModal } = storeToRefs(deadmanSwitchStore);
+const { currentlyViewedSwitch, showSwitchInfoModal, showFinalMessageModal } = storeToRefs(deadmanSwitchStore);
+
 
 </script>
 

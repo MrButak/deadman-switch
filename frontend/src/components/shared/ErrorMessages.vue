@@ -1,4 +1,8 @@
 <template>
+<!-- 
+<v-for="error in errors"></v-for>
+<error_component :error="error"></error_component>
+<v-end> -->
 
 <va-alert v-for="error in errorMessageStore.errorMessageArray"
     class="mb-4" 
