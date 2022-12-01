@@ -6,17 +6,25 @@
     no-padding
 >
     <template #content="{ ok }">
-    <va-card-title>
-        Switch Details
-    </va-card-title>
+
+    <va-card-actions align="between">
+        <p style="padding: 0 2rem 0 0">Switch Details</p>
+        <va-icon
+            class="mr-2"
+            name="settings"
+            size="small"
+            color="success"
+            @click="(showSwitchSettingsModal = !showSwitchSettingsModal)"
+        />
+    </va-card-actions>
 
     <va-card-content>
         <h6>Recipient details</h6>
     </va-card-content>
     
     <va-card-actions align="between">
-        <p style="padding: 0 2rem 0 0">First name</p>
-        <p style="padding: 0 0 0 2rem" class="va-text-success">{{ currentlyViewedSwitch.recipient_first_name }}</p>
+        <p style="padding: 0 6rem 0 0">First name</p>
+        <p style="padding: 0 0 0 6rem" class="va-text-success">{{ currentlyViewedSwitch.recipient_first_name }}</p>
     </va-card-actions>
 
     <va-card-actions align="between">
@@ -82,6 +90,44 @@
     </va-card-actions>
 
     </template>
+
+    Settings
+    <va-modal
+        v-model="showSwitchSettingsModal"
+        no-padding
+        blurred
+    >
+        <template #content="{ ok }">
+    
+        <va-card-actions align="between">
+            <p style="padding: 0 6rem 0 0">Settings</p>
+            <p style="padding: 0 0 0 6rem" class="va-text-success">a</p>
+        </va-card-actions>
+        <va-card-actions align="between">
+            <p style="padding: 0 2rem 0 0">a</p>
+            <p style="padding: 0 0 0 2rem" class="va-text-success">a</p>
+        </va-card-actions>
+        <va-card-actions align="between">
+            <p style="padding: 0 2rem 0 0">a</p>
+            <p style="padding: 0 0 0 2rem" class="va-text-success">a</p>
+        </va-card-actions>
+        <va-card-actions align="between">
+            <p style="padding: 0 2rem 0 0">a</p>
+            <p style="padding: 0 0 0 2rem" class="va-text-success">a</p>
+        </va-card-actions>
+        <va-card-actions align="between">
+            <p style="padding: 0 2rem 0 0">a</p>
+            <p style="padding: 0 0 0 2rem" class="va-text-success">a</p>
+        </va-card-actions>
+        <va-card-actions align="between">
+            <p style="padding: 0 2rem 0 0">a</p>
+            <p style="padding: 0 0 0 2rem" class="va-text-success">a</p>
+        </va-card-actions>
+    
+        
+        </template>
+    </va-modal>
+
 </va-modal>
 
 <!-- Final message popup modal -->
@@ -93,17 +139,21 @@
     fixed-layout
 />
 
+
 </template>
 
 
 
 <script setup>
 
+import { ref } from 'vue';
+
+import DeadmanSwitchSettingsModal from './DeadmanSwitchSettingsModal.vue';
 // Pinia stores
 import { storeToRefs } from 'pinia'
-import {useDeadmanSwitchStore} from '../../javascript/stateManager';
+import {useDeadmanSwitchStore} from '../../../javascript/stateManager';
 let deadmanSwitchStore = useDeadmanSwitchStore();
-const { currentlyViewedSwitch, showSwitchInfoModal, showFinalMessageModal } = storeToRefs(deadmanSwitchStore);
+const { currentlyViewedSwitch, showSwitchInfoModal, showFinalMessageModal, showSwitchSettingsModal } = storeToRefs(deadmanSwitchStore);
 
 
 </script>

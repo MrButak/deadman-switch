@@ -59,7 +59,6 @@
 </div>
 
 <DeadmanSwitchInfoModal />
-
 </template>
 
 
@@ -67,7 +66,8 @@
 <script setup>
 
 import { computed } from 'vue';
-import DeadmanSwitchInfoModal from './DeadmanSwitchInfoModal.vue';
+
+import DeadmanSwitchInfoModal from './infoModal/DeadmanSwitchInfoModal.vue';
 import CountdownTimer from '../shared/CountdownTimer.vue';
 
 import { checkForValidCookieAndGetUserId } from '../../javascript/userManager';

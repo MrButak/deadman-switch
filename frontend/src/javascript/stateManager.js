@@ -96,6 +96,7 @@ export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
     state: () => ({
         deadmanSwitches: [],
         showSwitchInfoModal: false,
+        showSwitchSettingsModal: false,
         showFinalMessageModal: false,
         currentlyViewedSwitch: {}
     }), 
