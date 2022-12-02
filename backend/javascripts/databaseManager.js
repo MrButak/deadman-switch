@@ -185,6 +185,19 @@ exports.deactivateExpiredSwitch = async(switchId, userId) => {
     };
 };
 
+exports.deleteSwitch = async(switchId) => {
+    let dbStmt = 'DELETE FROM deadman_switches WHERE id = ($1);';
+    let dbValues = [switchId];
+    try {
+        await pool.query(dbStmt, dbValues);
+        return true;
+    }
+    catch(error) {
+        console.log(error);
+        return false;
+    };
+};
+
 // Function NOT IN USE
 exports.deleteExpiredSwitch = async(userId, switchId) => {
     let dbStmt = 'DELETE FROM deadman_switches WHERE user_id = ($1) AND id = ($2);'

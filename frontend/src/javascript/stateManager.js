@@ -96,6 +96,7 @@ export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
     state: () => ({
         deadmanSwitches: [],
         showSwitchInfoModal: false,
+        showDeleteMessageModal: false,
         showFinalMessageModal: false,
         currentlyViewedSwitch: {}
     }), 
@@ -118,6 +119,10 @@ export const useDeadmanSwitchStore = defineStore('deadmanSwitchStore', {
             // Countdown timer can't take a negative number as a Prop
             if(secondsUntilSwitchFlipped < 0) { return 0 };
             return secondsUntilSwitchFlipped;
+        },
+        removeSwitchFromState(switchId) {
+            let switchIndex = this.deadmanSwitches.findIndex(dmSwitch => dmSwitch.id == switchId);
+            this.deadmanSwitches.splice(switchIndex, 1);
         }
     }
 });

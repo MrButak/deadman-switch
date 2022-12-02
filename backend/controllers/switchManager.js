@@ -1,4 +1,4 @@
-const { getDeadmanSwitches, insertNewDeadmanSwitch, checkInDeadmanSwitch } = require('../javascripts/databaseManager');
+const { getDeadmanSwitches, insertNewDeadmanSwitch, checkInDeadmanSwitch, deleteSwitch } = require('../javascripts/databaseManager');
 const { validateName, validateEmail } = require('../javascripts/validationManager');
 const { encryptString, decryptString } = require('../javascripts/utils/utils');
 
@@ -143,4 +143,26 @@ exports.checkIn = async (req, res) => {
             last_checked_in_at: updatedSwitch[1].last_checked_in_at
         }
     });
+};
+
+exports.deleteSwitch = async(req, res) => {
+
+    let switchId = '';
+    try {
+        let bodyData = JSON.parse(Object.keys(req.body));
+        switchId = bodyData.switchId;
+    }
+    catch(err) {
+        return res.status(500).json({status: '500'});
+    };
+
+    if(!switchId) {
+        return res.status(400).json({status: '400'});
+    };
+
+    let switchDeleted = await deleteSwitch(switchId);
+
+    return switchDeleted ?
+        res.status(200).json({status: '200'}) :
+        res.status(500).json({status: '500'});
 };

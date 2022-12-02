@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { signupEmail, verifyUserEmail, loginEmail, getHttpCookie, getUserDataWithUserId } = require('../controllers/userManager');
-const { getDeadmanSwitchesWithUserId, createNewSwitch, checkIn } = require('../controllers/switchManager');
+const { getDeadmanSwitchesWithUserId, createNewSwitch, checkIn, deleteSwitch } = require('../controllers/switchManager');
 
 // User signs up for an account
 router.post('/api/user/register', async function(req, res, next) {
@@ -40,4 +40,7 @@ router.post('/api/switch/checkin', async function(req, res) {
     await checkIn(req, res);
 });
 
+router.delete('/api/switch/delete', async function(req, res) {
+    await deleteSwitch(req, res);
+});
 module.exports = router;
